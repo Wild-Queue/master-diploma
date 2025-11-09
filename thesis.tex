@@ -19,13 +19,12 @@
 \usepackage[T1,T2A]{fontenc}
 \usepackage[utf8]{inputenc}
 
-\usepackage[english, russian]{babel} %% TODO remove russian
+\usepackage[russian,english]{babel} %% TODO remove russian
 \usepackage[backend=biber,style=ieee,autocite=inline]{biblatex}
-\addbibresource{ref.bib}
+\usepackage{blindtext}
 \bibliography{ref.bib}
 \DefineBibliographyStrings{english}{%
   bibliography = {References},}
-\usepackage{blindtext}
 
 \usepackage{pdfpages}
 \newenvironment{bottompar}{\par\vspace*{\fill}}{\clearpage}

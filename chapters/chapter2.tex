@@ -2,185 +2,80 @@
 \label{chap:lr}
 \chaptermark{Second Chapter Heading}
 
+% \Blindtext[2]
 
-\Blindtext[2]
+\section{The Concept and Components of the Object Model}
 
-\section{Понятие и компоненты объектной модели}
-% \Blindtext[1]
-% \newpage
-Объектная модель представляет собой фундаментальную основу, определяющую способ представления и поддержки языком программирования объектов, классов, наследования, инкапсуляции, полиморфизма и других связанных абстракций. Согласно общепринятой терминологии, объектная модель (object model) имеет два взаимосвязанных значения: (1) свойства объектов в целом в конкретном языке программирования, технологии, нотации или методологии, которая использует эти объекты; (2) набор интерфейсов или классов, через которые программа может исследовать и манипулировать некоторыми специфическими частями своего мира. Примерами объектных моделей являются объектные модели Java, Component Object Model (COM) или Object-Modeling Technique (OMT). Такие объектные модели обычно определяются с использованием таких концепций, как класс, обобщённая функция, сообщение, наследование, полиморфизм и инкапсуляция.
+The object model represents a fundamental framework that defines how a programming language 
+represents and supports objects, classes, inheritance, encapsulation, polymorphism, and 
+other related abstractions. According to commonly accepted terminology, the term object model 
+has two interrelated meanings: (1) the properties of objects within a particular programming language, 
+technology, notation, or methodology that employs these objects; and (2) a set of interfaces or classes 
+through which a program can explore and manipulate specific aspects of its environment.
+Examples of object models include the Java Object Model, the Component Object Model (COM), and 
+the Object Modeling Technique (OMT). Such object models are typically defined using concepts such as class, 
+generic function, message, inheritance, polymorphism, and encapsulation.
 
-В контексте объектно-ориентированного программирования Cardelli и Wegner в работе "On Understanding Types, Data Abstraction, and Polymorphism" определили объектно-ориентированные языки через три ключевых требования \cite{cardelli1985understanding}. Язык считается объектно-ориентированным, если он удовлетворяет условиям:
+
+Cardelli and Wegner in their work “On Understanding Types, Data Abstraction, and Polymorphism,” 
+defined object-oriented languages through three key requirements \cite{cardelli1985understanding}. 
+A language is considered object-oriented if it satisfies the following conditions:
+
 
 \begin{itemize}
-    \item Обеспечивает поддержку объектов, которые представляют собой абстракции данных с интерфейсом из именованных операций и скрытым внутренним состоянием
-    \item Объекты в языке имеют связанный с ними объектный тип
-    \item Типы могут наследовать атрибуты от супертипов.
+    \item Support objects that represent data abstractions with an interface composed of named 
+        operations and an encapsulated internal state
+    \item Objects in the language are associated with a specific object type
+    \item Types may inherit attributes from their supertypes
 \end{itemize}
 
-% "It supports objects that are data abstractions with an interface of named operations and a hidden local state; Objects have an associated object type; Types may inherit attributes from supertypes."
-
-Эти требования они сформулировали как формулу:
+These requirements were formulated in the form of a formula:
 
 $object-oriented = data\space abstractions + object\space types + type\space inheritance$
 
-Booch в своей фундаментальной работе ``Object-Oriented Analysis and Design with Applications'' описывает объектную модель как концептуальное представление организованной сложности программного обеспечения \cite{booch2008object}.
+Booch, in his seminal work Object-Oriented Analysis and Design with Applications, describes the 
+object model as a conceptual representation of the organized complexity of software systems \cite{booch2008object}.
 
 \begin{quote}
-    Booch (p. 40-41) concludes that the conceptual framework for anything object-oriented is the object model—a conceptual representation of the organized complexity of software. It consists of four major elements, i.e. abstraction, encapsulation, modularity, and hierarchy. In addition, the object model contains three minor element, i.e. typing, concurrency, and persistence.
+    Booch (p. 40-41) concludes that the conceptual framework for anything object-oriented is the 
+    object model—a conceptual representation of the organized complexity of software. 
+    It consists of four major elements, i.e. abstraction, encapsulation, modularity, and hierarchy. 
+    In addition, the object model contains three minor element, i.e. typing, concurrency, and persistence.
 \end{quote} 
 
-Это разделение на основные (\textit{major}) и дополнительные (\textit{minor}) элементы является принципиальным: без основных элементов модель перестаёт быть объектно-ориентированной; дополнительные элементы являются полезными, но не обязательными для поддержки объектной ориентации.
-
-% Под вопросом (Ниже)
-Формальная модель объектной модели была представлена Abadi и Cardelli в работе ``A Theory of Objects'', где объекты рассматриваются как примитивы объектных исчислений \cite{abadi2012}. Их подход демонстрирует, как можно формально объяснить как семантику объектов, так и их правила типизации, а также разработать все наиболее важные концепции объектно-ориентированных языков программирования: self, динамическую диспетчеризацию, классы, наследование, защищённые и приватные методы, прототипирование, подтипизацию, ковариантность и контравариантность, а также специализацию методов.
-
+This distinction between major and minor elements is fundamental: without the major elements, 
+the model ceases to be object-oriented, whereas the minor elements are useful but not essential 
+for supporting object orientation.
 
 
-\subsection{Основные компоненты объектной модели (Major Elements)}
+\subsection{Major Components of the Object Model}
 
-\subsubsection{Абстракция (Abstraction)}
+\subsubsection{Abstraction}
 
-Абстракция является одним из наиболее фундаментальных компонентов объектной модели. Согласно Tinelli в его учебных материалах \cite{tinelli_object_model}, абстракция определяется как:
+\subsubsection{Encapsulation}
 
-\begin{quote}
-``The process of identifying similarities between objects, situations or processes and ignoring their differences. A description, or specification, of something that emphasizes some details or properties while ignoring others. It focuses on the essential characteristics of something relative to a viewer's perspective.''
-\end{quote}
+\subsubsection{Modularity}
 
-Booch в свою очередь определяет абстракцию следующим образом \cite{zschocke_object_orientation}:
+\subsubsection{Hierarchy}
 
-\begin{quote}
-``An abstraction denotes the essential characteristics of an object that distinguish it from all other kinds of objects and thus provide crisply defined conceptual boundaries, relative to the perspective of the viewer.''
-\end{quote}
+\subsection{Minor Components of the Object Model}
 
-Абстракция в контексте объектно-ориентированного программирования фокусируется на **внешнем представлении объекта**, определяя концептуальные границы по отношению к другим объектам. Она помогает отделить **поведение объекта от его реализации**. В объектно-ориентированном программировании поведение объекта может быть охарактеризовано через услуги (\textit{services}), которые он предоставляет другим объектам (клиентам), а также операции, которые он может выполнять.
+\subsubsection{Typing}
 
-Объектная абстракция определяет **контракт** (\textit{contract}), от которого зависят другие объекты и который должен соблюдаться данным объектом. Контракт устанавливает все предположения, которые клиент может сделать относительно поведения сервера \cite{tinelli_object_model}.
+\subsubsection{Concurrency}
 
-\subsubsection{Инкапсуляция (Encapsulation)}
+\subsubsection{Persistence}
 
-Инкапсуляция является процессом **компартментализации элементов абстракции**, которые составляют её структуру и поведение. Booch определяет инкапсуляцию следующим образом \cite{zschocke_object_orientation}:
+\subsection{The Selected Definition of the Object Model}
 
-\begin{quote}
-``Encapsulation is the process of compartmentalizing the elements of an abstraction that constitute its structure and behavior; encapsulation serves to separate the contractual interface of an abstraction and its implementation.''
-\end{quote}
+Based on the conducted literature review, the following definition of the object model is adopted for the purposes of this work:
 
-Инкапсуляция служит для **отделения контрактного интерфейса абстракции от её реализации**. Согласно Tinelli \cite{tinelli_object_model}:
-
-\begin{quote}
-``Encapsulation. The abstraction of an object should precede any decisions about its implementation. Implementation details should not be accessible to clients. Encapsulation is the process of hiding such details.''
-\end{quote}
-
-В то время как абстракция фокусируется на том, как объект виден извне, инкапсуляция концентрируется на том, что может быть видно только изнутри объекта. Достигнутые результаты инкапсуляции \cite{tinelli_object_model}:
-
-\begin{itemize}
-    \item Greatly facilitates changes that do not impact the abstraction (i.e., the object's contract)
-    \item Leads to a clear separation of concerns (contract vs way to honor it)
-    \item Localizes design decisions likely to change
-\end{itemize}
-
-Абстракция и инкапсуляция являются **взаимодополняющими концепциями**: абстракция фокусируется на наблюдаемом поведении объекта, в то время как инкапсуляция фокусируется на реализации, которая обеспечивает это поведение.
-
-\subsubsection{Модульность (Modularity)}
-
-Модульность представляет собой свойство системы, которая была декомпозирована на набор связных и слабо связанных модулей. Согласно Tinelli \cite{tinelli_object_model}:
-
-\begin{quote}
-``Modularity. Modularization divides a software systems into components, modules. Modules may have connections to other modules but can be compiled separately, encapsulate sets of classes and objects, and have an interface and an implementation.''
-\end{quote}
-
-Критически важной является следующая точка \cite{tinelli_object_model}:
-
-\begin{quote}
-``Classes and objects define a system's logical structure. Modules define a system's physical structure. The two structures are by and large orthogonal.''
-\end{quote}
-
-Модули характеризуются рядом важных свойств, согласно Zschocke \cite{zschocke_object_orientation}. Объекты, когда используются как инструмент моделирования, должны быть близки к ментальной модели нашего мышления (понятность). Объекты должны поддерживать разложимость (деление на подобъекты) и композируемость (комбинация объектов для формирования больших объектов). Изменения в спецификациях должны приводить только к ограниченным изменениям всей системы (непрерывность). Защита предотвращает влияние на объекты каких-либо аномальных условий, которые происходят во время выполнения системы.
-
-\subsubsection{Иерархия (Hierarchy)}
-
-Иерархия представляет собой **ранжирование или упорядочивание абстракций**. Согласно Tinelli \cite{tinelli_object_model}:
-
-\begin{quote}
-``Hierarchy. A (partial) ordering of abstractions. Most important hierarchies: "is a" relation (class structure) and "part of" relation (object structure).''
-\end{quote}
-
-Две наиболее важные иерархии в сложной системе это:
-
-\begin{enumerate}
-    \item **Структура классов** (\textit{class structure}) — иерархия ``является'' (\textit{is a} hierarchy) или обобщение/специализация
-    \item **Структура объектов** (\textit{object structure}) — иерархия ``часть'' (\textit{part of} hierarchy) или целое/часть
-\end{enumerate}
-
-**Наследование** (\textit{inheritance}) является наиболее важной иерархией ``является''. Booch определяет наследование следующим образом \cite{booch1994}:
-
-\begin{quote}
-``Inheritance is a relationship among classes wherein one class shares the structure and/or behavior defined in one (single inheritance) or more (multiple inheritance) other classes.''
-\end{quote}
-
-Наследование описывает отношение между классами, при котором один класс разделяет структуру и/или поведение, определённое в одном или нескольких других классах. Наследование особенно эффективно для **управления эволюцией во времени**, позволяя системе адаптироваться к изменениям требований \cite{zschocke_object_orientation}.
-
-\subsection{Дополнительные компоненты объектной модели (Minor Elements)}
-
-\subsubsection{Типизация (Typing)}
-
-Типизация представляет собой **механизм принуждения класса объектов** таким образом, что объекты разных типов не могут быть взаимозаменяемыми или могут быть взаимозаменяемыми только ограниченным образом. Booch определяет типизацию следующим образом \cite{zschocke_object_orientation}:
-
-\begin{quote}
-``Typing is defined as 'the enforcement of the class of an object, such that objects of different types may not be interchanged, or at the most, they may be interchanged only in very restricted arrays.'''
-\end{quote}
-
-Согласно Tinelli, в современных объектно-ориентированных языках \cite{tinelli_object_model}:
-
-\begin{quote}
-``Every class defines a type, consisting of all objects that are instances of that class. However, not all types are classes. E.g.: Java's basic types (int, bool, ...), Java's interfaces, Traits in Scala.''
-\end{quote}
-
-Различают **статическую и динамическую типизацию** \cite{tinelli_object_model}:
-
-\begin{itemize}
-    \item **Statically typed languages** enforce typing restrictions at compile time: the type of each expression denoting a value is determined and checked before running the program
-    \item **Dynamically typed languages** enforce typing restrictions at run time: types are determined and checked as expressions are evaluated
-\end{itemize}
-
-Cardelli и Wegner подчёркивают защитную функцию типов \cite{cardelli1985understanding}:
-
-\begin{quote}
-``A type may be viewed as a set of clothes (or a suit of armor) that protects an underlying untyped representation from arbitrary or unintended use. It provides a protective covering that hides the underlying representation and constrains the way objects may interact with other objects.''
-\end{quote}
-
-\subsubsection{Параллелизм (Concurrency)}
-
-Параллелизм (\textit{concurrency}) является свойством, которое **отличает активный объект от неактивного**. Согласно Booch и описанию в литературе \cite{zschocke_object_orientation}:
-
-\begin{quote}
-``Objects can be characterized as asynchronous (sequential), guarded, or synchronous. Concurrency, then, describes whether an object continues processing after it has sent or received a message. This concept helps to distinguish an active object from one that is not active.''
-\end{quote}
-
-Параллелизм позволяет различным объектам действовать одновременно, используя взаимоисключающий доступ к общим ресурсам. Состояние активного объекта может быть изменено внутренними операциями, выполняющимися внутри самого объекта, в то время как пассивные объекты реализуются только как параллельный процесс с точками входа, соответствующими конкретным операциям объекта \cite{zschocke_object_orientation}.
-
-\subsubsection{Персистентность (Persistence)}
-
-Персистентность представляет собой свойство объекта, благодаря которому **его существование выходит за рамки времени и/или пространства**. Booch определяет это следующим образом \cite{zschocke_object_orientation}:
-
-\begin{quote}
-``The idea of persistence describes the fact whether an object's existence will transcend over time and/or space. Thus, persistence describes whether an object will exist only during the single execution of a system or between individual executions and/or whether the location of an object has moved away from an address space in memory in which it was initially created.''
-\end{quote}
-
-Персистентность позволяет объектам сохранять своё состояние между различными запусками программы. Существует персистентность во времени (объект продолжает существовать после завершения его создателя) и персистентность в пространстве (местоположение объекта перемещается из адресного пространства, в котором он был создан) \cite{zschocke_object_orientation}.
-
-\subsection{Эволюция понимания объектной модели}
-
-Важно отметить, что понимание объектной модели эволюционировало с развитием языков программирования. Первоначально, концепции класса, инкапсуляции и наследования были введены в языке SIMULA в 1960-х годах разработчиками Dahl и Nygaard \cite{zschocke_object_orientation}. Впоследствии Smalltalk (разработан Kay в 1970-х) стал первым полностью объектно-ориентированным языком, где всё рассматривается как объект \cite{zschocke_object_orientation}.
-
-Классификация, предложенная Booch, синтезировала годы исследований в области объектно-ориентированного программирования и стала стандартной в академической литературе и практическом применении. Как отмечает Booch \cite{booch1994}, принципы абстракции, инкапсуляции, модульности и иерархии были известны и раньше, но объектно-ориентированная парадигма привнесла их **синергию** — взаимное усиление и взаимодополнение этих концепций.
-
-
-\subsection{Выбранное определение объектной модели для данной диссертации}
-
-\textbf{На основе проведённого обзора литературы для целей данной диссертации принимается следующее определение объектной модели:}
-
-\textit{Объектная модель — это концептуальная основа, интегрирующая совокупность взаимосвязанных компонентов (четыре основных: абстракция, инкапсуляция, модульность, иерархия и три дополнительных: типизация, параллелизм, персистентность), которая определяет способ представления, организации и поддержки языком программирования объектов, классов, их взаимодействия, отношения наследования, механизмы полиморфизма и другие связанные абстракции для эффективного управления сложностью программных систем.}
+The object model is a conceptual framework that integrates a set of interrelated components — 
+four major ones (abstraction, encapsulation, modularity, and hierarchy) and 
+three minor ones (typing, concurrency, and persistence). It defines the means by which a 
+programming language represents, organizes, and supports objects, classes, their interactions, 
+inheritance relationships, mechanisms of polymorphism, and other related abstractions for the 
+effective management of software system complexity.
 
 
 
