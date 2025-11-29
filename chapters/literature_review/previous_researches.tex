@@ -1,0 +1,65 @@
+\section{Review of Related Work}
+
+The problem of comparative analysis of programming languages is not new to computer science. 
+Over recent decades, numerous works have been published dedicated to the classification 
+and comparison of object-oriented languages. Through a systematic literature review, 
+we have identified three main groups of studies: fundamental taxonomies, empirical performance comparisons, 
+and narrowly focused comparative analyses of specific language pairs.
+
+\subsection{Fundamental taxonomies and theoretical foundations}
+
+The foundational works in the classification of object models were conducted in the late 1980s. 
+The seminal work by P. Wegner, ``Dimensions of Object-Oriented Language Design`` \cite{wegner1987dimensions}, 
+laid the groundwork by introducing strict criteria for ``object-based`` languages. However, 
+contemporary research indicates that these hierarchical taxonomies are losing their relevance 
+in the era of multi-paradigm languages.
+
+In a recent work, M. Vandeloise \cite{vandeloise2025towards} argues that traditional classifications fail 
+to account for hybrid languages (e.g., Scala, Rust) and proposes a ``compositional reconstruction`` 
+of paradigms based on type theory, where the key factor becomes safety guarantees rather than 
+the presence of classes. This is supported by research from Crichton et al. \cite{crichton2023grounded}, 
+who propose treating the ownership semantics in Rust as a new fundamental dimension of the object model, 
+which ensures memory safety without a garbage collector—an aspect absent from earlier taxonomies 
+like Armstrong's \cite{armstrong2006quarks}.
+
+\subsection{Empirical Performance Comparisons}
+
+A second extensive group of works is dedicated to the quantitative comparison of languages. 
+The well-known study by L. Prechelt \cite{prechelt2002empirical} compares seven languages 
+(C, C++, Java, Python, among others) based on criteria such as execution time and memory consumption. 
+Similar contemporary studies, for instance, the work by Farooq and Khan \cite{farooq2023comparative}, 
+propose frameworks for assessing the popularity and technical efficiency of languages.
+
+A key limitation of this group of works, in relation to the goals of our dissertation, 
+is their focus on *quantitative metrics* (speed, code volume) rather than on the *architectural distinctions* 
+between object models. They answer the question ``which language is faster,`` but do not explain how differences 
+in the implementation of v-tables, prototypes (JavaScript), or structural typing (Go) influence the architecture 
+of software systems.
+
+\subsection{Narrowly Focused and Engineering Comparisons}
+
+The third category encompasses works that compare specific language pairs or their individual mechanisms. 
+Numerous publications exist that contrast Go's interface model with the class-based model 
+of Java/C++ \cite{pike2012go, balbaert2012way}. Hybrid functional-object-oriented models 
+in Scala compared to Java have also been extensively documented \cite{odersky2014unifying}.
+
+Nevertheless, a significant gap remains in the academic literature regarding works that conduct a comprehensive, 
+end-to-end analysis of the entire spectrum of modern models: ranging from ``pure`` OOP (Smalltalk, Ruby) 
+to prototype-based (JavaScript), hybrid (Scala, C++), and active object models (Zonnon). 
+The Zonnon language and its unique model, based on active objects and dialogs as described 
+by Gutknecht \cite{gutknecht2004zonnon}, receives virtually no attention in broad comparative surveys, 
+remaining confined to specialized niche literature.
+
+\subsection{Conclusion}
+
+The analysis of the literature demonstrates that, despite the abundance of comparative studies, 
+a comprehensive investigation is lacking—one that would:
+
+\begin{enumerate}
+    \item Unify both classical and modern languages within a single comparative framework.
+    \item Examine not only syntax or performance but also the internal implementation of object models (dispatch mechanisms, memory management, object layouts).
+    \item Identify the architectural consequences of choosing a particular model for designing complex systems.
+\end{enumerate}
+
+This dissertation aims to fill this gap by proposing a systematization that includes both industry standards 
+and academic languages, with the goal of developing recommendations for an enhanced object model.
