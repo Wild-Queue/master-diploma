@@ -1,0 +1,125 @@
+\section{Methodology of Comparative Analysis}
+
+When developing object models for programming language, 
+a systematic and reproducible approach to their analysis must be employed. 
+This section provides a list of criteria for comparing the implementation of object models.
+
+\subsection*{Rationale for the Chosen Methodology}
+
+The selection of comparison criteria is justified by a number of fundamental works on programming language design. 
+Cardelli and Wegner \cite{cardelli1985understanding} established three key requirements for defining 
+an object-oriented language: support for objects as data abstractions, the association of objects with a specific 
+type, and type inheritance. These requirements form a basic classification of languages and allow one 
+to distinguish object-oriented languages from those that merely support some object-based features.
+
+Booch \cite{booch2008object} defined four core elements of the object model~--- 
+abstraction, encapsulation, modularity, and hierarchy~--- as well as three secondary 
+elements~--- as well as three secondary elements—typing, concurrency, and persistence. 
+According to Booch, without the core elements, a model ceases to be object-oriented; 
+however, the secondary elements significantly impact the model's practical applicability. 
+This hierarchical approach to identifying elements helps determine which language 
+characteristics are critical.
+
+The methodology for evaluating programming languages is based on a comprehensive approach discussed in works 
+on language assessment criteria. Sebesta \cite{sebesta2016concepts} proposed four primary criteria 
+for evaluating languages: readability, writability, reliability, and cost. Furthermore, readability 
+and writability depend on a wide range of language characteristics, including syntactic simplicity, 
+support for abstraction, and orthogonality. Modern works on code quality and software maintainability 
+emphasize the importance of metrics such as modularity, reusability, analyzability, 
+and modifiability \cite{iso25010}, which are directly influenced by the characteristics of a specific 
+language's object model.
+
+\subsection*{Object Model Comparison Criteria}
+
+Based on the fundamental works mentioned above and an analysis of programming language standards, 
+the following criteria have been identified for the systematic comparison of object models:
+
+\paragraph{Type System}
+
+A language's type system defines the rules for assigning types to various program constructs~--- 
+variables, expressions, and functions. This is a fundamental aspect of any programming language, 
+essential both for enhancing reliability and for defining its infrastructure.
+
+A distinction is made between static typing (type checking at compile time) and dynamic 
+typing (type checking at runtime). Additionally, languages may use nominal typing (where type 
+compatibility is determined by their explicit declaration) or structural typing (where compatibility 
+is determined by the structure of types). The choice of type system impacts 
+code reliability, the potential for detecting errors in early development stages, and the overall 
+architecture of the object model.
+
+\paragraph{Inheritance Mechanism}
+
+Inheritance is a central mechanism in object-oriented languages for defining 
+new classes based on existing ones. It enables code reuse and establishes hierarchical 
+relationships between classes. Object-oriented design principles, such as the Liskov 
+Substitution Principle and the Open/Closed Principle, rely on inheritance and subtyping. 
+A correct implementation of the inheritance mechanism is critical for code maintainability and extensibility.
+
+\paragraph{Abstraction and Encapsulation}
+
+Abstraction is the process of hiding implementation details and exposing only the essential 
+features of an object. Encapsulation is the mechanism of bundling data and methods into a single 
+unit and restricting direct access to an object's internal state. Programming languages support 
+various access control levels (public, private, protected), which influence the degree of encapsulation. 
+Some languages allow for modifying class member visibility, while others enforce stricter control mechanisms.
+
+\paragraph{Polymorphism}
+
+Polymorphism enables a single interface to represent different data types. 
+It is a fundamental mechanism for achieving flexibility and extensibility in object-oriented systems.
+The choice of dispatch mechanism directly impacts performance: static dispatch allows the compiler 
+to optimize function calls, while dynamic dispatch provides flexibility at the cost of some 
+performance overhead.
+
+\paragraph{Object Creation Mechanism}
+
+Programming languages differ in their approach to object creation. Most modern languages employ 
+a class-based model where objects are instances of classes. However, some languages utilize 
+prototype-based inheritance, where objects inherit properties directly from other objects through delegation.
+The class-based model provides clear structure and predictable behavior, making code more understandable 
+and maintainable. The prototype-based model offers greater flexibility by enabling dynamic alteration 
+of object behavior during runtime. The distinction between these models impacts 
+how developers organize code, system performance, and the ease of debugging and maintenance.
+
+\paragraph{Metaclasses and Metaprogramming}
+
+Metaclasses are classes whose instances are themselves classes. They enable control over 
+class creation and behavior. Metaprogramming refers to techniques that allow programs to create or 
+modify other programs or themselves. Not all languages support metaclasses; those that do provide 
+varying degrees of control over the metaclass protocol.
+
+\paragraph{Multiple Inheritance and Mixins}
+
+To facilitate code reuse and avoid the complexities of multiple inheritance, some languages support 
+the mixin mechanism. Mixins allow functionality to be added to classes without using a strict inheritance 
+hierarchy, providing an alternative composition approach.
+
+\paragraph{Memory Management}
+
+The memory management strategy is a critical aspect of any programming language, 
+directly impacting performance, predictability, and development convenience.
+Languages may employ manual memory management, automatic garbage collection, 
+or other approaches such as reference counting or ownership-based management. 
+The choice of memory management strategy affects performance, predictability of program behavior, 
+and required developer skills.
+
+\paragraph{Exception Handling}
+
+Most modern object-oriented languages support exception handling mechanisms for managing runtime errors.
+A distinction is made between languages with checked exceptions, which are verified by the compiler, 
+and those with unchecked exceptions. Some languages provide special constructs, such as 
+finally blocks for the guaranteed execution of cleanup code.
+
+\paragraph{Method Dispatch}
+
+The mechanism by which a language determines which method to invoke is a crucial aspect 
+of implementing polymorphism. Dispatch can be static (resolved at compile time) or 
+dynamic (resolved at runtime). Dynamic dispatch is typically implemented using virtual method 
+tables (vtables), though alternative approaches such as inline 
+caching may also be employed.
+
+\paragraph{Modularity and Packages}
+
+A language must provide means for organizing code into modules to facilitate 
+the development of large-scale systems. This includes support for packages, 
+modules, namespaces, and visibility control of symbols.

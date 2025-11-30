@@ -157,8 +157,14 @@ public class BankAccount
         return _balance;
     }
 }
+    \end{minted}
+    \caption{Fragile Base Class: first implementation base class}
+    \label{fig:fragile-base-class-first-implementation-base-class}
+\end{figure}
 
-// Derived class: Extends with monthly fees
+\begin{figure}
+    \centering
+    \begin{minted}[breaklines=true,fontsize=\footnotesize,breaklines=true]{csharp}
 public class PremiumAccount : BankAccount
 {
     private decimal _monthlyFee = 10m;
@@ -190,8 +196,8 @@ public class PremiumAccount : BankAccount
     }
 }
     \end{minted}
-    \caption{Fragile Base Class: first implementation}
-    \label{fig:fragile-base-class-first-implementation}
+    \caption{Fragile Base Class: first implementation deriving class}
+    \label{fig:fragile-base-class-first-implementation-deriving-class}
 \end{figure}
 
 \begin{figure}
@@ -231,8 +237,14 @@ public class BankAccount_V2
         return _balance;
     }
 }
+    \end{minted}
+    \caption{Fragile Base Class: misspelled implementation base class}
+    \label{fig:fragile-base-class-misspelled-implementation-base-class}
+\end{figure}
 
-// PROBLEM: PremiumAccount now breaks with the new base class
+\begin{figure}
+    \centering
+    \begin{minted}[breaklines=true,fontsize=\footnotesize,breaklines=true]{csharp}
 public class PremiumAccount_V2 : BankAccount_V2
 {
     private decimal _monthlyFee = 10m;
@@ -261,8 +273,8 @@ public class PremiumAccount_V2 : BankAccount_V2
     }
 }
     \end{minted}
-    \caption{Fragile Base Class: misspelled implementation}
-    \label{fig:fragile-base-class-misspelled-implementation}
+    \caption{Fragile Base Class: misspelled implementation deriving class}
+    \label{fig:fragile-base-class-misspelled-implementation-deriving-class}
 \end{figure}
 
 \begin{figure}
