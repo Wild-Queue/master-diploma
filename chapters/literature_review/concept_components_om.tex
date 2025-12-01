@@ -76,68 +76,52 @@ cohesive unit, typically implemented as a class. More importantly, encapsulation
 access controls that restrict direct manipulation of an object's internal state. This concept originated from 
 Parnas's pioneering work on information hiding \cite{parnas1972criteria}, which established the principle that 
 modules should be designed such that they hide information from other modules—information that is likely to change.
-
 Parnas \cite{parnas1972criteria} articulated this principle by stating: 
+
 \begin{quote}
     Every module in the second decomposition is characterized by its knowledge of a design decision which it hides 
     from all others. Its interface or definition was chosen to reveal as little as possible about its inner workings. 
 \end{quote}
-This foundational idea has become the basis for encapsulation in object-oriented programming.
 
-Through encapsulation, the internal representation of an object is hidden from external access, and interaction 
-with the object is mediated exclusively through its public interface—a set of methods deliberately exposed for 
-this purpose. The value of encapsulation extends beyond mere data protection. It provides a stable interface that 
-enables developers to refactor and optimize the internal implementation without affecting dependent code. 
-Furthermore, it facilitates the implementation of validation logic within setter methods, ensuring that objects 
-never enter invalid states. This is particularly important in complex systems where maintaining object 
-consistency is critical to correctness.
+Encapsulation hides the internal representation of an object from external access, enabling interaction with the 
+object exclusively through its public interface—a set of methods specifically provided for this purpose. 
+Besides providing data protection, encapsulation provides a stable interface that allows developers 
+to refactor and optimize the internal implementation without affecting dependent code. 
 
 \subsubsection{Modularity}
 
-Modularity is the principle of designing software systems as collections of discrete, largely 
-independent modules or components that can be designed, implemented, and maintained separately. 
-Parnas \cite{parnas1972criteria} established the foundational principles for modular decomposition, 
-emphasizing that modules should be designed and implemented independently, be simple enough to be 
-fully understandable, and possess the ability to change a module's implementation without affecting 
-other modules' behavior.
+The principle of modularity is designing software systems as sets of discrete, independent units 
+or components that can be designed, implemented, and maintained separately. 
+Parnas' \cite{parnas1972criteria} fundamental idea of modular decomposition: 
+modules should be designed and implemented independently, be simple enough to be 
+fully understandable, and allow changing the implementation of a module without affecting 
+the behavior of other modules.
 
-In the context of object-oriented programming, modularity is achieved primarily through the organization 
-of classes and objects into cohesive units with clear, well-defined boundaries and minimal interdependencies. 
-As Liskov \cite{liskov1987keynote} notes, data abstractions provide a mechanism for organizing programs into 
-modules where each module is responsible for implementing a specific abstraction.
-
-Modularity in the object model manifests in several ways. At the most granular level, individual classes 
-encapsulate a single, well-defined responsibility. At a higher level, packages or namespaces group related 
-classes together. The module structure creates a hierarchy of abstractions, allowing developers to understand 
-a system at different levels of detail. 
+In object-oriented programming, modularity comes about by packaging 
+classes and objects into coherent units with well-defined boundaries and minimal interdependencies. 
+According to Liskov \cite{liskov1987keynote}, the data abstractions offer a mechanism to structure the programs into 
+modules in which each module is responsible for implementing an abstraction.
 
 \subsubsection{Hierarchy}
 
-Hierarchy refers to the organization of abstractions into ordered structures where more general or abstract 
-concepts are related to more specific or concrete ones through ”is-a” and ”part-of” relationships. 
-In object-oriented programming, hierarchy is realized through two primary mechanisms: 
-inheritance hierarchies (class structure) and compositional hierarchies (object structure).
+Hierarchy is the organization of abstractions into ordered structures in which more general 
+or abstract concepts are connected to more specific or concrete concepts through “is-a” and “part of” relationships. 
+In object-oriented programming, hierarchy is implemented using two main mechanisms: 
+inheritance hierarchies and composition hierarchies.
 
-In inheritance hierarchies, classes are organized into tree or lattice structures where subclasses 
-inherit attributes and behaviors from their superclasses. When a subclass $B$ is a subclass of a 
-superclass $A$, every instance of $B$ is also considered an instance of $A$, and $B$ is said to inherit 
-all features and behaviors from $A$. This relationship enables the creation of generalization-specialization 
-hierarchies, where abstract base classes define common behavior applicable to a family of related classes, 
-and derived classes specialize this behavior for specific scenarios.
+In inheritance hierarchies, classes are organized into tree-like or lattice structures in 
+which subclasses inherit attributes and behavior from their superclasses. 
+The principle underlying such structures is Liskov's substitution principle, 
+formulated by Liskov \cite{liskov1987keynote} and formalized in subsequent works \cite{liskov1999behavioral}. 
+This principle states that objects of a base type must be replaceable with objects 
+of derived types without changing the correctness of the program. 
 
-The principle underlying such structures is the Liskov Substitution Principle, articulated 
-by Liskov \cite{liskov1987keynote} and formalized in subsequent work \cite{liskov1999behavioral}. 
-This principle stipulates that objects of a base type should be replaceable by objects of derived types 
-without altering the correctness of the program. In formal terms, if $S$ is a subtype of $T$, 
-then objects of type $S$ may be substituted for objects of type $T$ without breaking the invariants 
-that hold for $T$.
-
-In compositional hierarchies, objects combine simpler objects through the ”part-of” relationship, 
-creating structures where complex objects are aggregates of simpler components. 
-This organizational principle allows for the construction of systems of arbitrary complexity from 
-well-understood, reusable building blocks. As noted in the seminal work on design patterns \cite{gamma1995design}, 
-composition provides a more flexible alternative to inheritance, enabling runtime changes 
-to object relationships that would otherwise be fixed at compile time.
+In composition hierarchies, objects combine simpler objects through a “part-of” relationship, 
+creating structures where complex objects are aggregates from simpler components. 
+This organizational principle allows systems of any complexity to be built from well-understood, 
+reusable building blocks. As noted in the seminal work on design patterns \cite{gamma1995design}, 
+composition provides a more flexible alternative to inheritance, allowing changes 
+to be made to the relationships between objects at runtime that would otherwise be fixed at compile time.
 
 Hierarchy provides several critical benefits: it enables the management of complexity through layered abstraction; 
 it promotes code reuse through inheritance of common behavior; it establishes natural relationships between 
@@ -146,84 +130,41 @@ allowing for flexible, extensible program architectures.
 
 \subsection{Minor Components of the Object Model}
 
-The minor components are features that enhance the expressiveness and applicability of the object model 
-but are not strictly necessary for a language to be considered object-oriented. Their presence in modern 
-programming languages reflects the evolution of object-oriented principles to address practical 
-challenges in contemporary software development.
+The minor components are features that improve the object model's expressiveness and usability, 
+but aren't strictly needed for a language to be considered as object-oriented. Presence of this components 
+in modern programming languages shows the evolution of object-oriented principles for solving practical 
+problems in modern software development.
 
 \subsubsection{Typing}
 
-Typing refers to the system of rules and mechanisms that govern how data types are associated with variables, 
-expressions, and values in a programming language, and how operations are permitted on values of different types. 
-A type system assigns specific types to each element in a program, defining both the kind of data that can be 
-stored and the operations permissible on that data.
-
-Milner's work on type inference in the ML programming language \cite{milner1978theory} established foundational 
-principles for polymorphic type systems. The Hindley-Milner type system \cite{hindley1969principal} allows type 
-inference where the types of variables can be deduced from programs written in an entirely untyped style, while 
-still supporting parametric polymorphism—the ability for a single definition to be applied to values of different 
-types.
-
-In object-oriented languages, typing serves multiple purposes. Static type checking, performed at compile time, 
-allows detection of many categories of errors before program execution, increasing reliability and enabling 
-certain optimizations. Type hierarchies, based on inheritance relationships, enable polymorphism—the ability 
-for different types to respond to the same method call in type-specific ways. The relationship between 
-types and subtypes is governed by formal principles: in particular, subtype polymorphism allows objects 
-of a supertype to be replaced by objects of a subtype, provided the subtype respects the contract established 
-by the supertype.
+Typing is defined a system of rules and mechanisms that determine how data types are associated with variables, 
+expressions, and values, as well as how operations on values of different types are permitted. 
+The type system assigns specific types to each element in the program, defining both 
+the kind of data that can be stored and the operations that are allowed on that data.
 
 \subsubsection{Concurrency}
 
-Concurrency refers to the ability of a system to manage multiple computations that execute logically in 
-parallel, either through true simultaneous execution on multi-processor systems or through interleaved 
-execution on single-processor systems. In the context of the object model, concurrency addresses how 
-objects maintain consistency and correctness when multiple threads or processes access and modify them 
-simultaneously.
+Concurrency is defined as the ability of a system to manipulate several computations that are logically 
+parallel, either through true simultaneous execution on multiprocessor systems or through alternating 
+execution on single-processor systems. In the context of the object model, concurrency resolves the issue on how 
+objects maintain consistency and correctness when multiple threads or processes simultaneously access and modify them.
 
-The integration of concurrency into object-oriented systems introduces significant complexity, as the 
-mutable state encapsulated within objects may be accessed by concurrent executions. Johnsen and 
-Owe \cite{johnsen2003combining} propose programming constructs for concurrent objects based on 
-processor release points and asynchronous method calls, which allow objects to dynamically change 
-between active and reactive behavior in a distributed environment. Active objects, as described by 
-Lavender and Schmidt \cite{lavender1996active}, decouple method execution from method invocation to 
-simplify synchronized access to shared resources.
-
-Different object-oriented languages address this challenge through various mechanisms: some employ 
-mutual exclusion locks to ensure that only one thread can execute a particular method on an object 
-at a time; others support active objects that manage their own internal threads; still others provide 
-transactional semantics where concurrent operations are executed in a serializable manner, guaranteeing 
+Different object-oriented languages solve the problem of synchronizing values during parallel execution 
+using different mechanisms. Some use mutual exclusion locks to ensure that only one thread can execute 
+a particular method on an object at a time. Others support active objects that manage their own internal threads; 
+still others provide transactional semantics, in which parallel operations are executed sequentially, ensuring 
 consistency.
-
-Effective concurrency support is increasingly important in modern object-oriented systems, particularly 
-those designed for distributed computing or multi-core processor environments. However, as concurrency 
-mechanisms can significantly complicate both language design and program development, it remains a 
-non-essential component of the object model. Many successful object-oriented languages provide limited 
-concurrency support or delegate concurrency management to external libraries or frameworks.
 
 \subsubsection{Persistence}
 
-Persistence refers to the ability to store and retrieve objects or their state across program executions, 
-typically through mechanisms such as serialization, object-relational mapping, or object-oriented databases. 
+Persistence refers to the ability to store and retrieve objects or their state between program runs. 
 Without persistence, all objects created during program execution are lost when the program terminates, 
-limiting the applicability of object-oriented programming to stateless or short-lived computations.
+which limits the applicability of object-oriented programming to stateless or short-lived computations.
 
-Atkinson and Morrison \cite{atkinson1995orthogonally} introduced the concept of orthogonal persistence, 
-which adheres to three fundamental principles: the principle of persistence independence (programs look 
-the same whether they manipulate long-term or short-term data), the principle of data type orthogonality 
-(all data objects are allowed to be persistent irrespective of their type), and the principle of persistence 
-identification (the mechanism for identifying persistent objects is not related to the type system).
-
-The object model incorporates persistence through various approaches. In some languages, persistence is 
-achieved implicitly through orthogonal persistence, where objects are automatically saved and restored 
-through special mechanisms without requiring explicit serialization code \cite{atkinson1995orthogonally}. 
-In other approaches, persistence is achieved through explicit programming, where objects must implement 
-serialization interfaces or developers must write code to translate objects to and from storage representations.
-
-Several strategies for making objects persistent have been proposed: persistence by class, where all objects 
-of certain classes are automatically persistent; persistence by creation, where special syntax creates 
-persistent objects; persistence by marking, where objects are explicitly marked as persistent after creation; 
-and persistence by reference, where designated root objects are declared persistent and all objects reachable 
-from them are transitively made persistent.
+The object model includes persistence through various approaches. The orthogonal persistence approach 
+automatically saves and restores objects using special mechanisms without the need for explicit serialization code. 
+With explicit programming, objects must implement serialization interfaces \cite{atkinson1995orthogonally}, 
+or developers must write code to convert objects to storage representations and back.
 
 \subsection{The Selected Definition of the Object Model}
 

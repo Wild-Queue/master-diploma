@@ -1,11 +1,13 @@
 \section{Critical Analysis of Object-Oriented Programming Approach}
 
-The object-oriented programming paradigm, despite its widespread adoption and significant 
-influence on software development practices, exhibits fundamental limitations and unresolved 
-challenges that constrain its applicability and effectiveness across diverse problem domains. 
-This section presents a systematic and critical examination of the core deficiencies of OOP. 
-The critical  perspective developed here establishes a theoretical foundation for evaluating 
-the real-world implementation of object models in contemporary programming languages.
+The object-oriented programming paradigm, despite its significant influence on software 
+development practices, demonstrates fundamental limitations and unresolved 
+problems that hinder its applicability and effectiveness in various problem-solving areas. 
+This section presents a systematic and critical examination of the main shortcomings of OOP. 
+The critical perspective developed here provides a theoretical basis for evaluating 
+the actual implementation of object models in modern programming languages.
+
+
 
 \subsection{Theoretical Inconsistencies in Inheritance and Subtyping}
 
@@ -15,10 +17,12 @@ that inheritance, when used as a mechanism for incremental modification of
 recursive object definitions, does not necessarily produce subtypes \cite{cook1989inheritance}. 
 The traditional assumption that inheritance hierarchies determine conformance 
 relations proves inadequate when dealing with recursive types and contravariant 
-method types. Cook et al. show through formal analysis that in strongly-typed OOP 
-languages like Simula, C++, and Eiffel, the restriction of inheritance to satisfy 
-subtyping requirements substantially limits the flexibility of inheritance mechanisms, 
-making them less expressive than untyped inheritance found in languages such as Smalltalk \cite{cook1989inheritance}.
+method types. 
+%% DANGEROUS REGION BEGIN
+% Cook et al. show through formal analysis that in strongly-typed OOP 
+% languages like Simula, C++, and Eiffel, the restriction of inheritance to satisfy 
+% subtyping requirements substantially limits the flexibility of inheritance mechanisms, 
+% making them less expressive than untyped inheritance found in languages such as Smalltalk \cite{cook1989inheritance}.
 
 The distinction between inheritance and subtyping stems from fundamental type-theoretic 
 considerations. Cardelli and Wegner's comprehensive analysis of type systems establishes 
@@ -29,7 +33,9 @@ inheritance mechanisms, particularly when dealing with recursive object definiti
 F-bounded polymorphism, impose additional constraints that compromise expressiveness \cite{pierce1994simple}. 
 The practical consequence of this theoretical inconsistency is that inheritance-based type 
 hierarchies cannot soundly enforce type safety without either compromising expressiveness or 
-introducing type insecurities. Eiffel exemplifies this problem: by identifying classes with 
+introducing type insecurities. 
+%% DANGEROUS REGION END
+Eiffel exemplifies this problem: by identifying classes with 
 types and inheritance with subtyping, the language exhibits type insecurities as documented 
 by Cardelli and Wegner \cite{cardelli1985understanding}.
 
