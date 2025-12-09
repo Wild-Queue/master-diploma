@@ -7,8 +7,6 @@ This section presents a systematic and critical examination of the main shortcom
 The critical perspective developed here provides a theoretical basis for evaluating 
 the actual implementation of object models in modern programming languages.
 
-
-
 \subsection{Theoretical Inconsistencies in Inheritance and Subtyping}
 
 A fundamental issue in typed object-oriented languages concerns the conflation 
@@ -18,23 +16,14 @@ recursive object definitions, does not necessarily produce subtypes \cite{cook19
 The traditional assumption that inheritance hierarchies determine conformance 
 relations proves inadequate when dealing with recursive types and contravariant 
 method types. 
-%% DANGEROUS REGION BEGIN
-% Cook et al. show through formal analysis that in strongly-typed OOP 
-% languages like Simula, C++, and Eiffel, the restriction of inheritance to satisfy 
-% subtyping requirements substantially limits the flexibility of inheritance mechanisms, 
-% making them less expressive than untyped inheritance found in languages such as Smalltalk \cite{cook1989inheritance}.
 
-The distinction between inheritance and subtyping stems from fundamental type-theoretic 
-considerations. Cardelli and Wegner's comprehensive analysis of type systems establishes 
-that inheritance as an implementation mechanism and subtyping as a type-theoretic relation 
-represent orthogonal concerns \cite{cardelli1985understanding}. Their framework demonstrates 
-that subtyping relations require adherence to the Liskov substitution principle, whereas 
-inheritance mechanisms, particularly when dealing with recursive object definitions through 
-F-bounded polymorphism, impose additional constraints that compromise expressiveness \cite{pierce1994simple}. 
-The practical consequence of this theoretical inconsistency is that inheritance-based type 
-hierarchies cannot soundly enforce type safety without either compromising expressiveness or 
-introducing type insecurities. 
-%% DANGEROUS REGION END
+The distinction between inheritance and subtyping stems from type-theoretic considerations. 
+Cardelli and Wegner in their analysis of type systems establishes that inheritance 
+as an implementation mechanism and subtyping represent orthogonal concerns \cite{cardelli1985understanding}. 
+Their concepts demonstrates that subtyping relations require adherence to the Liskov substitution principle, whereas 
+inheritance mechanisms impose additional constraints that compromise expressiveness \cite{pierce1994simple}. 
+The consequence of this theoretical inconsistency is that inheritance-based type hierarchies 
+cannot enforce type safety without either compromising expressiveness or  introducing type insecurities. 
 Eiffel exemplifies this problem: by identifying classes with 
 types and inheritance with subtyping, the language exhibits type insecurities as documented 
 by Cardelli and Wegner \cite{cardelli1985understanding}.
