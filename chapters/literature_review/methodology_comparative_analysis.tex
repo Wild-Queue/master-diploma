@@ -1,68 +1,38 @@
 \section{Methodology of Comparative Analysis}
 
-When developing object models for programming language, 
-a systematic and reproducible approach to their analysis must be employed. 
-This section provides a list of criteria for comparing the implementation of object models.
+When developing object models for programming language, a systematic and reproducible approach to their analysis must be employed. This section provides a list of criteria for comparing the implementation of object models.
 
 \subsection*{Rationale for the Chosen Methodology}
 
-The selection of comparison criteria is justified by a number of fundamental works on programming language design. 
-Cardelli and Wegner \cite{cardelli1985understanding} established three key requirements for defining 
-an object-oriented language: support for objects as data abstractions, the association of objects with a specific 
-type, and type inheritance. These requirements form a basic classification of languages and allow one 
-to distinguish object-oriented languages from those that merely support some object-based features.
+The selection of comparison criteria is justified by a number of fundamental works on programming language design. Cardelli and Wegner \cite{cardelli1985understanding} established three key requirements for defining an object-oriented language: support for objects as data abstractions, the association of objects with a specific type, and type inheritance. These requirements form a basic classification of languages and allow one to distinguish object-oriented languages from those that merely support some object-based features.
 
-Booch \cite{booch2008object} defined four core elements of the object model~--- 
-abstraction, encapsulation, modularity, and hierarchy~--- as well as three secondary 
-elements~--- as well as three secondary elements—typing, concurrency, and persistence. 
-According to Booch, without the core elements, a model ceases to be object-oriented; 
-however, the secondary elements significantly impact the model's practical applicability. 
-This hierarchical approach to identifying elements helps determine which language 
-characteristics are critical.
+Booch \cite{booch2008object} defined four core elements of the object model~--- abstraction, encapsulation, modularity, and hierarchy~--- as well as three secondary elements~--- as well as three secondary elements—typing, concurrency, and persistence. According to Booch, without the core elements, a model ceases to be object-oriented; however, the secondary elements significantly impact the model's practical applicability. This hierarchical approach to identifying elements helps determine which language characteristics are critical.
 
-The methodology for evaluating programming languages is based on a comprehensive approach discussed in works 
-on language assessment criteria. Sebesta \cite{sebesta2016concepts} proposed four primary criteria 
-for evaluating languages: readability, writability, reliability, and cost. Furthermore, readability 
-and writability depend on a wide range of language characteristics, including syntactic simplicity, 
-support for abstraction, and orthogonality. Modern works on code quality and software maintainability 
-emphasize the importance of metrics such as modularity, reusability, analyzability, 
-and modifiability \cite{iso25010}, which are directly influenced by the characteristics of a specific 
-language's object model.
+The methodology for evaluating programming languages is based on a comprehensive approach discussed in works on language assessment criteria. Sebesta \cite{sebesta2016concepts} proposed four primary criteria for evaluating languages: readability, writability, reliability, and cost. Furthermore, readability and writability depend on a wide range of language characteristics, including syntactic simplicity, support for abstraction, and orthogonality. Modern works on code quality and software maintainability emphasize the importance of metrics such as modularity, reusability, analyzability, and modifiability \cite{iso25010}, which are directly influenced by the characteristics of a specific language's object model.
 
 \subsection*{Object Model Comparison Criteria}
 
-Based on the fundamental works mentioned above and an analysis of programming language standards, 
-the following criteria have been identified for the systematic comparison of object models:
+Based on the fundamental works mentioned above and an analysis of programming language standards, the following criteria have been identified for the systematic comparison of object models:
 
 \begin{enumerate}
-    \item \textbf{Type System:} allows to evaluate how the language ensures code reliability and builds 
-    its infrastructure through data validation rules.
-    
-    \item \textbf{Inheritance Mechanism:} is necessary to compare how languages support code reuse and 
-    hierarchy organization, which directly affects maintainability and extensibility.
-    
-    \item \textbf{Abstraction and Encapsulation:} helps analyze how language manages complexity by 
-    hiding implementation details and protecting the internal state of objects.
+    \item \textbf{Type System:} allows to evaluate how the language ensures code reliability and builds its infrastructure through data validation rules.
 
-    \item \textbf{Polymorphism:} comparing the trade-off between performance (static dispatching) 
-    and code flexibility (dynamic dispatching) in different languages.
+    \item \textbf{Inheritance Mechanism:} is necessary to compare how languages support code reuse and hierarchy organization, which directly affects maintainability and extensibility.
 
-    \item \textbf{Object Creation Mechanism:} Compare fundamental approaches to defining objects: 
-    based on classes (instances) or prototypes (delegation).
+    \item \textbf{Abstraction and Encapsulation:} helps analyze how language manages complexity by hiding implementation details and protecting the internal state of objects.
 
-    \item \textbf{Metaclasses and Metaprogramming:} assessments of the language's ability to introspect 
-    and modify its own structure during execution.
+    \item \textbf{Polymorphism:} comparing the trade-off between performance (static dispatching) and code flexibility (dynamic dispatching) in different languages.
 
-    \item \textbf{Multiple Inheritance and Mixins:} Compare alternative mechanisms for composition and 
-    extending functionality beyond a strict class hierarchy.
+    \item \textbf{Object Creation Mechanism:} Compare fundamental approaches to defining objects: based on classes (instances) or prototypes (delegation).
 
-    \item \textbf{Memory Management:} analysis of trade-offs between performance, predictability of behavior, 
-    and development complexity in different languages.
+    \item \textbf{Metaclasses and Metaprogramming:} assessments of the language's ability to introspect and modify its own structure during execution.
 
-    \item \textbf{Exception Handling:} Compare the philosophies of languages regarding error handling guarantees: 
-    strict control at the compilation stage (checked exceptions) or a more flexible runtime model.
+    \item \textbf{Multiple Inheritance and Mixins:} Compare alternative mechanisms for composition and extending functionality beyond a strict class hierarchy.
 
-    \item \textbf{Modularity and Packages:} assess how the language supports the organization and scaling of 
-    large projects through code structuring mechanisms.
+    \item \textbf{Memory Management:} analysis of trade-offs between performance, predictability of behavior, and development complexity in different languages.
+
+    \item \textbf{Exception Handling:} Compare the philosophies of languages regarding error handling guarantees: strict control at the compilation stage (checked exceptions) or a more flexible runtime model.
+
+    \item \textbf{Modularity and Packages:} assess how the language supports the organization and scaling of large projects through code structuring mechanisms.
 
 \end{enumerate}
