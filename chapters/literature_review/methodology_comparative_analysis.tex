@@ -2,7 +2,7 @@
 
 When developing object models for programming language, a systematic and reproducible approach to their analysis must be employed. This section provides a list of criteria for comparing the implementation of object models.
 
-\subsection*{Rationale for the Chosen Methodology}
+\subsection{Rationale for the Chosen Methodology}
 
 The selection of comparison criteria is justified by a number of fundamental works on programming language design. Cardelli and Wegner \cite{cardelli1985understanding} established three key requirements for defining an object-oriented language: support for objects as data abstractions, the association of objects with a specific type, and type inheritance. These requirements form a basic classification of languages and allow one to distinguish object-oriented languages from those that merely support some object-based features.
 
@@ -10,7 +10,7 @@ Booch \cite{booch2008object} defined four core elements of the object model~--- 
 
 The methodology for evaluating programming languages is based on a comprehensive approach discussed in works on language assessment criteria. Sebesta \cite{sebesta2016concepts} proposed four primary criteria for evaluating languages: readability, writability, reliability, and cost. Furthermore, readability and writability depend on a wide range of language characteristics, including syntactic simplicity, support for abstraction, and orthogonality. Modern works on code quality and software maintainability emphasize the importance of metrics such as modularity, reusability, analyzability, and modifiability \cite{iso25010}, which are directly influenced by the characteristics of a specific language's object model.
 
-\subsection*{Object Model Comparison Criteria}
+\subsection{Object Model Comparison Criteria}
 
 Based on the fundamental works mentioned above and an analysis of programming language standards, the following criteria have been identified for the systematic comparison of object models:
 
@@ -29,10 +29,95 @@ Based on the fundamental works mentioned above and an analysis of programming la
 
     \item \textbf{Multiple Inheritance and Mixins:} Compare alternative mechanisms for composition and extending functionality beyond a strict class hierarchy.
 
-    \item \textbf{Memory Management:} analysis of trade-offs between performance, predictability of behavior, and development complexity in different languages.
-
     \item \textbf{Exception Handling:} Compare the philosophies of languages regarding error handling guarantees: strict control at the compilation stage (checked exceptions) or a more flexible runtime model.
 
     \item \textbf{Modularity and Packages:} assess how the language supports the organization and scaling of large projects through code structuring mechanisms.
 
+    \item \textbf{Subtyping and Contract model:} Comparison of how languages relate inheritance and subtyping, and what means of contract formalization they provide (invariants, preconditions, postconditions).
+
+    \item \textbf{Composition mechanisms and alternatives to inheritance:} Comparison of the degree of composition support (delegation, decorators, first-class interfaces) as an alternative to inheritance, it shows how much the model really supports reuse without hierarchies.
+
+    \item \textbf{Managing the mutability and evolution of hierarchies:} Languages protect clients from base class changes in different ways: final/sealed constructs, closed hierarchies, explicit extension points, and redefinition rules.
+ 
+    \item \textbf{Multi-paradigm integration:} Comparison of how the object model is consistent with other paradigms (immutability-first, ownership, actors, active objects).
+
+    \item \textbf{Support for formal verifiability and specification:} Compare the extent to which the object model is suitable for formal methods: the presence of strict type semantics, restrictions on side effects, explicit specification interfaces.
+
 \end{enumerate}
+
+
+\subsection{Methodology of Comparative Analysis}
+
+Based on the reviewed literature and the theoretical foundations presented above, the comparative methodology in this dissertation is reduced to a set of eight core criteria. Each criterion reflects a structural dimension of the object model rather than superficial syntactic or performance characteristics.
+
+\subsubsection{1. Type System and Subtyping Model}
+
+The type system constitutes the primary semantic framework of an object model. Cardelli and Wegner emphasize that understanding object-oriented languages requires distinguishing between data abstraction, polymorphism, and subtyping \cite{cardelli1985understanding}. They explicitly separate inheritance from subtyping, demonstrating that “inheritance is not subtyping” and that type safety depends on formal subtyping relations rather than reuse mechanisms.
+
+Therefore, the comparison must evaluate: (i) nominal vs. structural typing, (ii) variance rules, and (iii) the formal relation between inheritance and subtyping.
+
+\textbf{Relevance:} The type system defines semantic correctness boundaries and impacts modular reasoning.
+
+\subsubsection{2. Abstraction and Encapsulation Mechanisms}
+
+Abstraction and encapsulation are identified by Booch as core elements of the object model \cite{booch2008object}. Parnas’ principle of information hiding states that modules should conceal design decisions likely to change \cite{parnas1972criteria}. 
+
+Encapsulation mechanisms (visibility modifiers, module boundaries, interface constructs) determine whether internal representation is truly protected or merely conventionally hidden. Weak encapsulation leads to fragile hierarchies and tight coupling, as documented in design pattern literature.
+
+\textbf{Relevance:} Encapsulation quality determines modular stability and evolvability.
+
+\subsubsection{3. Inheritance Semantics and Hierarchy Management}
+
+Hierarchy is one of Booch’s four major components, yet inheritance introduces well-documented structural risks. Mikhajlov and Sekerinski formally analyze the fragile base class problem, demonstrating that “apparently safe modifications to a base class can cause derived classes to malfunction” \cite{mikhajlov1998study}. 
+
+Consequently, the methodology evaluates: (i) single vs. multiple inheritance, (ii) linearization rules, (iii) mechanisms such as sealed/final classes, and (iv) protection against fragile base class effects.
+
+\textbf{Relevance:} Inheritance directly affects modular soundness and long-term maintainability.
+
+\subsubsection{4. Composition and Alternatives to Inheritance}
+
+Because class inheritance exposes the implementation details of superclasses to subclasses, many programmers prefer composition.
+Therefore, object models must be compared with respect to delegation mechanisms, interface-based composition, mixins, and traits. This criterion evaluates whether the language provides first-class constructs enabling reuse without hierarchical fragility.
+
+\textbf{Relevance:} Composition mechanisms mitigate structural deficiencies of inheritance-based reuse.
+
+\subsubsection{5. Object Representation and Creation Model}
+
+The languages diverge fundamentally in how objects are constructed and represented: class-based instantiation, prototype-based delegation, or hybrid models.
+
+This dimension determines object identity semantics, dispatch strategy, and layout constraints. It also affects meta-level extensibility and runtime adaptability.
+
+\textbf{Relevance:} Object construction semantics shape the entire runtime model.
+
+\subsubsection{6. Polymorphism and Dispatch Mechanisms}
+
+Polymorphism is central to OOP theory. The comparison must distinguish between static (compile-time) and dynamic (runtime) dispatch and evaluate trade-offs between flexibility and predictability.
+
+\textbf{Relevance:} Dispatch rules determine behavioral substitutability and performance characteristics.
+
+\subsubsection{7. State Model, Mutability, and Concurrency Guarantees}
+
+Reynolds distinguishes between values and entities, highlighting the conceptual implications of mutable object identity \cite{reynolds1985three}. Mutable shared state complicates reasoning, particularly under concurrency.
+
+Languages differ in whether they enforce immutability by default, provide ownership models, or rely on synchronization primitives. This dimension is essential for evaluating architectural scalability and suitability for concurrent systems.
+
+\textbf{Relevance:} Increasingly critical in modern multi-core environments.
+
+\subsubsection{8. Support for Formal Specification and Verifiability}
+
+The theoretical separation between behavioral subtyping and implementation inheritance \cite{cook1989inheritance} implies the need for explicit contracts. Languages that support invariants, preconditions, and postconditions allow formal reasoning about substitutability.
+
+The absence of clear separation between specification and implementation has been identified as a structural weakness of mainstream OOP systems \cite{mikhajlov1998study}. Thus, the methodology assesses the availability of contract models and formal type semantics.
+
+\textbf{Relevance:} Essential for long-term correctness, static verification, and architectural reliability.
+
+\subsubsection{Excluded Criteria}
+
+Certain criteria from the initial list were excluded:
+
+\begin{itemize}
+    \item \textit{Exception handling} — although relevant to language philosophy, it does not directly define the object model architecture.
+    \item \textit{Packages and modular organization} — considered secondary to encapsulation and hierarchy, already captured under modular abstraction.
+    \item \textit{Persistence} — treated as an orthogonal runtime concern rather than a defining structural property.
+    \item \textit{Metaprogramming} — important for language flexibility but not foundational for object model semantics.
+\end{itemize}

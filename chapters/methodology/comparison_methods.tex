@@ -1,0 +1,509 @@
+\section{Comparison Technique}
+
+\subsection{Type System and Subtyping Model}
+
+\subsubsection{Metric Definition}
+
+Let the \textit{Type System and Subtyping Soundness Index (TSSI)} be defined as:
+
+\begin{equation}
+    TSSI(L) = 
+    \alpha \cdot S_{nom}(L) + 
+    \beta \cdot S_{var}(L) + 
+    \gamma \cdot S_{rel}(L)
+\end{equation}
+
+where $L$ denotes the analyzed programming language, $\alpha + \beta + \gamma = 1$ and each component is normalized to the interval $[0,1]$.
+
+\subsubsection{Components}
+
+\textbf{1) Nominal–Structural Typing Score $S_{nom}(L)$}
+
+\begin{equation}
+S_{nom}(L) = \frac{I_{struct}(L) + I_{nom}(L)}{2}
+\end{equation}
+
+where:
+
+\begin{itemize}
+\item $I_{struct}(L) = 1$ if the language supports structural subtyping with formal typing rules; $0$ otherwise.
+\item $I_{nom}(L) = 1$ if the language supports nominal typing with explicit subtype declarations; $0$ otherwise.
+\end{itemize}
+
+Hybrid systems receive $1$ for both components. Purely nominal or purely structural systems receive $0.5$. The evaluation is performed at the language specification level by analyzing typing judgments and formal rules.
+
+\textbf{2) Variance Formalization Score $S_{var}(L)$}
+
+\begin{equation}
+S_{var}(L) = \frac{V_{exp}(L) + V_{sound}(L)}{2}
+\end{equation}
+
+where:
+
+\begin{itemize}
+\item $V_{exp}(L) \in [0,1]$ measures the explicitness of variance annotations (0 = no generics; 0.5 = implicit or restricted variance; 1 = explicit declaration of co/contra/invariance).
+\item $V_{sound}(L) \in [0,1]$ measures formal soundness guarantees (1 if variance rules are formally defined and proven type-safe in specification; 0.5 if partially restricted; 0 if unsound or unspecified).
+\end{itemize}
+
+\textbf{3) Inheritance–Subtyping Separation Score $S_{rel}(L)$}
+
+\begin{equation}
+S_{rel}(L) = 
+1 - 
+\frac{|E_{inh}(L) \cap E_{sub}(L)|}
+{|E_{sub}(L)|}
+\end{equation}
+
+where:
+
+\begin{itemize}
+    \item $E_{inh}(L)$ is the set of inheritance relations defined syntactically in the language specification.
+    \item $E_{sub}(L)$ is the set of subtype relations defined in the language formal type system.
+\end{itemize}
+
+This metric measures the proportion of subtype relationships that are not caused by implementation inheritance. If all subtypes exist in the language only through inheritance, then the value of the metric approaches $0$, which indicates the absence of conceptual separation. If subtypes are determined in most cases separately from inheritance (e.g., using interfaces or structural typing rules), the metric approaches $1$, reflecting a strong semantic separation between reuse and interchangeability. Measurement is performed at the specification level by constructing abstract inheritance and subtype relation graphs from the formal language definition. 
+
+\subsubsection{Justification}
+
+This formula describes the differences between subtyping and inheritance mechanisms. Decomposition identifies three independent semantic aspects: the discipline of typing, variance safety, and the formal separation of inheritance from subtyping.  Normalisation of coefficients allows you to adapt the expression for specific goals, increasing values of the important parameters during a specific comparison.
+
+\subsection{Abstraction and Encapsulation Mechanisms}
+
+\subsubsection{Metric Definition}
+
+Let the \textit{Abstraction and Encapsulation score (AE)} be defined as:
+
+\begin{equation}
+    AE(L) = 
+    \alpha \cdot V(L) + 
+    \beta \cdot M(L) + 
+    \gamma \cdot I(L) + 
+    \delta \cdot E(L)
+\end{equation}
+
+where $L$ denotes the analyzed programming language, $\alpha + \beta + \gamma + \delta = 1$ and each component is normalized to the interval $[0,1]$.
+
+\subsubsection{Components}
+
+\begin{itemize}
+    \item $V(L)$ — \textit{Visibility Granularity Index}.
+    Normalized measure of the access control strictness modifiers (e.g., private, protected, file, module-level).
+    \[
+    V(L) = \frac{n_{levels}(L)}{n_{max}}
+    \]
+    where $n_{levels}(L)$ is the number of semantically distinct access scopes supported by the language.
+
+    \item $M(L)$ — \textit{Module Isolation Strength}.
+    Metric aimed for comparison of the number of module or namespace boundaaries that restrict access to a view:
+    \[
+    M(L) = \frac{b_{strict}(L)}{b_{total}(L)}
+    \]
+    where $b_{strict}(L)$ is the amount of boundaries with enforced export control (e.g., modules with explicit export lists), and $b_{total}(L)$ is the total number of modularization constructs.
+
+    \item $I(L)$ — \textit{Interface Abstraction Capacity}.
+    Measures the ability to separate specification from implementation (e.g., interfaces, abstract classes, protocols from classes).
+    \[
+    I(L) = \frac{n_{abstraction_constructs}(L)}{n_{object}(L)}
+    \]
+    where $n_{abstraction_constructs}(L)$ counts distinct language-level constructs dedicated to behavioral abstraction and $n_{object}(L)$ is the number of object-defining constructs.
+
+    \item $E(L)$ — \textit{Encapsulation Enforcement Coefficient}.
+    Binary or graded measure reflecting whether encapsulation violations are prevented by the type system and runtime (no unrestricted reflection, no unchecked field access, controlled unsafe mechanisms).
+    \[
+    E(L) = 1 - \frac{n_{bypass-mechanisms}(L)}{n_{total-control-mechanisms}(L)}
+    \]
+\end{itemize}
+
+\subsection{Inheritance Semantics and Hierarchy Management}
+
+\subsubsection{Metric Definition}
+
+Let the \textit{Inheritance Semantics Robustness Index (ISRI)} be defined as:
+
+\begin{equation}
+    ISRI(L) =
+    \alpha \cdot H_s(L) +
+    \beta \cdot L_d(L) +
+    \gamma \cdot C_p(L) +
+    \delta \cdot F_b(L),
+\end{equation}
+
+where $L$ denotes the analyzed programming language, $\alpha + \beta + \gamma + \delta = 1$ and each component is normalized to the interval $[0,1]$.
+
+\subsubsection{Components}
+
+\begin{itemize}
+    \item $H_s(L)$ — \textit{Hierarchy Simplicity Factor}.  
+    A normalized measure of inheritance model complexity:
+    \[
+    H_s(L) = 1 - \frac{M(L) - 1}{M_{max} - 1},
+    \]
+    where $M(L)$ is the maximum number of direct superclass declarations allowed (1 for single inheritance, $>1$ for multiple inheritance), and $M_{max}$ is a maximal value of M(L) for all comparing languages.
+
+    \item $L_d(L)$ — \textit{Linearization Determinism Score}.  
+    A binary or graded measure reflecting whether the language defines a formally specified, deterministic method resolution order (MRO):
+    \[
+    L_d(L) =
+    \begin{cases}
+    1, & \text{if linearization is formally defined and deterministic}, \\
+    0.5, & \text{if partially specified}, \\
+    0, & \text{if ambiguous or implementation-defined}.
+    \end{cases}
+    \]
+
+    \item $C_p(L)$ — \textit{Constraint Protection Coefficient}.  
+    Measures availability of hierarchy restriction mechanisms:
+    \[
+    C_p(L) = \frac{F(L)}{F_{max}},
+    \]
+    where $F(L)$ is the number of supported protection mechanisms (e.g., \texttt{final}, \texttt{sealed}, non-virtual-by-default methods, explicit override requirements), and $F_{max}$ is a maximal value of M(L) for all comparing languages.
+
+    \item $F_b(L)$ — \textit{Fragile Base Mitigation Factor}.  
+    Reflects language-level safeguards against fragile base class effects:
+    \[
+    F_b(L) = \frac{S(L)}{S_{max}},
+    \]
+    where $S(L)$ counts semantic safeguards (e.g., explicit override annotations, method visibility control, requirement of explicit super-calls, covariance restrictions).
+\end{itemize}
+
+----------------------------------------------
+
+\subsection{Composition and Alternatives to Inheritance}
+
+\subsubsection{Metric Definition}
+
+Let the \textit{Composition and Reuse Flexibility Index (CRFI)} be defined as:
+
+\begin{equation}
+    CRFI(L) = 
+    \alpha \cdot D_{cls}(L) + 
+    \beta \cdot T_{exp}(L) + 
+    \gamma \cdot I_{comp}(L)
+\end{equation}
+
+where $L$ denotes the analyzed programming language, $\alpha + \beta + \gamma = 1$ and each component is normalized to the interval $[0,1]$.
+
+\subsubsection{Components}
+
+\textbf{1) Class-Based Delegation Score $D_{cls}(L)$}
+
+\begin{equation}
+D_{cls}(L) = \frac{K_{del}(L) + S_{fwd}(L)}{2}
+\end{equation}
+
+where:
+\begin{itemize}
+    \item $K_{del}(L)$ indicates available syntactic delegation constructs in the language.
+    \[
+    K_{del}(L) = 
+    \begin{cases}
+    1, & \text{if available with keywords (e.g. \texttt{delegate})}, \\
+    0.5, & \text{if emulated via adapters}, \\
+    0, & \text{if language does not provide delegation mechanisms}.
+    \end{cases}
+    \]
+    \item $S_{fwd}(L)$ evaluates the presence of mechanisms that allows to automatically delegate method calls from one object to another without writing boilerplate code.
+    \[
+    S_{fwd}(L) = 
+    \begin{cases}
+    1, & \text{if automatic delegation mechanisms are available}, \\
+    0, & \text{if language does not provide automatic delegation}.
+    \end{cases}
+    \]
+\end{itemize}
+
+\textbf{2) Trait Expressiveness Score $T_{exp}(L)$}
+
+\begin{equation}
+T_{exp}(L) = \frac{R_{conf}(L) + O_{mod}(L)}{2}
+\end{equation}
+
+where:
+\begin{itemize}
+    \item $R_{conf}(L)$ evaluates name conflict resolution during mixing.
+    \[
+    R_{conf}(L) = 
+    \begin{cases}
+    1, & \text{if resolution using explicit exclusion or aliasing}, \\
+    0.5, & \text{if resolution using declaration order}, \\
+    0, & \text{if compilation error}.
+    \end{cases}
+    \]
+    \item $O_{mod}(L)$ evaluates the ability of composition mechanisms (tracks, mixins) to determine the requirements for the class that uses them.
+    \[
+    O_{mod}(L) = 
+    \begin{cases}
+    1, & \text{if allows to declare requirements inside traits/mixins}, \\
+    0, & \text{if traits/mixins should be completely self-constrained}.
+    \end{cases}
+    \]
+\end{itemize}
+
+\textbf{3) Interface Composition Capacity $I_{comp}(L)$}
+
+\begin{equation}
+    I_{comp}(L) = \frac{N_{impl}(L) + D_{def}(L) \cdot N_{max}}{2 \cdot N_{max}}
+\end{equation}
+
+where:
+\begin{itemize}
+    \item $N_{impl}(L)$ is the maximum number of interfaces a class can implement, 
+    \item $N_{max}$ is the maximum $N_{impl}(L)$ for all comparison languages.
+    \item $D_{def}(L)$ indicates the presence of default method implementations in interfaces.
+    \[
+    D_{def}(L) = 
+    \begin{cases}
+    1, & \text{if allows to declare implementations inside interfaces.}, \\
+    0, & \text{if interfaces contain only method signatures, constant, types}.
+    \end{cases}
+    \]
+\end{itemize}
+This parameter evaluates whether interfaces function solely as types or also as units of composable behavior, approaching the role of mixins.
+
+\subsection{Object Representation and Creation Model}
+
+\subsubsection{Metric Definition}
+
+Let the \textit{Object Representation and Creation Index (ORCI)} be defined as:
+
+\begin{equation}
+    ORCI(L) = 
+    \alpha \cdot S_{id}(L) + 
+    \beta \cdot S_{cr}(L) + 
+    \gamma \cdot S_{meta}(L)
+\end{equation}
+
+where $L$ denotes the analyzed programming language, $\alpha + \beta + \gamma = 1$ and each component is normalized to the interval $[0,1]$.
+
+\subsubsection{Components}
+
+\textbf{1) Identity Semantics Score $S_{id}(L)$}
+
+Object identity is a core property distinguishing objects from values. This component measures the consistency of reference semantics across the language's type system.
+
+\begin{equation}
+S_{id}(L) = \frac{T_{ref}(L)}{T_{user}(L)}
+\end{equation}
+
+where:
+\begin{itemize}
+    \item $T_{user}(L)$ is the total number of user-definable type categories in the language specification.
+    \item $T_{ref}(L)$ is the number of user-definable type categories that enforce reference semantics.
+\end{itemize}
+
+\textbf{2) Instantiation Paradigm Diversity $S_{cr}(L)$}
+
+\begin{equation}
+S_{cr}(L) = \frac{P_{supported}(L)}{P_{max}}
+\end{equation}
+
+where:
+\begin{itemize}
+    \item $P_{supported}(L)$ is the number of distinct instantiation paradigms supported natively (e.g., \texttt{new} Class, Prototype Clone, Literal Construction, Actor Spawn).
+    \item $P_{max}$ is the maximum number of paradigms observed across all compared languages.
+\end{itemize}
+
+\textbf{3) Meta-level Extensibility Score $S_{meta}(L)$}
+
+\begin{equation}
+S_{meta}(L) = \frac{I_{level}(L)}{I_{max}}
+\end{equation}
+
+where:
+\begin{itemize}
+    \item $I_{level}(L)$ represents the depth of intercession allowed (0 = none, 1 = introspection only, 2 = structural modification, 3 = creation protocol override).
+    \[
+    I_{level}(L) = 
+    \begin{cases}
+    3, & \text{if allows overriding the object instantiation process via metaobjects}, \\
+    2, & \text{if allows modification of existing object structures at runtime}, \\
+    1, & \text{if allows querying object structure at runtime but prohibits modification}, \\
+    0, & \text{if does not allows querying object structure and modification}.
+    \end{cases}
+    \]
+    \item $I_{max}$ is the maximum intercession level defined for the comparison languages.
+\end{itemize}
+
+\subsection{Polymorphism and Dispatch Mechanisms}
+
+\subsubsection{Metric Definition}
+
+Let the \textit{Polymorphism and Dispatch Efficiency Index (PDEI)} of a language $L$ be defined as:
+
+\begin{equation}
+    PDEI(L) = 
+    \alpha \cdot M_{scope}(L) + 
+    \beta \cdot S_{disp}(L) + 
+    \gamma \cdot O_{virt}(L)
+\end{equation}
+
+where $L$ denotes the analyzed programming language, $\alpha + \beta + \gamma = 1$ and each component is normalized to the interval $[0,1]$.
+
+\subsubsection{Components}
+
+\textbf{1) Dispatch Scope Mechanism $M_{scope}(L)$}
+
+This component evaluates the richness of dispatch mechanisms supported by the language specification, distinguishing between single, multiple, and predicate dispatch.
+
+\begin{equation}
+M_{scope}(L) = \frac{w_{single} \cdot I_{single} + w_{multi} \cdot I_{multi} + w_{pred} \cdot I_{pred}}{w_{single} + w_{multi} + w_{pred}}
+\end{equation}
+
+where:
+\begin{itemize}
+    \item $I_{single} = 1$ if single dispatch (receiver-based) is supported; $0$ otherwise.
+    \item $I_{multi} = 1$ if multiple dispatch (argument-based) is natively supported; $0$ otherwise.
+    \item $I_{pred} = 1$ if predicate-based or condition-based dispatch is available; $0$ otherwise.
+    \item Weights are set as $w_{single}=1$, $w_{multi}=2$, $w_{pred}=2$
+        \begin{itemize}
+            \item Single dispatch weight is $1$ because it often requires structural workarounds. 
+            \item Multiple dispatch weight is $2$ because it resolves the expression problem for operation extension without modifying existing ones. 
+            \item Predicate dispatch weight is $2$ since it extends polymorphism beyond type hierarchies into execution logic.
+        \end{itemize}
+\end{itemize}
+
+\textbf{2) Dispatch Safety Guarantee $S_{disp}(L)$}
+
+\begin{equation}
+S_{disp}(L) = 1 - \frac{N_{runtime\_error}}{N_{total\_dispatch}}
+\end{equation}
+
+where:
+\begin{itemize}
+    \item $N_{runtime\_error}$ is the number of dispatch scenarios resulting in runtime exceptions.
+    \item $N_{total\_dispatch}$ is the total amount of valid dispatch constructs defined in the language.
+\end{itemize}
+
+\textbf{3) Virtualization Optimization Potential $O_{virt}(L)$}
+
+\begin{equation}
+O_{virt}(L) = \frac{K_{final} + K_{sealed} + K_{static}}{3}
+\end{equation}
+
+where:
+\begin{itemize}
+    \item $K_{final} = 1$ if language support final/non-virtual methods; $0$ otherwise.
+    \item $K_{sealed} = 1$ if language support sealed class hierarchies restricting subclassing; $0$ otherwise.
+    \item $K_{static} = 1$ if language support static dispatch hints (e.g., \texttt{static} methods, explicit devirtualization annotations); $0$ otherwise.
+\end{itemize}
+
+\subsection{State Model, Mutability, and Concurrency Guarantees}
+
+\subsubsection{Metric Definition}
+
+Let the \textit{State and Concurrency Safety Index (SCSI)} be defined as:
+
+\begin{equation}
+    SCSI(L) = 
+    \alpha \cdot M_{def}(L) + 
+    \beta \cdot A_{ctrl}(L) + 
+    \gamma \cdot P_{conc}(L)
+\end{equation}
+
+where $L$ denotes the analyzed programming language, $\alpha + \beta + \gamma = 1$ and each component is normalized to the interval $[0,1]$.
+
+\subsubsection{Components}
+
+\textbf{1) Default Mutability Score $M_{def}(L)$}
+
+\begin{equation}
+M_{def}(L) = 
+\begin{cases} 
+1, & \text{if objects are immutable by default} \\
+0.5, & \text{if mutability requires explicit annotation} \\
+0, & \text{if objects are mutable by default}
+\end{cases}
+\end{equation}
+
+\textbf{2) Alias Control Score $A_{ctrl}(L)$}
+
+\begin{equation}
+A_{ctrl}(L) = \frac{N_{own}(L)}{N_{max}}
+\end{equation}
+
+where:
+\begin{itemize}
+    \item $N_{own}(L)$ is the number of distinct ownership or linearity mechanisms supported.
+    \item $N_{max}$ is the maximum number of mechanisms observed across all compared languages.
+\end{itemize}
+
+\textbf{3) Concurrency Primitive Safety $P_{conc}(L)$}
+
+\begin{equation}
+P_{conc}(L) = \frac{S_{race}(L) + S_{model}(L)}{2}
+\end{equation}
+
+where:
+\begin{itemize}
+    \item $S_{race}(L) \in [0,1]$ measures data race freedom guarantees.
+    \[
+    S_{race}(L) = 
+    \begin{cases} 
+    1, & \text{if the type system proves data race freedom} \\
+    0.5, & \text{if runtime checks exist} \\
+    0, & \text{if reliance is purely on programmer discipline}
+    \end{cases}
+    \]
+    \item $S_{model}(L) \in [0,1]$ measures the abstraction level of concurrency primitives. 
+    \[
+    S_{model}(L) = 
+    \begin{cases} 
+    1, & \text{if provide high-level models(Actors, CSP channels)} \\
+    0.5, & \text{if provide structured concurrency (tasks/futures)} \\
+    0, & \text{if provide only low-level threads and locks}
+    \end{cases}
+    \]
+\end{itemize}
+
+\subsection{Support for Formal Specification and Verifiability}
+
+\subsubsection{Metric Definition}
+
+Let the \textit{Formal Specification and Verifiability Index (FSVI)} be defined as:
+
+\begin{equation}
+    FSVI(L) = 
+    \alpha \cdot C_{nat}(L) + 
+    \beta \cdot V_{enf}(L) + 
+    \gamma \cdot S_{dec}(L)
+\end{equation}
+
+where $L$ denotes the analyzed programming language, $\alpha + \beta + \gamma = 1$ and each component is normalized to the interval $[0,1]$.
+
+\subsubsection{Components}
+
+\textbf{1) Native Contract Constructs Score $C_{nat}(L)$}
+
+\begin{equation}
+C_{nat}(L) = \frac{n_{pre} + n_{post} + n_{inv}}{3}
+\end{equation}
+
+\begin{itemize}
+    \item $n_{pre}$ indicate the presence of first-class language constructs for preconditions.
+    \item $n_{post}$ indicate the presence of first-class language constructs for postconditions.
+    \item $n_{inv}$ indicate the presence of first-class language constructs for invariants.
+    \item Values are assigned based on the language specification: $1$ if the construct is syntactically native and semantically defined, $0$ if reliant on external libraries or comments.
+\end{itemize}
+
+\textbf{2) Verification Enforcement Level $V_{enf}(L)$}
+
+\[
+V_{enf}(L) = 
+\begin{cases} 
+    1.0, & \text{if static verification is supported (compile-time proof)} \\
+    0.5, & \text{if only runtime checking is available} \\
+    0.0, & \text{if no enforcement mechanism exists}
+\end{cases}
+\]
+
+\textbf{3) Specification-Implementation Decoupling $S_{dec}(L)$}
+
+\begin{equation}
+S_{dec}(L) = 1 - \frac{|I_{impl} \cap I_{spec}|}{|I_{spec}|}
+\end{equation}
+
+where
+\begin{itemize}
+    \item $I_{spec}$ is the set of interfaces or modules allowing independent specification.
+    \item $I_{impl}$ is the set of constructs where specification is tightly bound to implementation code.
+\end{itemize}

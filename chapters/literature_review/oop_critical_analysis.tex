@@ -258,6 +258,147 @@ The inheritance mechanism introduces structural coupling between base and derive
 Beyond inheritance-induced coupling, OOP systems exhibit architectural issues with circular dependencies among classes. Circular dependencies create tight mutual coupling that reduces the possibility of separate reuse and creates domino effects where changes in one module spread unwanted side effects to dependent modules. This architectural pattern violates the foundational principle of modular decomposition, particularly problematic in large-scale systems where dependency management becomes increasingly complex.
 
 The Gang of Four Design Patterns documentation explicitly acknowledges this limitation, stating that inheritance exposes a subclass to details of its parent's implementation, and therefore ``inheritance breaks encapsulation'' \cite{gamma1995design}. The authors warn that implementation of a subclass can become so bound to the implementation of its parent that any change in the parent's implementation forces the subclass to change. They further note that polymorphism combined with implementation inheritance can create systems where it is difficult to predict which method will be invoked in response to a message, complicating both debugging and maintenance.
+architectural coupling
+\begin{figure}[htbp]
+    \centering
+    \begin{minted}[breaklines=true,fontsize=\footnotesize]{java}
+public class Account {
+    protected double balance;  // Exposed implementation detail
+    
+    public Account(double initialBalance) {
+        this.balance = initialBalance;
+    }
+    
+    public void deposit(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Amount must be positive");
+        }
+        balance += amount;
+        logTransaction("DEPOSIT", amount); 
+    }
+    
+    protected void logTransaction(String type, double amount) {
+        System.out.printf("[%s] $%.2f | Balance: $%.2f%n", 
+                          type, amount, balance);
+    }
+}
+    \end{minted}
+    \caption{Base class \texttt{Account} exposing internal state and workflow through protected members}
+    \label{fig:account-base}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \begin{minted}[breaklines=true,fontsize=\footnotesize]{java}
+public class SavingsAccount extends Account {
+    private static final double INTEREST_RATE = 0.05;
+    
+    public SavingsAccount(double initialBalance) {
+        super(initialBalance);
+    }
+    
+    @Override
+    public void deposit(double amount) {
+        super.deposit(amount);
+        applyInterest();  // Breaks if parent changes workflow order
+    }
+    
+    private void applyInterest() {
+        // Direct manipulation of protected state violates encapsulation
+        double interest = balance * INTEREST_RATE;
+        balance += interest; 
+        logTransaction("INTEREST", interest);
+    }
+}
+    \end{minted}
+    \caption{Derived class \texttt{SavingsAccount} tightly coupled to parent's implementation details}
+    \label{fig:savings-derived}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \begin{minted}[breaklines=true,fontsize=\footnotesize]{java}
+public class Order {
+    private Customer customer;
+    private List<OrderItem> items;
+    
+    public Order(Customer customer) {
+        this.customer = Objects.requireNonNull(customer);
+        this.items = new ArrayList<>();
+        // Creates circular dependency: Order $\rightarrow$ Customer
+        customer.registerOrder(this);  // Customer $\rightarrow$ Order
+    }
+    
+    public void addItem(OrderItem item) {
+        items.add(item);
+    }
+    
+    public double calculateTotal() {
+        return items.stream()
+                   .mapToDouble(OrderItem::getPrice)
+                   .sum();
+    }
+    
+    public Customer getCustomer() {
+        return customer;
+    }
+}
+    \end{minted}
+    \caption{Class \texttt{Order} establishing bidirectional dependency with \texttt{Customer}}
+    \label{fig:order-circular}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \begin{minted}[breaklines=true,fontsize=\footnotesize]{java}
+public class Customer {
+    private String id;
+    private List<Order> orders;
+    
+    public Customer(String id) {
+        this.id = id;
+        this.orders = new ArrayList<>();
+    }
+    
+    public void registerOrder(Order order) {
+        orders.add(order);
+    }
+    
+    public double getLifetimeValue() {
+        return orders.stream()
+                    .mapToDouble(Order::calculateTotal)
+                    .sum();
+    }
+}
+    \end{minted}
+    \caption{Class \texttt{Customer} completing circular dependency cycle and depending on \texttt{Order} internals}
+    \label{fig:customer-circular}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \begin{minted}[breaklines=true,fontsize=\footnotesize]{java}
+public class OrderItem {
+    private String productId;
+    private double price;
+    private int quantity;
+    
+    public OrderItem(String productId, double price, int quantity) {
+        this.productId = productId;
+        this.price = price;
+        this.quantity = quantity;
+    }
+    
+    public double getPrice() {
+        return price * quantity;  // Implementation detail exposed to callers
+    }
+}
+    \end{minted}
+    \caption{Supporting class \texttt{OrderItem} whose internal calculation logic is exposed to dependent classes}
+    \label{fig:orderitem-support}
+\end{figure}
+
+The examples demonstrate two critical manifestations of excessive coupling in object-oriented systems. Figures \ref{fig:account-base} and \ref{fig:savings-derived} illustrate inheritance-induced coupling where \texttt{SavingsAccount} becomes dependent on implementation details of its parent \texttt{Account}: the protected field \texttt{balance}, the internal workflow sequence (deposit $\rightarrow$ log), and the assumption that \texttt{logTransaction()} executes after state modification. This breaks encapsulation because the subclass gains access to superclass internals that should remain hidden. Critically, any modification to \texttt{Account}'s implementation—renaming \texttt{balance}, reordering workflow steps, or changing \texttt{logTransaction()}'s signature—necessitates corresponding changes in \texttt{SavingsAccount}, creating ripple effects through the inheritance hierarchy. Figures~\ref{fig:order-circular} \ref{fig:customer-circular} \ref{fig:orderitem-support} exhibit architectural coupling through circular dependencies between \texttt{Order} and \texttt{Customer}, where each class maintains a direct reference to the other. This mutual dependency prevents independent reuse of either component, violates modular decomposition principles, and creates domino effects where changes to \texttt{Order}'s calculation logic (\texttt{calculateTotal()}) propagate unpredictably to \texttt{Customer.getLifetimeValue()}.
 
 \subsection{Multiple Inheritance and Ambiguity Resolution}
 
@@ -265,11 +406,203 @@ Languages supporting multiple inheritance encounter the well-documented diamond 
 
 Languages addressing this through single inheritance restrictions or interface-based approaches acknowledge that inheritance as a reuse mechanism creates structural problems that require linguistic constraints. The very fact that languages must prohibit or heavily restrict inheritance patterns suggests limitations in the fundamental mechanism itself.
 
+\begin{figure}[htbp]
+    \centering
+    \begin{minted}[breaklines=true,fontsize=\footnotesize]{cpp}
+class Animal {
+protected:
+    int health;  // Shared state from common ancestor
+public:
+    Animal() : health(100) {}
+    void breathe() {
+        std::cout << "Breathing with health=" << health << std::endl;
+    }
+};
+    \end{minted}
+    \caption{Base class \texttt{Animal} defining shared state and behavior in diamond inheritance hierarchy}
+    \label{fig:diamond-animal}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \begin{minted}[breaklines=true,fontsize=\footnotesize]{cpp}
+class Mammal : public Animal {
+    // NO override of breathe(); inherits Animal::breathe() directly
+    // NO modification of health initialization
+};
+    \end{minted}
+    \caption{Intermediate class \texttt{Mammal} inheriting from \texttt{Animal} without overriding base methods}
+    \label{fig:diamond-mammal}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \begin{minted}[breaklines=true,fontsize=\footnotesize]{cpp}
+class Bird : public Animal {
+    // NO override of breathe(); inherits Animal::breathe() directly
+    // NO modification of health initialization
+};
+    \end{minted}
+    \caption{Intermediate class \texttt{Bird} inheriting from \texttt{Animal} without overriding base methods}
+    \label{fig:diamond-bird}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \begin{minted}[breaklines=true,fontsize=\footnotesize]{cpp}
+class Bat : public Mammal, public Bird {
+};
+
+int main() {
+    Bat bat;
+    bat.breathe();        // COMPILATION ERROR: ambiguous call
+    bat.health = 50;      // COMPILATION ERROR: ambiguous member access
+}
+    \end{minted}
+    \caption{Derived class \texttt{Bat} exhibiting diamond inheritance ambiguity without virtual inheritance}
+    \label{fig:diamond-bat}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \begin{minted}[breaklines=true,fontsize=\footnotesize]{python}
+class Animal:
+    def __init__(self):
+        self.health = 100  # State defined in common ancestor
+    
+    def breathe(self):
+        return f"Breathing (health={self.health})"
+    \end{minted}
+    \caption{Base class \texttt{Animal} defining shared state in Python diamond hierarchy}
+    \label{fig:py-diamond-animal}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \begin{minted}[breaklines=true,fontsize=\footnotesize]{python}
+class Mammal(Animal):
+    def __init__(self):
+        super().__init__()
+        # NO override of breathe(); delegates to Animal.breathe()
+    \end{minted}
+    \caption{Intermediate class \texttt{Mammal} inheriting from \texttt{Animal} without method override}
+    \label{fig:py-diamond-mammal}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \begin{minted}[breaklines=true,fontsize=\footnotesize]{python}
+class Bird(Animal):
+    def __init__(self):
+        super().__init__()
+        # NO override of breathe(); delegates to Animal.breathe()
+    \end{minted}
+    \caption{Intermediate class \texttt{Bird} inheriting from \texttt{Animal} without method override}
+    \label{fig:py-diamond-bird}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \begin{minted}[breaklines=true,fontsize=\footnotesize]{python}
+class Bat(Mammal, Bird):
+    def __init__(self):
+        super().__init__()
+
+bat = Bat()
+print(bat.breathe())
+print(Bat.__mro__)          # Shows linearization path
+# (<class '__main__.Bat'>, <class '__main__.Mammal'>,
+#  <class '__main__.Bird'>, <class '__main__.Animal'>, <class 'object'>)
+    \end{minted}
+    \caption{Derived class \texttt{Bat} demonstrating method resolution order limitations in Python}
+    \label{fig:py-diamond-bat}
+\end{figure}
+
+In the C++ implementation (Figs. \ref{fig:diamond-animal}, \ref{fig:diamond-mammal}, \ref{fig:diamond-bird}, \ref{fig:diamond-bat}), class \texttt{Bat} contains two distinct subobjects of \texttt{Animal}—one through the \texttt{Mammal} path and another through the \texttt{Bird} path—each maintaining independent state (\texttt{health}). This duplication violates the object identity principle: a bat logically possesses a single health value, yet the inheritance model creates two physically separate instances. Access to inherited members becomes ambiguous at compile time, requiring explicit path qualification (\texttt{bat.Mammal::breathe()}) that exposes implementation details and defeats encapsulation. The Python implementation (Figs.~\ref{fig:py-diamond-animal} , \ref{fig:py-diamond-mammal}, \ref{fig:py-diamond-bird}, \ref{fig:py-diamond-bat}) mitigates lookup ambiguity through C3 linearization, but the fundamental conceptual problem persists: multiple inheritance paths to a single logical ancestor create tension between the inheritance graph's topology and the linear method resolution order. 
+
 \subsection{The Reusability Paradox}
 
 Despite promises of enhanced reusability through inheritance and polymorphism, empirical software development experience reveals significant obstacles to achieving code reuse in OOP systems. Graham observes that object-oriented programming offers ``a sustainable way to write spaghetti code,'' suggesting that the anticipated reusability gains often fail to materialize \cite{graham2003}. The problem lies partly in the tightly coupled nature of inheritance-based designs: inheriting from an existing class binds the derived class not just to the inherited interface but to the entire implementation dependency graph of the parent class.
 
 Effective reuse typically requires either shallow inheritance hierarchies or careful extraction of orthogonal concerns into separately reusable components. This requirement contradicts the hierarchical organization that inheritance encourages, creating a tension between the inheritance mechanism and practical reusability goals.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{minted}[
+        breaklines=true,
+        fontsize=\footnotesize,
+        linenos=true,
+        numbersep=5pt
+    ]{java}
+// Problematic reuse through inheritance
+public class InstrumentedHashSet<E> extends HashSet<E> {
+    private int addCount = 0;
+
+    @Override
+    public boolean add(E e) {
+        addCount++;
+        return super.add(e);
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends E> c) {
+        addCount += c.size();
+        return super.addAll(c);
+    }
+
+    public int getAddCount() {
+        return addCount;
+    }
+}
+    \end{minted}
+    \caption{Instrumented set implementation using inheritance}
+    \label{fig:instrumented-hashset-inheritance}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \begin{minted}[
+        breaklines=true,
+        fontsize=\footnotesize,
+        linenos=true,
+        numbersep=5pt
+    ]{java}
+// Robust reuse through composition
+public class InstrumentedSet<E> implements Set<E> {
+    private final Set<E> delegate;
+    private int addCount = 0;
+
+    public InstrumentedSet(Set<E> delegate) {
+        this.delegate = Objects.requireNonNull(delegate);
+    }
+
+    @Override
+    public boolean add(E e) {
+        addCount++;
+        return delegate.add(e);
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends E> c) {
+        addCount += c.size();
+        return delegate.addAll(c);
+    }
+
+    public int getAddCount() {
+        return addCount;
+    }
+
+    // Delegation to all other Set methods omitted for brevity
+    @Override public int size() { return delegate.size(); }
+    @Override public boolean isEmpty() { return delegate.isEmpty(); }
+    // ... remaining Set interface methods delegated to 'delegate'
+}
+    \end{minted}
+    \caption{Instrumented set implementation using composition}
+    \label{fig:instrumented-set-composition}
+\end{figure}
+
+The inheritance-based approach in Fig.~\ref{fig:instrumented-hashset-inheritance} exemplifies the reusability paradox: despite leveraging inheritance to extend \texttt{HashSet}'s functionality, the derived class becomes tightly coupled to implementation details invisible in the public interface. Specifically, \texttt{HashSet.addAll()} internally invokes \texttt{add()} for each element—a behavioral detail not specified in the \texttt{Set} interface contract. Consequently, when clients invoke \texttt{addAll(\{'apple', 'banana', 'cherry'\})}, the counter increments six times (three via the overridden \texttt{addAll()} and three via subsequent \texttt{add()} calls), violating expectations. The composition-based solution in Fig.~\ref{fig:instrumented-set-composition} achieves reliable reuse by decoupling instrumentation logic from the underlying set implementation through explicit delegation.
 
 \subsection{State Management Complexity and Object Identity}
 
@@ -278,6 +611,84 @@ Object-oriented systems organize code around mutable state encapsulated within o
 Reynolds' distinction between values (immutable, state-based equality) and entities (distinct identity, mutable state) illustrates the conceptual tension in OOP \cite{reynolds1985three}. In value-oriented systems, equality testing is unambiguous and immutability simplifies reasoning. In object-oriented systems, the notion of object identity introduces questions about whether two references point to the same object or equivalent objects, complications that functional approaches avoid entirely through immutable values.
 
 Furthermore, the emphasis on object identity creates problems in concurrent systems where mutable shared state becomes a liability. Multiple threads attempting to access and modify object state require extensive synchronization, complicating concurrent programming compared to functional approaches based on immutable data and pure transformations \cite{reynolds1985three}.
+
+\begin{figure}[htbp]
+\centering
+\begin{minted}[breaklines=true,fontsize=\footnotesize]{java}
+public class BankAccount {
+    private final String accountId;
+    private int balance;
+    
+    public BankAccount(String accountId, int initialBalance) {
+        this.accountId = accountId;
+        this.balance = initialBalance;
+    }
+    
+    public void deposit(int amount) {
+        this.balance += amount;
+    }
+    
+    public void withdraw(int amount) {
+        this.balance -= amount;
+    }
+    
+    public int getBalance() {
+        return this.balance;
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true; 
+        if (!(obj instanceof BankAccount)) return false;
+        BankAccount other = (BankAccount) obj;
+        return this.accountId.equals(other.accountId) && 
+               this.balance == other.balance;
+    }
+}
+\end{minted}
+\caption{Mutable entity class with identity and state-based equality semantics}
+\label{fig:bankaccount}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\begin{minted}[breaklines=true,fontsize=\footnotesize]{java}
+public class AccountManager {
+    public static void demonstrateIdentityProblem() {
+        // Two references to the SAME entity (identity equivalence)
+        BankAccount a = new BankAccount("A123", 100);
+        BankAccount b = a;
+        
+        assert (a == b);                // true: same identity
+        assert a.equals(b);             // true: same state
+        
+        a.deposit(50);
+        
+        // Mutation affects BOTH references due to shared identity
+        assert a.getBalance() == 150;
+        assert b.getBalance() == 150;   // Unexpected side effect!
+        
+        // Two DISTINCT entities with identical initial state (value equivalence)
+        BankAccount c = new BankAccount("B456", 100);
+        BankAccount d = new BankAccount("B456", 100);
+        
+        assert (c != d);                // false: different identities
+        assert c.equals(d);             // true: equivalent state
+        
+        c.deposit(50);
+        
+        // Mutation breaks state equivalence despite identical initial state
+        assert !c.equals(d);            // State divergence after mutation
+        assert c.getBalance() == 150;
+        assert d.getBalance() == 100;   // Independent state evolution
+    }
+}
+\end{minted}
+\caption{Demonstration of identity-value tension and state mutation effects}
+\label{fig:accountmanager}
+\end{figure}
+
+Figure~\ref{fig:bankaccount} defines \texttt{BankAccount} as an entity with mutable state (\texttt{balance}) and dual equality semantics: reference identity (\texttt{==}) and state-based equivalence (\texttt{.equals()}). Figure~\ref{fig:accountmanager} demonstrates the resulting reasoning complexity. Lines 5--14 show how shared identity causes non-local side effects: mutation through reference \texttt{a} implicitly alters the state observed through \texttt{b}, requiring the programmer to track aliasing relationships. Lines 16--27 reveal following problem: initially equivalent entities \texttt{c} and \texttt{d} diverge after mutation, that is violating referential transparency.
 
 \subsection{Absence of Clear Separation Between Specification and Implementation}
 
@@ -288,6 +699,178 @@ OOP languages typically conflate class specifications with implementation detail
 The widespread adoption of design patterns and anti-pattern literature documents systematic difficulties with OOP system design. The Gang of Four patterns book identifies recurring design problems that OOP practitioners encounter; the very necessity of these patterns suggests that raw OOP mechanisms inadequately support common design requirements \cite{gamma1993design}. Anti-patterns such as the God Object problem reflect systematic tendency toward violation of single responsibility principles.
 
 Chidamber and Kemerer's metrics suite for measuring OOP design quality reveals correlations between high metric values and undesirable properties: high coupling between object classes indicates fault-proneness and maintenance difficulty; excessive inheritance tree depth indicates reduced comprehensibility; high weighted methods per class indicates complexity \cite{chidamber1994metrics}. These metrics-based findings empirically validate concerns about OOP's inherent tendency toward coupled, complex designs. Their research demonstrates that systems exhibiting high CBO values require more rigorous testing and experience higher defect rates, a pattern consistent across multiple industrial software projects \cite{chidamber1994metrics}.
+
+% =========================================================
+% Base Class
+% =========================================================
+\begin{figure}[t]
+\centering
+\begin{minted}[fontsize=\footnotesize,breaklines=true]{java}
+abstract class AbstractEnterpriseProcessor {
+
+    protected AuditService audit;
+    protected PricingService pricing;
+    protected ValidationService validation;
+
+    public final Order process(OrderRequest request) {
+
+        validate(request);
+        preProcess(request);
+
+        double price = pricing.calculate(request);
+        Order order = createOrder(request, price);
+
+        postProcess(order);
+        audit.log("order_created");
+
+        return order;
+    }
+
+    protected void validate(OrderRequest request) {
+        validation.validateUser(request.userId());
+        validation.validateItems(request.items());
+    }
+
+    protected abstract void preProcess(OrderRequest request);
+    protected abstract Order createOrder(OrderRequest request, double price);
+    protected abstract void postProcess(Order order);
+}
+\end{minted}
+\caption{Base class implementing the Template Method pattern for order processing.}
+\label{fig:abstract_processor}
+\end{figure}
+
+
+% =========================================================
+% Payment Layer
+% =========================================================
+\begin{figure}[t]
+\centering
+\begin{minted}[fontsize=\footnotesize,breaklines=true]{java}
+abstract class PaymentProcessor extends AbstractEnterpriseProcessor {
+
+    protected PaymentGateway payment;
+    protected TransactionRepository transactions;
+
+    @Override
+    protected Order createOrder(OrderRequest request, double price) {
+
+        payment.charge(request.userId(), price);
+        transactions.save(request.userId(), price);
+
+        return new Order(request.userId(), price);
+    }
+}
+\end{minted}
+\caption{Inheritance layer introducing payment and transaction persistence behavior.}
+\label{fig:payment_processor}
+\end{figure}
+
+
+% =========================================================
+% Fraud Layer
+% =========================================================
+\begin{figure}[t]
+\centering
+\begin{minted}[fontsize=\footnotesize,breaklines=true]{java}
+abstract class FraudAwareProcessor extends PaymentProcessor {
+
+    protected FraudService fraud;
+    protected BlacklistService blacklist;
+
+    @Override
+    protected void preProcess(OrderRequest request) {
+
+        double score = fraud.score(request);
+
+        if (score > 0.8) {
+            blacklist.add(request.userId());
+            throw new RuntimeException("fraud suspected");
+        }
+    }
+}
+\end{minted}
+\caption{Inheritance layer adding fraud detection and blacklist management.}
+\label{fig:fraud_processor}
+\end{figure}
+
+
+% =========================================================
+% Retry Layer
+% =========================================================
+\begin{figure}[t]
+\centering
+\begin{minted}[fontsize=\footnotesize,breaklines=true]{java}
+abstract class RetryableProcessor extends FraudAwareProcessor {
+
+    protected RetryService retry;
+
+    @Override
+    public final Order process(OrderRequest request) {
+
+        return retry.execute(() -> super.process(request));
+    }
+}
+\end{minted}
+\caption{Inheritance layer introducing retry semantics around the processing algorithm.}
+\label{fig:retry_processor}
+\end{figure}
+
+
+% =========================================================
+% Concrete God Object
+% =========================================================
+\begin{figure}[t]
+\centering
+\begin{minted}[fontsize=\footnotesize,breaklines=true]{java}
+class EnterpriseOrderProcessor extends RetryableProcessor {
+
+    private InventoryService inventory;
+    private RecommendationEngine recommendations;
+    private ERPClient erp;
+    private NotificationService notifications;
+    private AnalyticsService analytics;
+    private DiscountService discounts;
+    private LoyaltyService loyalty;
+    private ShippingService shipping;
+    private InvoiceService invoice;
+    private CRMClient crm;
+
+    @Override
+    protected void postProcess(Order order) {
+
+        inventory.reserve(order);
+        shipping.schedule(order);
+        invoice.generate(order);
+        erp.sync(order);
+        crm.update(order);
+
+        notifications.send(order);
+        recommendations.update(order);
+        analytics.track(order);
+        loyalty.addPoints(order);
+
+        applyDiscountPolicies(order);
+        triggerCampaigns(order);
+        reconcileAccounting(order);
+    }
+
+    private void applyDiscountPolicies(Order order) { }
+    private void triggerCampaigns(Order order) { }
+    private void reconcileAccounting(Order order) { }
+}
+\end{minted}
+\caption{Concrete enterprise processor exhibiting extensive infrastructure coupling.}
+\label{fig:enterprise_processor}
+\end{figure}
+
+The example presented in Figures~\ref{fig:abstract_processor},\ref{fig:payment_processor},\ref{fig:fraud_processor},\ref{fig:retry_processor},\ref{fig:enterprise_processor} illustrates structural characteristics empirically associated with reduced maintainability and increased defect proneness in object-oriented systems.
+
+First, the hierarchy exhibits a Depth of Inheritance Tree (DIT) equal to five. Understanding the runtime behavior of the \texttt{process} operation requires analysis across multiple abstraction layers. It has been empirically correlated with decreased comprehensibility and increased maintenance effort.
+
+Second, the final concrete class demonstrates high Coupling Between Object classes (CBO). The \texttt{EnterpriseOrderProcessor} directly depends on numerous infrastructural and domain services. When combined with inherited dependencies from ancestor classes, the total number of external collaborators exceeds fifteen distinct services. High CBO values have been consistently associated with increased fault proneness and testing complexity.
+
+Third, the concrete processor exhibits characteristics of the God Object anti-pattern. It assumes responsibility for heterogeneous business concerns. This concentration of responsibilities violates the Single Responsibility Principle and increases the likelihood of ripple effects during modification.
 
 \subsection{Systematic Classification of OOP Limitations}
 

@@ -1,4 +1,88 @@
 \chapter{Implementation}
 \label{chap:impl}
 
-\ldots
+The preceding chapters of this dissertation presented a comparative analysis of object models in contemporary programming languages, including C\#, C++, Go, Java, Python, Ruby, JavaScript, Scala, Smalltalk, and Zonnon. The analysis was conducted according to a uniform set of formally motivated criteria covering type systems, subtyping relations, abstraction and encapsulation mechanisms, inheritance semantics, composition facilities, object representation models, dispatch strategies, state and mutability control, concurrency guarantees, and support for formal specification. 
+
+The results of that analysis demonstrate that no existing object model simultaneously achieves semantic rigor, modular robustness, resistance to hierarchical fragility, formal substitutability guarantees, and architectural scalability under concurrency constraints. These limitations are not incidental; rather, they stem from foundational design decisions concerning type theory, behavioral subtyping, and object semantics. Therefore, a purely empirical comparison is not sufficient. A constructive synthesis grounded in formal theory is required.
+
+This section introduces the implementation chapter, whose objective is to formulate a conceptual object model for an ``ideal'' programming language that systematically addresses the deficiencies identified in the comparative study. The term ``ideal'' is used here in a methodological sense: it denotes a theoretically consistent model derived from formal principles and evaluated against the same criteria applied to existing languages. The chapter does not propose a production-ready language, but rather a rigorously structured semantic framework.
+
+\subsubsection{A. Dimensions of Model Description}
+
+The object model will be described from eight principal perspectives, each reflecting a structural aspect of object-oriented language design.
+
+\paragraph{1 Type-Theoretic Perspective}
+
+This section includes the definition of type identity, subtype relations, compatibility rules, and variance constraints. The description will clarify how types are declared, subtype relationships are established, and type safety is enforced. Particular attention will be given to the separation between subtyping and inheritance, and to the role of contracts in determining compatibility.
+From this perspective, the model is treated as a formal compatibility framework that defines the semantic boundaries of programs.
+
+\paragraph{2 Abstraction and Encapsulation Perspective}
+
+The model will be described with respect to its abstraction boundaries. This includes the mechanisms that separate interface from implementation, the visibility rules governing program components, and the modular structure of the language.
+The description will specify how representation independence is preserved, how internal state is protected from external interference, and how module-level isolation is enforced. The model will therefore be examined as a system of controlled information flow.
+
+\paragraph{3 Hierarchical Structure Perspective}
+
+The model will be described in terms of its hierarchical organization. This perspective focuses on inheritance semantics, extension rules, and hierarchy management mechanisms.
+
+The description will clarify:
+\begin{itemize}
+    \item under which conditions inheritance is permitted,
+    \item how method overriding is constrained,
+    \item how further extension can be restricted,
+    \item and how structural fragility is prevented.
+\end{itemize}
+
+From this viewpoint, the object model is analyzed as a structured extension system whose stability depends on well-defined constraints.
+
+\paragraph{4 Composition and Reuse Perspective}
+
+The model will be described in terms of composition and reuse. From this point of view, we consider delegation mechanisms, feature-like constructs, interface aggregation, and other non-hierarchical reuse strategies.
+The description will indicate how the components are combined, the possibilities of reusing behavior without exposing implementation details, and how reuse mechanisms interact with the subtype relation.
+
+\paragraph{5 Object Representation and Construction Perspective}
+
+The model will be described in terms of object representation and creation semantics: definition of object identity, initialization process, invariant establishment during construction, and separation between abstract type and concrete representation.
+The description will explain how object instances are created, how memory management and identity are supposed to be implemented at the language level.
+
+\paragraph{6 Behavioral and Dispatch Perspective}
+
+The model will be described from the perspective of behavioral execution and method dispatch. This includes static and dynamic dispatch rules, resolution order, overriding constraints, and interaction between polymorphism and contracts.
+The description will specify how behavioral substitutability is maintained at runtime and how dispatch mechanisms affect predictability and analyzability of programs.
+
+\paragraph{7 State and Concurrency Perspective}
+
+The model will be described with respect to state management and mutability control. This perspective examines:
+\begin{itemize}
+    \item default mutability policies,
+    \item explicit declaration of mutable entities,
+    \item ownership or confinement rules,
+    \item and guarantees relevant to concurrent execution.
+\end{itemize}
+
+\paragraph{8 Specification and Verification Perspective}
+
+The model will be described from the standpoint of formal specification and verifiability. This includes the integration of invariants, preconditions, and postconditions into type definitions, as well as rules governing contract inheritance and compatibility. The description will clarify how specifications are declared, how they are checked, and how they influence subtype relations. 
+
+\subsubsection{B. Integrative Character of the Description}
+
+In the previous part, each point of view is presented separately. To present the overall picture, this chapter highlights their interdependence. The type system restricts inheritance; encapsulation affects composition; mutability policies affect interchangeability; and contracts determine subtype compatibility. In this way, the object model will be described as an integrated system in which each dimension contributes to the overall semantic consistency.
+
+\subsubsection{C. Organizational Principle}
+
+Each subsection of the chapter follows a uniform descriptive pattern:
+
+\begin{enumerate}
+    \item Identification of the structural dimension under consideration.
+    \item Definition of the design objectives for that dimension.
+    \item Specification of the mechanisms introduced in the model.
+    \item Explanation of how these mechanisms interact with other dimensions.
+\end{enumerate}
+
+At the first stage, the exact semantic coverage of the subsection is established. Each aspect is considered as an independently analyzed component of the overall model. Its conceptual boundaries are clearly delineated to prevent conceptual duplication and terminological ambiguity. 
+
+At the second stage, the constraints that the model must satisfy within this dimension are formalized. These goals follow from the shortcomings identified during the comparative analysis of existing languages presented earlier. 
+
+At the third stage, the constructive component of the description is introduced. Here, abstract goals are transformed into specific semantic rules: entry rules, inheritance restrictions, visibility rules, construction protocols, dispatch semantics, ownership rules, or contract distribution laws. 
+
+The fourth step is dedicated to system consistency.  This integrative analysis serves two purposes: it prevents local optimizations that undermine global consistency, and demonstrates that the model behaves as a single semantic system rather than as a set of loosely coupled functions.
