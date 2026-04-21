@@ -1,17 +1,21 @@
-\section{Comparison Technique}
+\section{Comparison Techniques}
+
+The criteria defined in the previous chapter establish the basis for the analysis of object models at the level of principles of language design. However, to ensure a strict and reproducible comparison between several programming languages, these qualitative parameters must be implemented in measurable constructs. Thus, the methodology moves from a theoretical classification to a formalized evaluation model in which each criterion is expressed as a quantitative metric. The following subsections provide a set of definitions of metrics corresponding to each previously identified criterion, providing both formal equations and decomposition at the component level.
 
 \subsection{Type System and Subtyping Model}
+
+The TSSI metric is based on research on language metrics and subtyping theory: the idea of representing language properties as normalized measurable components is taken from the work of \cite{fayzrakhmanov2022introducing}, and the distinction between nominal and structural typing, as well as the difference between inheritance and subtyping, is based on the study of \cite{cardelli1985understanding}. The component related to variance conceptually goes back to the formalization of parametric polymorphism and generic security generics in research on generic systems \cite{pierce2002types}.
 
 \subsubsection{Metric Definition}
 
 Let the \textit{Type System and Subtyping Soundness Index (TSSI)} be defined as:
 
-\begin{equation}
+\[
     TSSI(L) = 
     \alpha \cdot S_{nom}(L) + 
     \beta \cdot S_{var}(L) + 
     \gamma \cdot S_{rel}(L)
-\end{equation}
+\]
 
 where $L$ denotes the analyzed programming language, $\alpha + \beta + \gamma = 1$ and each component is normalized to the interval $[0,1]$.
 
@@ -19,9 +23,9 @@ where $L$ denotes the analyzed programming language, $\alpha + \beta + \gamma = 
 
 \textbf{1) Nominal–Structural Typing Score $S_{nom}(L)$}
 
-\begin{equation}
+\[
 S_{nom}(L) = \frac{I_{struct}(L) + I_{nom}(L)}{2}
-\end{equation}
+\]
 
 where:
 
@@ -34,9 +38,9 @@ Hybrid systems receive $1$ for both components. Purely nominal or purely structu
 
 \textbf{2) Variance Formalization Score $S_{var}(L)$}
 
-\begin{equation}
+\[
 S_{var}(L) = \frac{V_{exp}(L) + V_{sound}(L)}{2}
-\end{equation}
+\]
 
 where:
 
@@ -47,139 +51,181 @@ where:
 
 \textbf{3) Inheritance–Subtyping Separation Score $S_{rel}(L)$}
 
-\begin{equation}
-S_{rel}(L) = 
-1 - 
-\frac{|E_{inh}(L) \cap E_{sub}(L)|}
-{|E_{sub}(L)|}
-\end{equation}
+\[
+S_{rel}(L) = \frac{I_{dec}(L) + I_{ind}(L) + I_{form}(L)}{3}
+\]
 
 where:
+\[
+    I_{dec}(L) =
+    \begin{cases}
+        1, & \text{if the language allows explicit subtyping without inheritance constructs} \\
+        0.5, & \text{if such separation exists but is restricted (e.g., limited to specific constructs)} \\
+        0, & \text{if subtyping is defined only through inheritance}
+    \end{cases}
+\]
 
-\begin{itemize}
-    \item $E_{inh}(L)$ is the set of inheritance relations defined syntactically in the language specification.
-    \item $E_{sub}(L)$ is the set of subtype relations defined in the language formal type system.
-\end{itemize}
+\[
+    I_{ind}(L) =
+    \begin{cases}
+        1, & \text{if subtyping rules are defined independently of inheritance semantics} \\
+        0.5, & \text{if independence is partial or implicit} \\
+        0, & \text{if subtyping is fully derived from inheritance}
+    \end{cases}
+\]
+
+\[
+    I_{form}(L) =
+    \begin{cases}
+        1, & \text{if inheritance and subtyping are formally specified as distinct relations} \\
+        0.5, & \text{if separation is stated but не полностью формализована} \\
+        0, & \text{if distinction отсутствует или не определена в спецификации}
+    \end{cases}
+\]
+
 
 This metric measures the proportion of subtype relationships that are not caused by implementation inheritance. If all subtypes exist in the language only through inheritance, then the value of the metric approaches $0$, which indicates the absence of conceptual separation. If subtypes are determined in most cases separately from inheritance (e.g., using interfaces or structural typing rules), the metric approaches $1$, reflecting a strong semantic separation between reuse and interchangeability. Measurement is performed at the specification level by constructing abstract inheritance and subtype relation graphs from the formal language definition. 
 
-\subsubsection{Justification}
-
-This formula describes the differences between subtyping and inheritance mechanisms. Decomposition identifies three independent semantic aspects: the discipline of typing, variance safety, and the formal separation of inheritance from subtyping.  Normalisation of coefficients allows you to adapt the expression for specific goals, increasing values of the important parameters during a specific comparison.
-
 \subsection{Abstraction and Encapsulation Mechanisms}
+
+The Abstraction and Encapsulation score is based on the approach to comparative analysis of programming languages proposed in \cite{fayzrakhmanov2022introducing}, where individual language properties are translated into quantitative indicators. The idea of highlighting visibility levels, modular boundaries, and encapsulation mechanisms is based on work on object-oriented design and modularity \cite{meyer1997object, parnas1972criteria}. The component reflecting encapsulation protection at the specification and runtime levels is conceptually related to research on controlled access to the state of an object and restriction of unauthorized reflection \cite{bracha2004mirrors}.
 
 \subsubsection{Metric Definition}
 
 Let the \textit{Abstraction and Encapsulation score (AE)} be defined as:
 
-\begin{equation}
+\[
     AE(L) = 
     \alpha \cdot V(L) + 
     \beta \cdot M(L) + 
     \gamma \cdot I(L) + 
     \delta \cdot E(L)
-\end{equation}
+\]
 
 where $L$ denotes the analyzed programming language, $\alpha + \beta + \gamma + \delta = 1$ and each component is normalized to the interval $[0,1]$.
 
 \subsubsection{Components}
 
-\begin{itemize}
-    \item $V(L)$ — \textit{Visibility Granularity Index}.
-    Normalized measure of the access control strictness modifiers (e.g., private, protected, file, module-level).
-    \[
+\textbf{1) Visibility Granularity Index $V(L)$}
+
+Normalized measure of the access control strictness modifiers (e.g., private, protected, file, module-level).
+\[
     V(L) = \frac{n_{levels}(L)}{n_{max}}
-    \]
-    where $n_{levels}(L)$ is the number of semantically distinct access scopes supported by the language.
+\]
+where $n_{levels}(L)$ is the number of semantically distinct access scopes supported by the language.
 
-    \item $M(L)$ — \textit{Module Isolation Strength}.
-    Metric aimed for comparison of the number of module or namespace boundaaries that restrict access to a view:
-    \[
+
+\textbf{2) Module Isolation Strength $M(L)$}
+Metric aimed for comparison of the number of module or namespace boundaaries that restrict access to a view:
+
+\[
     M(L) = \frac{b_{strict}(L)}{b_{total}(L)}
-    \]
-    where $b_{strict}(L)$ is the amount of boundaries with enforced export control (e.g., modules with explicit export lists), and $b_{total}(L)$ is the total number of modularization constructs.
+\]
+where $b_{strict}(L)$ is the amount of boundaries with enforced export control (e.g., modules with explicit export lists), and $b_{total}(L)$ is the total number of modularization constructs.
 
-    \item $I(L)$ — \textit{Interface Abstraction Capacity}.
-    Measures the ability to separate specification from implementation (e.g., interfaces, abstract classes, protocols from classes).
-    \[
+
+\textbf{3) Interface Abstraction Capacity $I(L)$}
+Measures the ability to separate specification from implementation (e.g., interfaces, abstract classes, protocols from classes).
+\[
     I(L) = \frac{n_{abstraction_constructs}(L)}{n_{object}(L)}
-    \]
-    where $n_{abstraction_constructs}(L)$ counts distinct language-level constructs dedicated to behavioral abstraction and $n_{object}(L)$ is the number of object-defining constructs.
+\]
+where $n_{abstraction_constructs}(L)$ counts distinct language-level constructs dedicated to behavioral abstraction and $n_{object}(L)$ is the number of object-defining constructs.
 
-    \item $E(L)$ — \textit{Encapsulation Enforcement Coefficient}.
-    Binary or graded measure reflecting whether encapsulation violations are prevented by the type system and runtime (no unrestricted reflection, no unchecked field access, controlled unsafe mechanisms).
-    \[
-    E(L) = 1 - \frac{n_{bypass-mechanisms}(L)}{n_{total-control-mechanisms}(L)}
-    \]
-\end{itemize}
+
+\textbf{4) Encapsulation Enforcement Coefficient $E(L)$}
+Binary measure reflecting whether encapsulation violations are prevented by the type system and runtime (no unrestricted reflection, no unchecked field access, controlled unsafe mechanisms).
+
+$E(L) = 1$ if the language does not supports mechanisms for uncontrolled access during runtime; $0$ otherwise.
 
 \subsection{Inheritance Semantics and Hierarchy Management}
+
+The Inheritance Semantics Robustness Index metric develops the ideas about the difference between inheritance and subtyping outlined in \cite{cook1989inheritance} and complements them with formal aspects of standard systems from \cite{cardelli1985understanding, pierce2002types}. The component related to deterministic parameterization and method resolution order is conceptually based on work on conflict resolution in inheritance hierarchies \cite{scharli2003traits}.
 
 \subsubsection{Metric Definition}
 
 Let the \textit{Inheritance Semantics Robustness Index (ISRI)} be defined as:
 
-\begin{equation}
+\[
     ISRI(L) =
     \alpha \cdot H_s(L) +
     \beta \cdot L_d(L) +
     \gamma \cdot C_p(L) +
     \delta \cdot F_b(L),
-\end{equation}
+\]
 
 where $L$ denotes the analyzed programming language, $\alpha + \beta + \gamma + \delta = 1$ and each component is normalized to the interval $[0,1]$.
 
 \subsubsection{Components}
 
-\begin{itemize}
-    \item $H_s(L)$ — \textit{Hierarchy Simplicity Factor}.  
-    A normalized measure of inheritance model complexity:
-    \[
-    H_s(L) = 1 - \frac{M(L) - 1}{M_{max} - 1},
-    \]
-    where $M(L)$ is the maximum number of direct superclass declarations allowed (1 for single inheritance, $>1$ for multiple inheritance), and $M_{max}$ is a maximal value of M(L) for all comparing languages.
+\textbf{1) Hierarchy Simplicity Factor $H_s(L)$}
 
-    \item $L_d(L)$ — \textit{Linearization Determinism Score}.  
-    A binary or graded measure reflecting whether the language defines a formally specified, deterministic method resolution order (MRO):
-    \[
+A normalized measure of inheritance model complexity:
+\[
+    H_s(L) = 1 - \frac{M(L) - 1}{M_{max} - 1},
+\]
+where $M(L)$ is the maximum number of direct superclass declarations allowed (1 for single inheritance, $>1$ for multiple inheritance), and $M_{max}$ is a maximal value of M(L) for all comparing languages.
+
+
+\textbf{2) Linearization Determinism Score $L_d(L)$}
+A binary measure reflecting whether the language defines a formally specified, deterministic method resolution order (MRO):
+\[
     L_d(L) =
     \begin{cases}
-    1, & \text{if linearization is formally defined and deterministic}, \\
-    0.5, & \text{if partially specified}, \\
-    0, & \text{if ambiguous or implementation-defined}.
+        1, & \text{if linearization is formally defined and deterministic}, \\
+        0.5, & \text{if partially specified}, \\
+        0, & \text{if ambiguous or implementation-defined}.
     \end{cases}
-    \]
+\]
 
-    \item $C_p(L)$ — \textit{Constraint Protection Coefficient}.  
-    Measures availability of hierarchy restriction mechanisms:
-    \[
-    C_p(L) = \frac{F(L)}{F_{max}},
-    \]
-    where $F(L)$ is the number of supported protection mechanisms (e.g., \texttt{final}, \texttt{sealed}, non-virtual-by-default methods, explicit override requirements), and $F_{max}$ is a maximal value of M(L) for all comparing languages.
 
-    \item $F_b(L)$ — \textit{Fragile Base Mitigation Factor}.  
-    Reflects language-level safeguards against fragile base class effects:
-    \[
-    F_b(L) = \frac{S(L)}{S_{max}},
-    \]
-    where $S(L)$ counts semantic safeguards (e.g., explicit override annotations, method visibility control, requirement of explicit super-calls, covariance restrictions).
+\textbf{3) Constraint Protection Coefficient $C_p(L)$}
+Measures availability of hierarchy restriction mechanisms:
+\[
+    C_p(L) = \frac{\sum_{i=1}^{k} p_i(L)}{k}
+\]
+where $p_i(L)$ — binary indicator defined шт specification.
+Сomparison includes:
+
+\begin{itemize}
+    \item $p_1$: Finalization of classes/methods (e.g., \texttt{final}, non-inheritable declarations)
+    \item $p_2$: Sealed or closed hierarchies (restricted subclassing sets)
+    \item $p_3$: Explicit override enforcement (mandatory \texttt{override} annotation)
+    \item $p_4$: Non-virtual-by-default semantics
+    \item $p_5$: Abstract/interface separation constraints
+    \item $p_6$: Compile-time inheritance restriction rules (e.g., prohibition of certain extensions)
 \end{itemize}
 
-----------------------------------------------
+
+\textbf{4) Fragile Base Mitigation Factor $F_b(L)$}
+Reflects language-level safeguards against fragile base class effects:
+\[
+    F_b(L) = \frac{\sum_{i=1}^{k} s_i(L)}{k}
+\]
+where $s_i(L)$ — binary variable reflecting whether safeguard $i$ is explicitly defined at the language specification level.
+Comparison includes:
+\begin{itemize}
+    \item $s_1$: Mandatory explicit override annotation (prevents accidental overriding)
+    \item $s_2$: Strict method visibility control (prevents unintended exposure of overridable members)
+    \item $s_3$: Requirement of explicit superclass invocation (controlled \texttt{super}/\texttt{base} calls)
+    \item $s_4$: Variance restrictions ensuring type-safe overriding (covariance/contravariance constraints)
+    \item $s_5$: Default non-overridable methods (opt-in polymorphism)
+    \item $s_6$: Compile-time override consistency checks (signature and contract enforcement)
+\end{itemize}
 
 \subsection{Composition and Alternatives to Inheritance}
+
+For the CRFI metric: the key idea of paying сonsideration flexibility through traits and mixins taken from the works of \cite{scharli2003traits}. The component related to naming conflicts and requirements for the using class is based on the formalization of traits and their composition mechanisms \cite{scharli2003traits}. The idea of interpreting interfaces as carriers of behavior, not just contracts, is consistent with the evolution of default methods in languages with interfaces \cite{bracha2004generics}.
 
 \subsubsection{Metric Definition}
 
 Let the \textit{Composition and Reuse Flexibility Index (CRFI)} be defined as:
 
-\begin{equation}
+\[
     CRFI(L) = 
     \alpha \cdot D_{cls}(L) + 
     \beta \cdot T_{exp}(L) + 
     \gamma \cdot I_{comp}(L)
-\end{equation}
+\]
 
 where $L$ denotes the analyzed programming language, $\alpha + \beta + \gamma = 1$ and each component is normalized to the interval $[0,1]$.
 
@@ -187,9 +233,9 @@ where $L$ denotes the analyzed programming language, $\alpha + \beta + \gamma = 
 
 \textbf{1) Class-Based Delegation Score $D_{cls}(L)$}
 
-\begin{equation}
+\[
 D_{cls}(L) = \frac{K_{del}(L) + S_{fwd}(L)}{2}
-\end{equation}
+\]
 
 where:
 \begin{itemize}
@@ -214,9 +260,9 @@ where:
 
 \textbf{2) Trait Expressiveness Score $T_{exp}(L)$}
 
-\begin{equation}
+\[
 T_{exp}(L) = \frac{R_{conf}(L) + O_{mod}(L)}{2}
-\end{equation}
+\]
 
 where:
 \begin{itemize}
@@ -241,14 +287,22 @@ where:
 
 \textbf{3) Interface Composition Capacity $I_{comp}(L)$}
 
-\begin{equation}
-    I_{comp}(L) = \frac{N_{impl}(L) + D_{def}(L) \cdot N_{max}}{2 \cdot N_{max}}
-\end{equation}
+\[
+    I_{comp}(L) = \frac{N_{impl}(L) + D_{def}(L)}{2}
+\]
 
 where:
 \begin{itemize}
     \item $N_{impl}(L)$ is the maximum number of interfaces a class can implement, 
-    \item $N_{max}$ is the maximum $N_{impl}(L)$ for all comparison languages.
+    \[
+    N_{impl}(L) = 
+    \begin{cases}
+        1, & \text{if number of interfaces is not restricted}, \\
+        0.66, & \text{if the number of interfaces is limited, but it is greater than 1}, \\
+        0.33, & \text{if the number of interfaces is limited by 1 interface}, \\
+        0, & \text{if there are no interfaces or their analogues}.
+    \end{cases}
+    \]
     \item $D_{def}(L)$ indicates the presence of default method implementations in interfaces.
     \[
     D_{def}(L) = 
@@ -262,16 +316,18 @@ This parameter evaluates whether interfaces function solely as types or also as 
 
 \subsection{Object Representation and Creation Model}
 
+The ORCI metric combines several lines of research: the distinction between object identity and value semantics goes back to classical works on object models \cite{meyer1997object}, and the idea of multiple object creation paradigms goes back to research on prototype-based programming and meta-object models \cite{kiczales1991art}.
+
 \subsubsection{Metric Definition}
 
 Let the \textit{Object Representation and Creation Index (ORCI)} be defined as:
 
-\begin{equation}
+\[
     ORCI(L) = 
     \alpha \cdot S_{id}(L) + 
     \beta \cdot S_{cr}(L) + 
     \gamma \cdot S_{meta}(L)
-\end{equation}
+\]
 
 where $L$ denotes the analyzed programming language, $\alpha + \beta + \gamma = 1$ and each component is normalized to the interval $[0,1]$.
 
@@ -281,9 +337,9 @@ where $L$ denotes the analyzed programming language, $\alpha + \beta + \gamma = 
 
 Object identity is a core property distinguishing objects from values. This component measures the consistency of reference semantics across the language's type system.
 
-\begin{equation}
+\[
 S_{id}(L) = \frac{T_{ref}(L)}{T_{user}(L)}
-\end{equation}
+\]
 
 where:
 \begin{itemize}
@@ -293,9 +349,9 @@ where:
 
 \textbf{2) Instantiation Paradigm Diversity $S_{cr}(L)$}
 
-\begin{equation}
+\[
 S_{cr}(L) = \frac{P_{supported}(L)}{P_{max}}
-\end{equation}
+\]
 
 where:
 \begin{itemize}
@@ -305,37 +361,38 @@ where:
 
 \textbf{3) Meta-level Extensibility Score $S_{meta}(L)$}
 
-\begin{equation}
+\[
 S_{meta}(L) = \frac{I_{level}(L)}{I_{max}}
-\end{equation}
+\]
 
 where:
-\begin{itemize}
-    \item $I_{level}(L)$ represents the depth of intercession allowed (0 = none, 1 = introspection only, 2 = structural modification, 3 = creation protocol override).
-    \[
-    I_{level}(L) = 
-    \begin{cases}
+$I_{level}(L)$ represents the depth of intercession allowed (0 = none, 1 = introspection only, 2 = structural modification, 3 = creation protocol override).
+\[
+I_{level}(L) = 
+\begin{cases}
     3, & \text{if allows overriding the object instantiation process via metaobjects}, \\
     2, & \text{if allows modification of existing object structures at runtime}, \\
     1, & \text{if allows querying object structure at runtime but prohibits modification}, \\
     0, & \text{if does not allows querying object structure and modification}.
-    \end{cases}
-    \]
-    \item $I_{max}$ is the maximum intercession level defined for the comparison languages.
-\end{itemize}
+\end{cases}
+\]
+
+$I_{max}$ is the maximum intercession level defined for the comparison languages.
 
 \subsection{Polymorphism and Dispatch Mechanisms}
+
+The PDEI metric is based on research on polymorphism, multiple dispatch, and expression problem: the relationship between extensibility of behavior and the typical structure of language is discussed in \cite{castagna1995covariance}. The idea of separating secure dispatch from just dynamic dispatch is based on the formal criteria of exhaustion and compile-time correctness, and the final/sealed/static hints component is associated with de-virtualization and limiting late binding \cite{pierce2002types}.
 
 \subsubsection{Metric Definition}
 
 Let the \textit{Polymorphism and Dispatch Efficiency Index (PDEI)} of a language $L$ be defined as:
 
-\begin{equation}
+\[
     PDEI(L) = 
     \alpha \cdot M_{scope}(L) + 
     \beta \cdot S_{disp}(L) + 
     \gamma \cdot O_{virt}(L)
-\end{equation}
+\]
 
 where $L$ denotes the analyzed programming language, $\alpha + \beta + \gamma = 1$ and each component is normalized to the interval $[0,1]$.
 
@@ -345,9 +402,9 @@ where $L$ denotes the analyzed programming language, $\alpha + \beta + \gamma = 
 
 This component evaluates the richness of dispatch mechanisms supported by the language specification, distinguishing between single, multiple, and predicate dispatch.
 
-\begin{equation}
+\[
 M_{scope}(L) = \frac{w_{single} \cdot I_{single} + w_{multi} \cdot I_{multi} + w_{pred} \cdot I_{pred}}{w_{single} + w_{multi} + w_{pred}}
-\end{equation}
+\]
 
 where:
 \begin{itemize}
@@ -363,22 +420,35 @@ where:
 \end{itemize}
 
 \textbf{2) Dispatch Safety Guarantee $S_{disp}(L)$}
-
-\begin{equation}
-S_{disp}(L) = 1 - \frac{N_{runtime\_error}}{N_{total\_dispatch}}
-\end{equation}
+\[
+S_{disp}(L) = \frac{I_{static}(L) + I_{exhaust}(L)}{2}
+\]
 
 where:
 \begin{itemize}
-    \item $N_{runtime\_error}$ is the number of dispatch scenarios resulting in runtime exceptions.
-    \item $N_{total\_dispatch}$ is the total amount of valid dispatch constructs defined in the language.
+    \item $I_{static}(L)$ captures whether the language enforces compile-time verification of dispatch correctness.
+    \item $I_{exhaust}(L)$ evaluates whether the language enforces completeness of dispatch definitions.
 \end{itemize}
+
+\[I_{static}(L) =
+    \begin{cases}
+        1, & \text{if the language guarantees dispatch safety at compile time} \\
+        0, & \text{otherwise}
+    \end{cases}
+\]
+
+\[I_{exhaust}(L) =
+    \begin{cases}
+    1, & \text{if the language enforces exhaustive dispatch definitions} \\
+    0, & \text{otherwise}
+    \end{cases}
+\]
 
 \textbf{3) Virtualization Optimization Potential $O_{virt}(L)$}
 
-\begin{equation}
+\[
 O_{virt}(L) = \frac{K_{final} + K_{sealed} + K_{static}}{3}
-\end{equation}
+\]
 
 where:
 \begin{itemize}
@@ -389,16 +459,18 @@ where:
 
 \subsection{State Model, Mutability, and Concurrency Guarantees}
 
+The SCSI metric is based on work on safe operation with the state and competitiveness of \cite{clarke1998ownership}. The idea to measure the default mutability constraint and static link constraints was based on research on ownership types, affine/linear reasoning, and aliasing control \cite{clarke1998ownership}.
+
 \subsubsection{Metric Definition}
 
 Let the \textit{State and Concurrency Safety Index (SCSI)} be defined as:
 
-\begin{equation}
+\[
     SCSI(L) = 
     \alpha \cdot M_{def}(L) + 
-    \beta \cdot A_{ctrl}(L) + 
+    \beta \cdot S_{dens}(L) + 
     \gamma \cdot P_{conc}(L)
-\end{equation}
+\]
 
 where $L$ denotes the analyzed programming language, $\alpha + \beta + \gamma = 1$ and each component is normalized to the interval $[0,1]$.
 
@@ -406,32 +478,48 @@ where $L$ denotes the analyzed programming language, $\alpha + \beta + \gamma = 
 
 \textbf{1) Default Mutability Score $M_{def}(L)$}
 
-\begin{equation}
+\[
 M_{def}(L) = 
 \begin{cases} 
-1, & \text{if objects are immutable by default} \\
-0.5, & \text{if mutability requires explicit annotation} \\
-0, & \text{if objects are mutable by default}
+    1, & \text{if objects are immutable by default} \\
+    0.5, & \text{if mutability requires explicit annotation} \\
+    0, & \text{if objects are mutable by default}
 \end{cases}
-\end{equation}
+\]
 
-\textbf{2) Alias Control Score $A_{ctrl}(L)$}
+\textbf{2) Static Reference Constraint Density $S_{dens}(L)$}
 
-\begin{equation}
-A_{ctrl}(L) = \frac{N_{own}(L)}{N_{max}}
-\end{equation}
+\[
+S_{dens}(L) = \frac{N_{constr}(L)}{N_{ref}(L)}
+\]
 
 where:
 \begin{itemize}
-    \item $N_{own}(L)$ is the number of distinct ownership or linearity mechanisms supported.
-    \item $N_{max}$ is the maximum number of mechanisms observed across all compared languages.
+\item $N_{constr}(L)$ is the number of distinct syntactic constructs in language $L$ that impose static constraints on references.
+\item $N_{ref}(L)$ is the total number of distinct reference-related constructs in language $L$.
+\end{itemize}
+
+Formal Counting Rules
+
+\noindent
+A construct is counted in $N_{ref}(L)$ if it:
+\begin{itemize}
+\item introduces, manipulates, or qualifies references (e.g., pointers, references, object handles),
+\item is explicitly represented in the language syntax or type system.
+\end{itemize}
+
+\noindent
+A construct is counted in $N_{constr}(L)$ if it:
+\begin{itemize}
+\item belongs to $N_{ref}(L)$, and
+\item enforces compile-time restrictions on aliasing, mutability, or usage of references.
 \end{itemize}
 
 \textbf{3) Concurrency Primitive Safety $P_{conc}(L)$}
 
-\begin{equation}
+\[
 P_{conc}(L) = \frac{S_{race}(L) + S_{model}(L)}{2}
-\end{equation}
+\]
 
 where:
 \begin{itemize}
@@ -457,26 +545,27 @@ where:
 
 \subsection{Support for Formal Specification and Verifiability}
 
+The FSVI metric is based on Design by Contract, formulated in \cite{meyer2002applying}, where preconditions, postconditions, and invariants are first-class language concepts. The distinction between native contracts, runtime checking, and static verification was added due to research that considers the program specification as a tool for formal correctness control \cite{meyer2002applying}.
+
 \subsubsection{Metric Definition}
 
 Let the \textit{Formal Specification and Verifiability Index (FSVI)} be defined as:
 
-\begin{equation}
+\[
     FSVI(L) = 
     \alpha \cdot C_{nat}(L) + 
-    \beta \cdot V_{enf}(L) + 
-    \gamma \cdot S_{dec}(L)
-\end{equation}
+    \beta \cdot V_{enf}(L)
+\]
 
-where $L$ denotes the analyzed programming language, $\alpha + \beta + \gamma = 1$ and each component is normalized to the interval $[0,1]$.
+where $L$ denotes the analyzed programming language, $\alpha + \beta = 1$ and each component is normalized to the interval $[0,1]$.
 
 \subsubsection{Components}
 
 \textbf{1) Native Contract Constructs Score $C_{nat}(L)$}
 
-\begin{equation}
+\[
 C_{nat}(L) = \frac{n_{pre} + n_{post} + n_{inv}}{3}
-\end{equation}
+\]
 
 \begin{itemize}
     \item $n_{pre}$ indicate the presence of first-class language constructs for preconditions.
@@ -495,15 +584,3 @@ V_{enf}(L) =
     0.0, & \text{if no enforcement mechanism exists}
 \end{cases}
 \]
-
-\textbf{3) Specification-Implementation Decoupling $S_{dec}(L)$}
-
-\begin{equation}
-S_{dec}(L) = 1 - \frac{|I_{impl} \cap I_{spec}|}{|I_{spec}|}
-\end{equation}
-
-where
-\begin{itemize}
-    \item $I_{spec}$ is the set of interfaces or modules allowing independent specification.
-    \item $I_{impl}$ is the set of constructs where specification is tightly bound to implementation code.
-\end{itemize}

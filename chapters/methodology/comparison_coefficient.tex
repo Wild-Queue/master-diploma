@@ -1,0 +1,108 @@
+\section{Parameter Estimation for Metric Coefficients}
+
+The selection of weighting coefficients for the proposed metrics is guided by the primary objective of this work: to emphasize those aspects of object models that most significantly affect extensibility, safety, and semantic clarity in object-oriented programming. The coefficients are calibrated to prioritize semantic soundness over syntactic convenience, explicitness over implicit behavior, and composability over rigid hierarchy structures. Additionally,  separation of concerns—particularly between subtyping, inheritance, and composition—is critical for scalable software architecture \cite{odersky2004overview, cook1989inheritance}. Therefore, higher weights are systematically assigned to components reflecting formal guarantees and semantic orthogonality.
+
+\subsection{Type System and Subtyping Model}
+
+\[
+    \alpha = 0.3, \quad \beta = 0.3, \quad \gamma = 0.4
+\]
+
+The highest weight is assigned to the inheritance–subtyping separation component ($\gamma = 0.45$). This decision is grounded in extensive literature identifying the conflation of inheritance and subtyping as a fundamental flaw in mainstream object-oriented languages \cite{cook1989inheritance}. Failure to distinguish them leads to violations of the Liskov Substitution Principle and undermines sound modular reasoning. Liskov and Wing further formalize this issue, noting that subtype relationships must preserve behavioral specifications independently of implementation structure \cite{liskov1999behavioral}. This separation is treated as the most critical factor influencing the overall soundness of the object model.
+
+The variance formalization component is assigned the second-highest weight ($\beta = 0.30$), as it directly impacts type safety in the presence of parametric polymorphism  \cite{pierce2002types}. Historical issues in Java generics, such as the need for use-site variance (wildcards), illustrate the complexity introduced by insufficiently expressive or partially formalized variance systems. 
+
+The nominal–structural typing balance component receives a slightly lower weight ($\alpha = 0.25$). While important for flexibility and expressiveness, its impact on soundness is more indirect compared to the other components. Cardelli and Wegner argue that no single typing discipline suffices for all abstraction needs \cite{cardelli1985understanding}, motivating hybrid approaches that combine nominal and structural typing. Structural typing improves composability and reduces coupling, while nominal typing enhances readability and explicitness of design intent. Therefore, $\alpha$ is assigned a moderate weight, reflecting its role as an enabler of expressive type design rather than a primary determinant of soundness.
+
+\subsection{Abstraction and Encapsulation Mechanisms}
+
+\[
+    \alpha = 0.20, \quad \beta = 0.25, \quad \gamma = 0.25, \quad \delta = 0.30
+\]
+
+The highest weight is assigned to the encapsulation enforcement coefficient ($\delta = 0.30$), as enforcement mechanisms represent the final guarantee that abstraction boundaries are respected at runtime. Encapsulation, as originally formulated by Parnas, is fundamentally about information hiding to reduce system complexity and improve maintainability \cite{parnas1972criteria}. However, this principle is only effective if the language prevents unauthorised access to the internal state. 
+
+The module isolation strength component is assigned $\beta = 0.25$, reflecting its importance in large-scale system design. Modular boundaries serve as the primary mechanism for controlling visibility across compilation units and deployment artefacts. Parnas emphasises that modularisation should be based on design decisions which are likely to change \cite{parnas1972criteria}, requiring strict control over exported interfaces. Languages with explicit export lists and strong module systems provide stronger guarantees than those with weaker namespace mechanisms.
+
+The interface abstraction capacity component is also assigned $\gamma = 0.25$, as the ability to separate specification from implementation is fundamental to object-oriented design. Liskov and Wing emphasise that abstraction mechanisms must support behavioural subtyping independently of implementation details \cite{liskov1999behavioral}. Languages that provide multiple abstraction constructs (interfaces, abstract classes, traits, protocols) enable more flexible and precise modelling of contracts.
+
+The visibility granularity index receives the lowest weight ($\alpha = 0.20$), as fine-grained access modifiers contribute to encapsulation but are insufficient on their own. The presence of multiple visibility levels does not prevent violations if the language permits reflection or unsafe access.
+
+\subsection{Inheritance Semantics and Hierarchy Management}
+
+\[
+\alpha = 0.20, \quad \beta = 0.25, \quad \gamma = 0.30, \quad \delta = 0.25
+\]
+
+The highest weight is assigned to the constraint protection coefficient ($\gamma = 0.30$), as explicit language-level restrictions on inheritance are the primary mechanism for preventing incorrect or unsafe extension of class hierarchies. Unconstrained inheritance has long been recognised as a source of design fragility and unintended coupling. Meyer notes that unrestricted inheritance enables improper extension and redefinition, leading to violations of class invariants and behavioural contracts \cite{meyer1997object}. 
+
+The linearization determinism score is assigned $\beta = 0.25$, reflecting the importance of a formally defined and predictable method resolution order (MRO), especially in languages that support multiple inheritance or mixin composition. Ambiguity in method lookup leads to non-local reasoning and unpredictable behaviour. 
+
+The fragile base mitigation factor is assigned $\delta = 0.25$, as it captures safeguards against one of the most well-documented problems in object-oriented design. The fragile base class problem arises when modifications to a superclass unintentionally break derived classes due to hidden dependencies. Mikhajlov and Sekerinski describe this issue as a consequence of implicit assumptions about inherited behaviour that are not enforced by the type system \cite{mikhajlov1998study}. 
+
+The hierarchy simplicity factor receives the lowest weight ($\alpha = 0.20$), as limiting the number of direct superclasses reduces structural complexity but does not, by itself, guarantee correctness or robustness. Single inheritance eliminates ambiguity and simplifies reasoning, as noted by Booch, who argues that simpler hierarchies improve comprehensibility and maintainability \cite{booch2008object}. However, multiple inheritance and mixin-based designs can provide expressive power when combined with proper linearization and constraint mechanisms.
+
+\subsection{Composition and Alternatives to Inheritance}
+
+\[
+\alpha = 0.30, \quad \beta = 0.35, \quad \gamma = 0.35
+\]
+
+The highest weights are assigned to trait expressiveness and interface composition capacity ($\beta = 0.35$, $\gamma = 0.35$), as these mechanisms provide the most semantically rich and scalable alternatives to classical inheritance. The shift toward composition over inheritance has been widely advocated in the literature. This principle is motivated by the need to reduce tight coupling and increase flexibility in system design. Trait and mixin systems represent a formalization of composition-based reuse. Similarly, interface composition capacity is highly significant, as modern languages increasingly extend interfaces beyond pure type declarations. 
+As Gamma et al. state, favor object composition over class inheritance \cite{gamma1995design}.
+
+The class-based delegation score receives a slightly lower weight ($\alpha = 0.30$). Delegation is a well-established alternative to inheritance, particularly in prototype-based and dynamically typed languages. However, in many statically typed languages, delegation is often implemented through design patterns (e.g., Adapter, Decorator) rather than first-class language constructs, resulting in boilerplate code and reduced clarity. Languages that provide built-in delegation mechanisms reduce this overhead. However, delegation alone does not provide the same level of compositional structure and conflict resolution as traits or advanced interface systems. For this reason, Class-Based Delegation Score is assigned a slightly lower weight compared to the other components.
+
+\subsection{Object Representation and Creation Model}
+
+\[
+\alpha = 0.35, \quad \beta = 0.30, \quad \gamma = 0.35
+\]
+
+The highest weights are assigned to identity semantics and meta-level extensibility ($\alpha = 0.35$, $\gamma = 0.35$), as these components directly determine the conceptual integrity and expressive power of the object model. 
+
+The identity semantics score ($\alpha = 0.35$) is critical because object identity is a defining property of object-oriented programming. As emphasized by Abadi and Cardelli, objects are characterized by identity, state, and behavior \cite{abadi2012theory}. Inconsistent treatment of identity across user-defined types leads to semantic fragmentation, where some objects behave as values while others behave as references. This inconsistency complicates reasoning about aliasing, mutability, and side effects.
+
+The meta-level extensibility score ($\gamma = 0.35$) is equally significant, as it captures the ability of a language to support reflection, intercession, and customization of object behavior. Metaobject protocols (MOPs), as described by Kiczales et al., enable programmers to adapt the language implementation to suit the needs of specific applications \cite{kiczales1991art}. This includes modifying object layout, method dispatch, and instantiation semantics.
+
+The instantiation paradigm diversity component receives a slightly lower weight ($\beta = 0.30$). The availability of multiple object creation paradigms—such as constructor-based instantiation, prototype cloning, literals, and actor-based spawning—enhances flexibility and supports different programming styles. However, while multiple instantiation mechanisms increase expressiveness, they do not necessarily improve semantic clarity or correctness. Excessive diversity may even introduce inconsistency if paradigms are not well integrated. Therefore, Instantiation Paradigm Diversity is assigned a substantial but secondary weight compared to identity semantics and meta-level control.
+
+
+\subsection{Polymorphism and Dispatch Mechanisms}
+
+\[
+\alpha = 0.35, \quad \beta = 0.35, \quad \gamma = 0.30
+\]
+
+The highest weights are assigned to dispatch scope and dispatch safety ($\alpha = 0.35$, $\beta = 0.35$), as these components fundamentally determine both the expressive capabilities and the semantic reliability of polymorphic behavior.
+
+The dispatch scope mechanism ($\alpha = 0.35$) captures the range of polymorphic abstractions supported by the language. Traditional object-oriented languages rely primarily on single dispatch, which restricts method selection to the dynamic type of the receiver. However, this model is widely recognized as insufficient for many extensibility scenarios. As Wadler describes in the context of the expression problem, single dispatch makes it difficult to extend operations without modifying existing code \cite{wadler1998expression}. 
+
+Multiple dispatch directly addresses this limitation by allowing method selection based on the dynamic types of all arguments, improving modular extensibility. Predicate dispatch further generalizes this concept by enabling selection based on arbitrary conditions, extending polymorphism beyond type hierarchies. Given its direct impact on the expressive power of object interaction, Dispatch Scope Mechanism is assigned a dominant weight.
+
+The dispatch safety guarantee is assigned $\beta = 0.35$, reflecting the importance of correctness in method selection. Type-safe dispatch is essential for ensuring that method calls do not result in runtime failures.  Therefore, Dispatch Safety Guarantee is weighted equally with dispatch scope.
+
+The virtualization optimization potential receives a slightly lower weight ($\gamma = 0.30$), as it primarily affects performance rather than expressiveness or correctness. Virtual method dispatch introduces runtime overhead, and modern languages provide mechanisms to mitigate this through devirtualization techniques.  While these mechanisms are important for performance-critical systems, they do not alter the fundamental semantics of polymorphism.
+
+\subsection{State Model, Mutability, and Concurrency Guarantees}
+
+\[
+    \alpha = 0.35, \quad \beta = 0.25, \quad \gamma = 0.40
+\]
+
+The highest weight is assigned to the concurrency primitive safety component ($\gamma = 0.40$), as concurrency-related errors constitute one of the most critical and difficult classes of defects in modern software systems. As emphasized by \textit{Adve and Boehm}, data races lead to undefined or unpredictable behavior in most programming language memory models \cite{boehm2008foundations}. Languages that provide formal guarantees of race freedom or enforce structured concurrency significantly reduce the cognitive burden on developers and improve system reliability. Consequently, the ability of a language to provide safe and expressive concurrency primitives directly impacts its suitability for large-scale object-oriented systems.
+
+The default mutability score ($\alpha = 0.35$) is assigned the second highest weight due to its strong influence on both reasoning about program state and interaction with concurrency. Immutability has been widely recognized as a key mechanism for reducing complexity in concurrent systems. As noted by \textit{Bloch}, immutable objects are inherently thread-safe \cite{bloch2017effective}. Therefore, default immutability or explicit mutability annotations significantly enhance both safety and predictability.
+
+The static reference constraint density component ($\beta = 0.25$) is assigned a slightly lower, yet still substantial, weight. Static constraints on references—such as ownership types, borrowing systems, or const-correctness—play an important role in preventing aliasing-related errors and enforcing safe usage patterns. Clarke et al. demonstrate that ownership type systems can statically guarantee encapsulation and alias control \cite{clarke1998ownership}. However, in practice, many mainstream object-oriented languages either lack such mechanisms or provide them in limited form (e.g., \texttt{const} in C++), reducing their overall effectiveness. Furthermore, while static reference constraints improve safety, they are often complex and may hinder usability if not carefully designed. As a result, their impact, though important, is considered secondary to the more fundamental concerns of mutability defaults and concurrency safety.
+
+
+\subsection{Support for Formal Specification and Verifiability}
+
+\[
+\alpha = 0.45, \quad \beta = 0.55
+\]
+
+The verification enforcement component ($\beta = 0.55$) is assigned a slightly higher weight, as the mere presence of specification constructs does not guarantee their practical effectiveness without enforcement mechanisms. Formal specifications only contribute to software reliability if they are systematically checked. Static verification, in particular, enables compile-time guarantees about program correctness, significantly reducing the risk of runtime failures. Meyer further argues that contracts are only meaningful when they are both documented and automatically checked \cite{meyer2002applying}. Therefore, enforcement—especially at compile time—plays a decisive role in ensuring that formal specifications are not merely descriptive but operational.
+
+The native contract constructs component ($\alpha = 0.45$) is assigned a slightly lower, yet still substantial, weight. The presence of built-in constructs for preconditions, postconditions, and invariants reflects the language’s commitment to formal reasoning and design-by-contract principles. Meyer introduced Design by Contract as a fundamental methodology for object-oriented programming, stating that software elements should be specified by precise and verifiable interface conditions \cite{meyer1997object}. Languages that natively support such constructs (e.g., Eiffel) provide clearer semantics and better tool integration compared to those relying on external libraries or annotations. However, the developers often neglect or inconsistently apply contract annotations when they are not enforced or integrated into the compilation process. 

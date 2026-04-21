@@ -1,0 +1,1432 @@
+% Scala, JavaScript, Python, Ruby
+
+\subsection{Metrics Evaluation for Scala}
+
+Scala represents a hybrid object-functional programming language with a formally specified type system and a rich set of object-oriented abstractions. Its design, as described in the Scala Language Specification and foundational works such as Odersky et al.~\cite{odersky2004overview} and Emir et al.~\cite{emir2007matching}, explicitly aims to unify object-oriented and functional paradigms through a uniform object model and advanced type constructs. This subsection evaluates Scala according to the proposed metrics, grounding each value in language specification details and peer-reviewed research.
+
+\subsubsection{Type System and Subtyping Model}
+
+\textbf{1) Nominal–Structural Typing Score $S_{nom}(L)$}
+
+Scala employs nominal subtyping through explicit declarations such as \texttt{class}, \texttt{trait}, and inheritance clauses (e.g., \texttt{extends}), where subtype relations are defined by named entities and governed by formal typing judgments. 
+Scala also supports structural types via refinement types, where type compatibility is determined by the presence of members rather than explicit inheritance, and this behavior is formally specified in its typing rules \cite{odersky2004overview}. 
+
+\[
+    S_{nom}(\text{Scala}) = 1, \quad I_{struct} = 1 \Rightarrow S_{nom} = 1
+\]
+
+\textbf{2) Variance Formalization Score $S_{var}(L)$}
+
+Scala provides fully explicit variance annotations, where type parameters can be declared covariant (\texttt{+A}), contravariant (\texttt{-A}), or invariant (default), and their usage is syntactically enforced by the compiler through well-defined typing rules.
+
+$V_{exp}(\text{Scala}) = 1$. 
+
+Furthermore, the specification formalizes variance soundness via restrictions on positions of type parameters (e.g., covariant types cannot appear in contravariant positions), ensuring type safety through compile-time checks derived from formal subtyping and variance rules.
+
+$V_{sound}(\text{Scala}) = 1$.
+
+\[
+S_{var}(\text{Scala}) = 1
+\]
+
+\textbf{3) Inheritance–Subtyping Separation Score $S_{rel}(L)$}
+
+First, although nominal subtyping is primarily introduced via class and trait inheritance, the language also permits limited explicit subtyping without direct inheritance through constructs such as refinement types and type bounds (e.g., $A <: B$ in type parameters), indicating partial but not fully general separation.
+
+$I_{dec}(\text{Scala})=0.5$
+
+Second, Scala’s subtyping relation is formally richer than inheritance alone (including variance, compound types, and path-dependent types), yet still partially grounded in declared inheritance hierarchies, implying only partial independence.
+
+$I_{ind}(\text{Scala})=0.5$
+
+Third, the specification distinguishes subtyping ($<:$) from inheritance (class/trait extension) at a conceptual level, but does not fully axiomatize them as completely orthogonal relations. 
+
+$I_{form}(\text{Scala})=0.5$
+
+$S_{rel}(\text{Scala})=\frac{0.5+0.5+0.5}{3}=0.5$
+
+\textbf{Final metric value:}
+\[
+    TSSI(Scala) = 0.3 \cdot S_{nom}(L) + 0.3 \cdot S_{var}(L) + 0.4 \cdot S_{rel}(L) = 
+\]
+
+\subsubsection{Abstraction and Encapsulation Mechanisms}
+
+\textbf{1) Visibility Granularity Index $V(L)$}
+
+Scala provides multiple semantically distinct access control levels: \texttt{private[this]} (object-private), \texttt{private} (class-private), qualified \texttt{private[pkg]} (package-restricted), \texttt{protected[this]} (object-protected), \texttt{protected} (subclass access), and unrestricted public access (default).
+
+\[
+V(Scala) = \frac{6}{n_{max}}
+\]
+
+
+\textbf{2) Module Isolation Strength $M(L)$}
+
+Scala provides several modularization constructs, namely packages, package objects, singleton objects, classes, and traits, which together form $b_{total}(\text{Scala}) = 5$ distinct module or namespace boundaries. 
+However, Scala does not enforce strict export lists at the module level; instead, visibility is controlled via access modifiers (e.g., \texttt{private[pkg]}) rather than explicit export declarations, meaning no boundary inherently requires an explicit interface of exported members. While newer Scala versions introduce selective imports/exports (e.g., \texttt{export} clauses), these do not constitute mandatory encapsulation barriers in the formal core specification: $b_{strict}(\text{Scala}) = 0$.
+
+\[
+M(\text{Scala}) = \frac{0}{5} = 0
+\]
+
+
+\textbf{3) Interface Abstraction Capacity $I(L)$}
+
+Scala provides multiple constructs for separating specification from implementation: \texttt{trait} (the primary abstraction mechanism supporting abstract members and mixin composition) and \texttt{abstract class} (which allows partial implementation with abstract definitions).
+
+$n_{abstraction\_constructs}(\text{Scala}) = 2$
+
+The set of object-defining constructs includes \texttt{class}, \texttt{trait}, and \texttt{object} (singleton).
+
+$n_{object}(\text{Scala}) = 3$
+
+\[
+I(Scala) = \frac{2}{3} \approx 0.67
+\]
+
+
+\textbf{4) Encapsulation Enforcement Coefficient $E(L)$}
+
+Scala enforces encapsulation at the type system level via access modifiers (e.g., \texttt{private}, \texttt{protected}, and qualified visibility), it does not fully prevent encapsulation violations at runtime. Specifically, Scala inherits unrestricted reflection capabilities from the Java ecosystem (e.g., \texttt{java.lang.reflect}) and allows access to private members through reflective APIs, as well as other unsafe mechanisms available on the JVM. These capabilities are not restricted by the Scala type system and are not prohibited in the specification. 
+
+\[
+E(\text{Scala}) = 0
+\]
+
+\textbf{Final metric value:}
+\[
+    AE(Scala) = 0.2 \cdot V(L) + 0.25 \cdot M(L) + 0.25 \cdot I(L) + 0.3 \cdot E(L)
+\]
+
+\subsubsection{Inheritance Semantics and Hierarchy Management}
+
+\textbf{1) Hierarchy Simplicity Factor $H_s(L)$}
+
+Scala enforces single inheritance for classes (each class may extend at most one superclass) while allowing multiple inheritance only through \texttt{trait} mixins, which are composed using a well-defined linearization algorithm that preserves a single inheritance chain at the class level. Thus, the maximum number of direct superclass declarations for classes is 1.
+\[
+    H_s(L) = 1
+\]
+
+
+\textbf{2) Linearization Determinism Score $L_d(L)$}
+
+Scala defines a precise and formally specified method resolution order based on a deterministic linearization algorithm for classes and traits. This algorithm constructs a single linear hierarchy by combining the superclass chain with mixin traits in a well-defined order, ensuring consistent resolution of overridden members and eliminating ambiguity in multiple inheritance scenarios \cite{odersky2004overview}.
+\[
+    L_d(L) = 1
+\]
+
+\textbf{3) Constraint Protection Coefficient $C_p(L)$}
+
+$p_1(\text{Scala})=1$ since the language provides \texttt{final} for classes and methods, preventing further inheritance or overriding
+
+$p_2(\text{Scala})=1$ due to \texttt{sealed} traits/classes restricting subclassing to the same compilation unit
+
+$p_3(\text{Scala})=1$ because overriding requires the explicit \texttt{override} modifier, enforced at compile time
+
+$p_4(\text{Scala})=0$ as methods are virtual by default and dynamic dispatch is the standard semantics
+
+$p_5(\text{Scala})=0$ because the language does not enforce a strict separation between abstract classes and interfaces, instead unifying them via traits
+
+$p_6(\text{Scala})=1$ because the compiler enforces inheritance constraints such as prohibiting extension of \texttt{final} classes and enforcing linearization rules
+
+\[
+    C_p(Scala) = \frac{4}{6} \approx 0.67
+\]
+
+\textbf{4) Fragile Base Mitigation Factor $F_b(L)$}
+
+Scala incorporates several semantic safeguards that mitigate fragile base class effects. These include mandatory \texttt{override} annotations for redefining inherited members, fine-grained visibility control (e.g., \texttt{private}, \texttt{protected}, and qualified access), restrictions on variance positions ensuring type safety, and a well-defined linearization model governing \texttt{super} calls in mixin compositions.
+
+$s_1(\text{Scala})=1$ since the \texttt{override} modifier is mandatory and prevents accidental overriding
+
+$s_2(\text{Scala})=1$ because the language provides strict visibility modifiers (e.g., \texttt{private}, \texttt{protected}, and scoped qualifiers) that control exposure of overridable members.
+
+$s_3(\text{Scala})=0$ as explicit superclass invocation is not universally required and overriding methods may omit \texttt{super} calls.
+
+$s_4(\text{Scala})=1$ due to formally defined variance annotations ($+$/$-$) with compile-time restrictions ensuring type-safe subtyping and overriding.
+
+$s_5(\text{Scala})=0$ because methods are overridable by default unless marked \texttt{final}, so polymorphism is not supported.
+
+$s_6(\text{Scala})=1$ since the compiler enforces strict override consistency checks on method signatures and types.
+
+\[
+    F_b(\text{Scala})=\frac{1+1+0+1+0+1}{6}=\frac{4}{6}\approx 0.67
+\]
+
+\textbf{Final metric value:}
+\[
+    ISRI(Scala) = 0.2 \cdot H_s(L) + 0.25 \cdot L_d(L) + 0.3 \cdot C_p(L) + 0.25 \cdot F_b(L)
+\]
+
+\subsubsection{Composition and Alternatives to Inheritance}
+
+\textbf{1) Class-Based Delegation Score $D_{cls}(L)$}
+
+Scala does not provide built-in syntactic delegation constructs (i.e., no dedicated keyword such as \texttt{delegate}); instead, delegation is typically emulated via composition and forwarding methods or via library-level patterns. 
+Furthermore, the language specification does not define automatic method forwarding mechanisms at the language level.
+
+\[
+    K_{del}(Scala) = 0.5, \quad S_{fwd}(Scala) = 0 \Rightarrow D_{cls}(Scala) = 0.25
+\]
+
+\textbf{2) Trait Expressiveness Score $T_{exp}(L)$}
+
+Scala resolves name conflicts during trait composition using a deterministic linearization order rather than explicit exclusion or aliasing mechanisms. In cases of ambiguity, the rightmost trait in the mixin order takes precedence, and conflicts are resolved through overriding rules defined in the specification. 
+Furthermore, Scala traits can declare requirements on the classes that mix them in via self-types (e.g., \texttt{this: SomeType =>}), which are formally specified constraints on the composition context; therefore .
+
+\[
+    R_{conf}(Scala) = 0.5 \quad O_{mod}(Scala) = 1 \Rightarrow R_{conf}(Scala) = 0.75
+\]
+
+\textbf{3) Interface Composition Capacity $I_{comp}(L)$}
+
+Scala does not have a separate \texttt{interface} construct; instead, \texttt{trait}s serve as their direct analogue and extend beyond traditional interfaces. A class may mix in an unrestricted number of traits using the \texttt{with} keyword. 
+Traits can contain fully defined method implementations, fields, and even initialization logic, as formally specified in the language.
+
+\[
+    N_{impl}(\text{Scala}) = 1 \quad D_{def}(\text{Scala}) = 1 \Rightarrow I_{comp} = 1
+\]
+
+\textbf{Final metric value:}
+\[
+    CRFI(Scala) = 0.3 \cdot D_{cls}(L) + 0.35 \cdot T_{exp}(L) + 0.35 \cdot I_{comp}(L)
+\]
+
+\subsubsection{Object Representation and Creation Model}
+
+\textbf{1) Identity Semantics Score $S_{id}(L)$}
+
+All user-defined types (classes, traits) are reference types:
+Scala distinguishes between reference types (instances of \texttt{class}, \texttt{trait}, and \texttt{object}) and value types (e.g., subclasses of \texttt{AnyVal}). But all user-definable type are reference types
+
+\[
+    S_{id} = 1
+\]
+
+\textbf{2) Instantiation Paradigm Diversity $S_{cr}(L)$}
+
+Scala natively supports standard constructor-based instantiation via the \texttt{new} keyword, singleton object instantiation through \texttt{object} declarations (module pattern with implicit initialization), and literal construction for built-in and case classes (e.g., \texttt{apply} methods enabling factory-style creation without \texttt{new}). Additionally, case classes provide a canonical factory mechanism via automatically generated companion objects.
+
+\[
+    S_{cr} = \frac{3}{P_{max}} 
+\]
+
+\textbf{3) Meta-level Extensibility Score $S_{meta}(L)$}
+
+Scala supports runtime introspection through reflection APIs (e.g., \texttt{scala.reflect} and interoperability with \texttt{java.lang.reflect}), allowing programs to query type information and object structure dynamically. However, the language does not natively support full structural modification of objects (e.g., adding/removing fields or methods at runtime) nor overriding the object instantiation protocol via metaobjects within the core specification.
+
+\[
+    I_{level} = 1 \Rightarrow S_{meta} = \frac{1}{I_{max}}
+\]
+
+\textbf{Final metric value:}
+\[
+    ORCI(Scala) = 0.35 \cdot S_{id}(L) + 0.3 \cdot S_{cr}(L) + 0.35 \cdot S_{meta}(L)
+\]
+
+\subsubsection{Polymorphism and Dispatch Mechanisms}
+
+\textbf{1) Dispatch Scope Mechanism $M_{scope}(L)$}
+
+Scala natively supports single dispatch based on the dynamic type of the receiver object.
+
+$I_{single}(Scala) = 1$
+
+But, the language does not provide true multiple dispatch in the sense of dynamic selection based on all argument types. Method overloading is resolved statically at compile time rather than dynamically.
+
+$I_{multi}(Scala) = 0$
+
+Similarly, Scala does not include predicate-based dispatch as a formal language feature (dispatch based on arbitrary runtime conditions is expressed via pattern matching or control flow rather than method selection).
+
+$I_{pred}(Scala) = 0$
+
+\[
+    M_{scope}(Scala) = \frac{1}{5} = 0.2
+\]
+
+\textbf{2) Dispatch Safety Guarantee $S_{disp}(L)$}
+
+First, method dispatch correctness is enforced statically through the type system, including method resolution, override checking, and type-safe dynamic dispatch constrained by static typing judgments.
+
+$I_{static}(\text{Scala})=1$
+
+Second, the language enforces exhaustiveness in pattern matching over sealed hierarchies and algebraic data types, with the compiler issuing errors or warnings when cases are incomplete, thus providing specification-level guarantees of dispatch completeness in such contexts.
+
+$I_{exhaust}(\text{Scala})=1$
+
+\[
+    S_{disp}(Scala) = \frac{1+1}{2} = 1
+\]
+
+\textbf{3) Virtualization Optimization Potential $O_{virt}(L)$}
+
+Scala supports \texttt{final} declarations for classes and methods, preventing overriding and enabling devirtualization opportunities.
+
+$K_{final} = 1$
+
+It also provides \texttt{sealed} classes and traits, which restrict subclassing to the same compilation unit and allow the compiler to reason about closed hierarchies.
+
+$K_{sealed} = 1$
+
+Scala does not define explicit static methods or language-level static dispatch annotations in the same sense as some other languages (despite JVM-level optimizations), and dispatch remains primarily virtual unless restricted by \texttt{final}.
+
+$K_{static} = 0$
+
+\[
+O_{virt} = \frac{1 + 1 + 0}{3} \approx 0.67
+\]
+
+\textbf{Final metric value:}
+\[
+    PDEI(Scala) = 0.35 \cdot M_{scope}(L) + 0.35 \cdot S_{disp}(L) + 0.3 \cdot O_{virt}(L)
+\]
+
+\subsubsection{State Model, Mutability, and Concurrency Guarantees}
+
+\textbf{1) Default Mutability Score $M_{def}(L)$}
+
+although Scala promotes immutability idiomatically (e.g., via \texttt{val} bindings and immutable collections), mutability is explicitly available and controlled through the \texttt{var} keyword and mutable collection types, meaning that immutability must be declared rather than being enforced by default at the object level.
+\[
+    M_{def} = 0.5
+\]
+
+\textbf{2) Static Reference Constraint Density $S_{dens}(L)$}
+
+First, the constructs that introduce or manipulate references in Scala programming language: (1) object references (all values are references except primitives under erasure), (2) \texttt{val} bindings, (3) \texttt{var} bindings, (4) class/trait fields, (5) parameter passing (by-value references), and (6) path-dependent and refined types that qualify references.
+
+$N_{ref}(\text{Scala})=6$
+
+Second, the constructs that enforce static restrictions: (1) \texttt{val} (immutability of the reference binding), (2) path-dependent types (restricting reference usage via stable paths), and (3) refined/structural types (constraining accessible members at compile time), while \texttt{var}, general object references, fields, and parameter passing do not impose strict aliasing or mutability constraints.
+
+$N_{constr}(\text{Scala})=3$
+
+\[
+    S_{dens} = \frac{3}{6}
+\]
+
+\textbf{3) Concurrency Primitive Safety $P_{conc}(L)$}
+
+First, Scala’s type system does not enforce data race freedom (e.g., shared mutable state via \texttt{var} is permitted without compile-time guarantees), and the Java Memory Model underlies its execution semantics; thus, correctness relies largely on programmer discipline and external libraries rather than intrinsic type safety.
+
+$S_{race}(\text{Scala}) = 0$
+
+Second, while the core language exposes low-level JVM threads, Scala’s standard library provides \texttt{Future} and \texttt{Promise} abstractions (structured concurrency), and widely adopted frameworks such as Akka introduce Actor-based high-level concurrency models; however, since these are not strictly part of the core language specification.
+
+$S_{model}(\text{Scala}) = 0.5$.
+
+\[
+    S_{race} = 0, \quad S_{model} = 0.5 \Rightarrow P_{conc} = 0.25
+\]
+
+\textbf{Final metric value:}
+\[
+    SCSI(Scala) = 0.35 \cdot M_{def}(L) + 0.25 \cdot S_{dens}(L) + 0.4 \cdot P_{conc}(L)
+\]
+
+\subsubsection{Support for Formal Specification and Verifiability}
+
+\textbf{1) Native Contract Constructs Score $C_{nat}(L)$}
+
+$n_{pre} = 0$: Scala does not define native syntax for preconditions; although developers may use \texttt{require} from the standard library, it is a conventional method rather than a first-class language construct with formal semantic enforcement.
+
+$n_{post} = 0$: Scala lacks intrinsic postcondition constructs (unlike languages with \texttt{ensures} clauses); while \texttt{ensuring} exists as a library extension method, it is not specified as a core semantic contract mechanism.
+
+$n_{inv} = 0$: Scala provides no native invariant constructs at the language level (e.g., no class invariants enforced by the compiler or runtime per specification).
+
+\[
+    C_{nat} = 0
+\]
+
+\textbf{2) Verification Enforcement Level $V_{enf}(L)$}
+
+Scala does not support built-in static verification or formal proof systems within its compiler (i.e., no native refinement types, dependent types, or contract verification as part of the specification). However, Scala’s standard library includes runtime checking mechanisms such as \texttt{require}, \texttt{assert}, and \texttt{ensuring}, which allow developers to enforce conditions during execution, consistent with the operational semantics defined over the JVM.
+
+\[
+    V_{enf} = 0.5
+\]
+
+\textbf{Final metric value:}
+\[
+    FSVI(Scala) = 0.45 \cdot C_{nat}(L) + 0.55 \cdot V_{enf}(L)
+\]
+
+\subsection{Metrics Evaluation for JavaScript}
+
+JavaScript represents a dynamically typed, prototype-based object-oriented language standardized by ECMAScript (ECMA-262). Its object model fundamentally differs from class-based statically typed languages, emphasizing runtime flexibility, structural behavior, and reflective capabilities. As noted in \cite{ecma262}, “objects are collections of properties” and inheritance is realized via prototype delegation rather than nominal hierarchies. Prior research highlights that JavaScript “lacks a formal static type system and relies on dynamic property lookup and late binding”. This section evaluates JavaScript according to the proposed metrics, grounding each numerical assignment in the language specification and established academic analyses.
+
+\subsubsection{Type System and Subtyping Model}
+
+JavaScript does not define a static type system in its specification; types are dynamic and checked at runtime \cite{ecma262}. Consequently, formal subtyping relations $E_{sub}(L)$ are absent.
+
+\textbf{1) Nominal–Structural Typing Score $S_{nom}(L)$}
+
+JavaScript does not provide a formal static type system with structural subtyping rules; instead, it employs dynamic typing where type compatibility is resolved at runtime without formal typing judgments or compile-time subtyping relations. Although object shapes can be compared implicitly (duck typing), this behavior is not specified via formal structural typing rules in the language specification. 
+
+JavaScript lacks nominal typing: there are no explicit subtype declarations, and the prototype-based inheritance model does not constitute nominal subtyping in the formal type-theoretic sense. Subtyping relationships are not enforced through named type declarations but rather through dynamic property lookup. 
+
+\[
+I_{struct}(JS) = 0, \quad I_{nom}(JS) = 0 \Rightarrow S_{nom}(JS) = 0
+\]
+
+\textbf{2) Variance Formalization Score $S_{var}(L)$}
+
+ECMAScript does not include syntactic constructs for declaring parametric polymorphism or variance annotations (such as covariance or contravariance), and all values are dynamically typed without compile-time type parameterization. 
+There are no formally defined variance rules, nor any specification-level guarantees of type soundness related to variance; type behavior is governed entirely by runtime semantics without static verification or proofs of safety. 
+
+\[
+V_{exp}(JS) = 0, \quad V_{sound}(JS) = 0 \Rightarrow S_{var}(JS) = 0
+\]
+
+\textbf{3) Inheritance–Subtyping Separation Score $S_{rel}(L)$}
+
+First, JavaScript allows subtyping (i.e., object compatibility and behavioral substitutability) independently of explicit inheritance constructs: objects can be created via object literals or functions and still be used interchangeably based on their structure, without requiring the \texttt{[[Prototype]]} linkage.
+
+$I_{dec}(L)=1$
+
+Second, subtyping is not formally defined in the specification as an independent relation, but emerges implicitly through structural behavior (duck typing) and internal methods (e.g., \texttt{[[Get]]}, \texttt{[[Set]]}); however, inheritance via the prototype chain influences property resolution, making the independence partial. 
+
+$I_{ind}(L)=0.5$
+
+Third, the ECMAScript specification does not formally distinguish subtyping from inheritance: it defines inheritance operationally via prototype chains, while subtyping is not explicitly formalized as a separate semantic relation.
+
+$I_{form}(L)=0$
+
+\[
+    S_{rel}(\text{JavaScript}) = \frac{1 + 0.5 + 0}{3} = 0.5.
+\]
+
+\textbf{Final metric value:}
+\[
+    TSSI(JavaScript) = 0.3 \cdot S_{nom}(L) + 0.3 \cdot S_{var}(L) + 0.4 \cdot S_{rel}(L) = 
+\]
+
+\subsubsection{Abstraction and Encapsulation Mechanisms}
+
+\textbf{1) Visibility Granularity Index $V(L)$}
+
+JavaScript supports: public visibility for all object properties by default, class-private fields (denoted with the \# syntax), which are enforced at the specification level via lexical scoping and inaccessible outside the declaring class\cite{ecma262}.
+
+$n_{levels}(L) = 2$.
+
+\[
+V(JS) = \frac{2}{n_{max}}
+\]
+
+\textbf{2) Module Isolation Strength $M(L)$}
+
+JavaScript provides ES modules as the primary modularization construct, where bindings are explicitly exported and imported via \texttt{export} and \texttt{import} declarations, and only exported identifiers are accessible outside the module; thus, these constitute strict boundaries with enforced export control. Additionally, other constructs such as script scope or function scope do not qualify as module systems in the specification-level sense of namespace isolation.
+
+\[
+M(JS) = 1
+\]
+
+
+\textbf{3) Interface Abstraction Capacity $I(L)$}
+
+JavaScript does not provide dedicated abstraction constructs such as interfaces, abstract classes, or protocols at the language specification level. While abstraction can be emulated through conventions (e.g., duck typing or documentation), these are not formalized as distinct syntactic or semantic constructs.
+
+\[
+I(JS) = 0
+\]
+
+
+\textbf{4) Encapsulation Enforcement Coefficient $E(L)$}
+
+JavaScript permits unrestricted runtime access to object properties via dynamic lookup (e.g., bracket notation), reflection-like mechanisms such as \texttt{Reflect} and \texttt{Proxy}, and mutation of object structure without compile-time restrictions; these capabilities allow bypassing intended encapsulation boundaries for all non-private members.
+
+\[
+E(JS) = 0
+\]
+
+\textbf{Final metric value:}
+\[
+    AE(JS) = 0.2 \cdot V(L) + 0.25 \cdot M(L) + 0.25 \cdot I(L) + 0.3 \cdot E(L)
+\]
+
+\subsubsection{Inheritance Semantics and Hierarchy Management}
+
+\textbf{1) Hierarchy Simplicity Factor $H_s(L)$}
+
+JavaScript supports only single inheritance in terms of object delegation: each object has at most one internal \texttt{[[Prototype]]} reference, and class-based syntax (\texttt{extends}) likewise allows only one direct superclass. Although mixin patterns can simulate multiple inheritance, they are not formal language-level inheritance mechanisms defined in the specification.
+
+\[
+    H_s(JS) = 1
+\]
+
+\textbf{2) Linearization Determinism Score $L_d(L)$}
+
+JavaScript employs a prototype chain lookup algorithm, where property access is resolved deterministically by traversing the \texttt{[[Prototype]]} chain in a strictly defined order until a matching property is found or the chain terminates. This lookup procedure is formally specified in ECMAScript (e.g., via the \texttt{Get} and \texttt{[[Get]]} internal methods), ensuring a fully deterministic and unambiguous resolution order. Since JavaScript supports only single inheritance (one prototype link per object), there is no need for complex linearization strategies as in multiple inheritance systems, and the resolution order is uniquely defined by the chain structure.
+
+\[
+    L_d(JS) = 1
+\]
+
+\textbf{3) Constraint Protection Coefficient $C_p(L)$}
+
+$p_1=0$: the language does not provide \texttt{final} classes or methods; inheritance via the \texttt{[[Prototype]]} chain remains dynamically extensible. 
+
+$p_2=0$: ECMAScript lacks sealed or closed class hierarchies in the sense of restricting subclass sets (although \texttt{Object.seal} exists, it does not constrain inheritance relations). 
+
+$p_3=0$: method overriding is implicit and no mandatory \texttt{override} annotation is specified. 
+
+$p_4=0$: because all methods are effectively virtual by default due to dynamic dispatch through property lookup. 
+
+$p_5=0$: since JavaScript does not enforce a formal separation between abstract classes and interfaces at the language level. 
+
+$p_6=0$: because there are no compile-time rules prohibiting or restricting inheritance extensions; all checks are dynamic.
+
+\[
+    C_p(\text{JavaScript}) = \frac{0+0+0+0+0+0}{6} = 0,
+\]
+
+\textbf{4) Fragile Base Mitigation Factor $F_b(L)$}
+
+$s_1=0$: the language does not define any mandatory explicit override annotation; method overriding is implicit and unchecked by the specification. 
+
+$s_2=0$: JavaScript lacks strict method visibility controls at the specification level—while \texttt{\#private} fields exist, method visibility does not prevent overriding or exposure in inheritance hierarchies. 
+
+$s_3=1$: ECMAScript explicitly requires invocation of \texttt{super()} in derived class constructors before accessing \texttt{this}, enforcing controlled superclass initialization semantics. 
+
+$s_4=0$: the language specification does not impose variance restrictions or static type constraints ensuring type-safe overriding. 
+
+$s_5=0$: all methods are effectively overridable by default, with no built-in mechanism for non-overridable (final) methods. 
+
+$s_6=0$: there are no compile-time override consistency checks in the dynamically typed specification. Therefore, the metric evaluates to
+
+\[
+    F_b(\text{JavaScript}) = \frac{1}{6} \approx 0.167,
+\]
+
+\textbf{Final metric value:}
+\[
+    ISRI(JavaScript) = 0.2 \cdot H_s(L) + 0.25 \cdot L_d(L) + 0.3 \cdot C_p(L) + 0.25 \cdot F_b(L)
+\]
+
+\subsubsection{Composition and Alternatives to Inheritance}
+
+\textbf{1) Class-Based Delegation Score $D_{cls}(L)$}
+
+JavaScript does not provide dedicated delegation keywords (such as \texttt{delegate}); however, delegation can be emulated through object composition, prototype chaining, or manual forwarding methods, which are idiomatic but not syntactically enforced constructs. 
+The language does not include automatic method forwarding mechanisms—developers must explicitly define wrapper methods or use patterns (e.g., proxies) to delegate calls, which are not equivalent to built-in delegation features tied to class definitions
+
+\[
+K_{del}(JS) = 0.5, \quad S_{fwd}(JS) = 0 \Rightarrow D_{cls}(JS) = 0.25
+\]
+
+\textbf{2) Trait Expressiveness Score $T_{exp}(L)$}
+
+JavaScript resolves method name conflicts implicitly through property overwriting based on declaration or assignment order when mixin patterns (e.g., object spreading or prototype augmentation) are used. There are no formal mechanisms for explicit exclusion or aliasing, but neither does the language enforce compile-time errors. JavaScript mixin patterns cannot formally declare requirements (such as required methods or fields) within the language specification; any such constraints are informal and not enforced by the runtime or syntax.
+
+\[
+    R_{conf}(JS) = 0, \quad O_{mod}(JS) = 0 \Rightarrow T_{exp}(JS) = 0
+\]
+
+\textbf{3) Interface Composition Capacity $I_{comp}(L)$}
+
+The language does not include native interface constructs or formally defined analogues at the specification level. 
+There is no facility for declaring default method implementations, because of absence of interfaces. While JavaScript supports behavioral composition through mixins and object composition, these are not formal interface-based mechanisms and are not specified as such.
+
+\[
+    I_{comp}(JS) = 0
+\]
+
+\textbf{Final metric value:}
+\[
+    CRFI(JS) = 0.3 \cdot D_{cls}(L) + 0.35 \cdot T_{exp}(L) + 0.35 \cdot I_{comp}(L)
+\]
+
+\subsubsection{Object Representation and Creation Model}
+
+\textbf{1) Identity Semantics Score $S_{id}(L)$}
+
+JavaScript allows the creation of objects via object literals and class-based syntax, both of which produce objects governed by reference semantics. All user-definable structured types are reference-based. Primitive types (e.g., Number, String, Boolean) are not user-definable in the specification sense and are excluded from $T_{user}(L)$.
+
+\[
+    S_{id}(JS) = 1
+\]
+
+\textbf{2) Instantiation Paradigm Diversity $S_{cr}(L)$}
+
+JavaScript provides: constructor-based instantiation via the \texttt{new} operator with functions or classes, object literal construction using \texttt{{}}, and prototype-based creation via \texttt{Object.create}, which directly specifies the prototype of a new object. Other patterns (e.g., factory functions) are reducible to these primitives and are not considered separate paradigms.
+
+\[
+    S_{cr}(JS) = \frac{3}{P_{max}} = 0.75
+\]
+
+\textbf{3) Meta-level Extensibility Score $S_{meta}(L)$}
+
+JavaScript provides: runtime structural modification of objects (e.g., adding, deleting, or redefining properties via \texttt{Object.defineProperty}) and, more importantly, the ability to override fundamental object interaction semantics through \texttt{Proxy} objects, which intercept operations such as property access, assignment, and even object construction. This constitutes modification not only of structure but also of the object interaction protocol itself, corresponding to creation and behavior interception at a meta-level
+
+\[
+    S_{meta}(JS) = \frac{3}{I_{max}}
+\]
+
+\textbf{Final metric value:}
+\[
+    ORCI(JS) = 0.35 \cdot S_{id}(L) + 0.3 \cdot S_{cr}(L) + 0.35 \cdot S_{meta}(L)
+\]
+
+\subsubsection{Polymorphism and Dispatch Mechanisms}
+
+\textbf{1) Dispatch Scope Mechanism $M_{scope}(L)$}
+
+JavaScript supports single dispatch through its object model, where method invocation is determined by the receiver object and resolved via the prototype chain.
+
+$I_{single} = 1$
+
+However, the language does not natively support multiple dispatch based on the runtime types of multiple arguments.
+
+$I_{multi} = 0$ 
+
+Similarly, predicate-based dispatch is not a built-in language feature—conditional logic can emulate it, but there is no formal dispatch mechanism based on predicates in the specification.
+
+$I_{pred} = 0$
+
+\[
+    M_{scope}(JS) = \frac{1}{5} = 0.2
+\]
+
+\textbf{2) Dispatch Safety Guarantee $S_{disp}(L)$}
+
+First, $I_{static}(L)=0$ since the specification defines a dynamically typed language with no compile-time verification phase; method dispatch correctness (e.g., property existence or callable status) is resolved at runtime via operations such as \texttt{[[Get]]} and \texttt{[[Call]]}, and failures result in runtime exceptions rather than static rejection. 
+
+Second, $I_{exhaust}(L)=0$ because the language does not enforce exhaustive dispatch definitions; constructs such as \texttt{switch} statements or property-based dispatch do not require coverage of all possible cases, and missing branches are permitted without specification-level errors. Substituting into the metric,
+
+\[
+    S_{disp}(\text{JavaScript}) = \frac{0 + 0}{2} = 0,
+\]
+
+\textbf{3) Virtualization Optimization Potential $O_{virt}(L)$}
+
+JavaScript does not support final or non-virtual methods, as all methods are dynamically dispatched and can be overridden.
+
+$K_{final} = 0$
+
+The language also lacks sealed class hierarchies that restrict subclassing.
+
+$K_{sealed} = 0$
+
+While JavaScript includes \texttt{static} methods in class syntax, these do not provide static dispatch guarantees or devirtualization hints in the specification sense, as method resolution remains dynamic.
+
+$K_{static} = 0$
+
+\[
+    O_{virt}(JS) = 0
+\]
+
+\textbf{Final metric value:}
+\[
+    PDEI(JS) = 0.35 \cdot M_{scope}(L) + 0.35 \cdot S_{disp}(L) + 0.3 \cdot O_{virt}(L)
+\]
+
+\subsubsection{State Model, Mutability, and Concurrency Guarantees}
+
+\textbf{1) Default Mutability Score $M_{def}(L)$}
+
+All standard objects (including arrays and functions) are mutable unless explicitly restricted via mechanisms such as \texttt{Object.freeze} or by using immutable patterns at the application level. Therefore, mutability does not require explicit annotation; rather, immutability must be enforced explicitly by the programmer.
+
+\[
+    M_{def}(JS) = 0
+\]
+
+\textbf{2) Static Reference Constraint Density $S_{dens}(L)$}
+
+First, constructs that introduce or manipulate references: variable bindings (\texttt{var}, \texttt{let}, \texttt{const}), object property access, array indexing, and function parameter passing, all of which operate on references to objects in the heap via the specification’s internal Reference Record model. 
+
+$N_{ref}(\text{JavaScript}) = 4$
+
+Second, $N_{constr}(\text{JavaScript})$ counts only those constructs that enforce static (compile-time) constraints on reference usage. JavaScript, being a dynamically typed language, does not impose compile-time aliasing or mutability constraints.
+
+\[
+    S_{dens}(JavaScript) = 0
+\]
+
+\textbf{3) Concurrency Primitive Safety $P_{conc}(L)$}
+
+First, JavaScript employs a single-threaded event loop for the main execution context, which avoids traditional data races by design; however, with the introduction of \texttt{SharedArrayBuffer} and \texttt{Atomics}, true shared-memory concurrency is possible without static guarantees, and correctness relies on programmer discipline rather than type-system proofs or systematic runtime enforcement.
+
+$S_{race}(\text{JavaScript}) = 0$
+
+Second, JavaScript provides high-level concurrency primitives such as \texttt{Promise}, \texttt{async/await}, and event-driven callbacks, which correspond to structured concurrency (task-based asynchronous computation) rather than actor-style isolation or CSP channels.
+
+$S_{model}(\text{JavaScript}) = 0.5$. 
+
+\[
+    P_{conc}(JS) = \frac{0 + 0.5}{2} = 0.25
+\]
+
+\textbf{Final metric value:}
+\[
+    SCSI(JS) = 0.35 \cdot M_{def}(L) + 0.25 \cdot S_{dens}(L) + 0.4 \cdot P_{conc}(L)
+\]
+
+\subsubsection{Support for Formal Specification and Verifiability}
+
+\textbf{1) Native Contract Constructs Score $C_{nat}(L)$}
+
+JavaScript does not provide first-class language constructs for specifying preconditions, postconditions, or invariants; instead, such checks are implemented manually using conditional statements or via external libraries (e.g., assertion frameworks), which are not part of the core language semantics. Specifically, there are no native syntactic forms analogous to \texttt{require}, \texttt{ensure}, or invariant clauses within class or function definitions.
+
+\[
+    C_{nat}(JS) = \frac{0 + 0 + 0}{3} = 0
+\]
+
+\textbf{2) Verification Enforcement Level $V_{enf}(L)$}
+
+JavaScript does not support static verification or compile-time proof of correctness due to its dynamic type system and absence of a formal static contract or verification phase in the language standard. However, it does provide runtime checking mechanisms, such as dynamic type validation, exception handling (\texttt{throw}), and built-in runtime errors (e.g., \texttt{TypeError}), which enforce certain correctness properties during execution. These mechanisms allow violations of expected behavior to be detected only at runtime rather than prevented statically.
+\[
+    V_{enf}(JS) = 0.5
+\]
+
+\textbf{Final metric value:}
+\[
+    FSVI(JS) = 0.45 \cdot C_{nat}(L) + 0.55 \cdot V_{enf}(L)
+\]
+
+
+\subsection{Metrics Evaluation for Python}
+
+\subsubsection{Introduction}
+
+Python is a dynamically typed, object-oriented language with a highly reflective runtime and a flexible object model rooted in message passing and late binding. Its design philosophy, as described in the Python Language Reference and further analyzed in works such as, prioritizes simplicity and runtime adaptability over formal static guarantees. Consequently, Python provides rich object-oriented expressiveness but relatively weak formalization of type safety, encapsulation enforcement, and verification. In this section, the previously defined metrics are computed for Python based strictly on its language specification and formally documented semantics.
+
+\subsubsection{1) Type System and Subtyping Model}
+
+\textbf{1) Nominal–Structural Typing Score $S_{nom}(L)$}
+
+In the case of Python, nominal typing is clearly supported through its class system, where subtype relationships are explicitly declared via inheritance \cite{pep544}. 
+
+$I_{nom}(L)=1$
+
+Structural typing is also supported through the introduction of \textit{Protocols} \cite{pep544}, which define subtyping based on the presence of methods and properties rather than explicit inheritance.
+
+$I_{struct}(L)=1$ .
+
+\[
+S_{nom}(L) = 1
+\]
+
+\textbf{2) Variance Formalization Score $S_{var}(L)$}
+
+In Python, variance is supported in the type hinting system \cite{pep484} through the use of generic type variables (e.g., \texttt{TypeVar}) with explicit annotations such as \texttt{covariant=True} and \texttt{contravariant=True}, hence co-, contra-, and invariance can be directly declared.
+
+However, regarding soundness, Python’s type system is not enforced at runtime and relies on external static type checkers (e.g., mypy), and the official specification does not provide a fully formalized, proven type-safe variance model; instead, it imposes practical restrictions to mitigate unsoundness. 
+
+\begin{itemize}
+    \item $V_{exp}(L) = 1$
+    \item $V_{sound}(L) = 0.5$
+\end{itemize}
+
+\[
+S_{var}(L) = 0.75
+\]
+
+\textbf{3) Inheritance–Subtyping Separation Score $S_{rel}(L)$}
+
+First, Python supports explicit subtyping without inheritance via structural typing mechanisms such as \texttt{typing.Protocol}, allowing a class to be considered a subtype based on method signatures rather than inheritance hierarchy.
+
+$I_{dec}(L)=1$
+
+Second, subtyping rules in Python’s static type system are defined independently of inheritance semantics: nominal inheritance (class-based) and structural subtyping (protocol-based) coexist, and type compatibility is determined by type checkers without requiring subclass relationships.
+
+$I_{ind}(L)=1$
+
+Third, although the distinction between inheritance and subtyping is clearly articulated in the typing PEPs, it is not fully formalized in a rigorous mathematical specification within the core language definition, remaining partly informal and tool-dependent. Thus, substituting these values into the formula yields.
+
+$I_{form}(L)=0.5$
+
+\[
+    S_{rel}(\text{Python}) = \frac{1 + 1 + 0.5}{3} = \frac{2.5}{3} \approx 0.83,
+\]
+
+\textbf{Final metric value:}
+\[
+    TSSI(Python) = 0.3 \cdot S_{nom}(L) + 0.3 \cdot S_{var}(L) + 0.4 \cdot S_{rel}(L) = 
+\]
+
+\subsubsection{Abstraction and Encapsulation Mechanisms}
+
+\textbf{1) Visibility Granularity Index $V(L)$}
+
+In Python, access control is not enforced through strict modifiers but follows a convention-based model as described in the language reference: 
+
+\begin{itemize}
+    \item public members (default)
+    \item protected members indicated by a single leading underscore (e.g., \texttt{\_x})
+    \item private members using name mangling with double leading underscores (e.g., \texttt{\_\_x})
+\end{itemize}
+
+Although these mechanisms do not enforce strict encapsulation at the compiler or runtime level, they are semantically distinct and consistently recognized by the specification and tooling. 
+
+$n_{levels}(\text{Python}) = 3$. 
+
+\[
+    V(L)=0.75
+\]
+
+
+\textbf{2) Module Isolation Strength $M(L)$}
+
+In Python, the primary modularization construct is the module itself (i.e., a file), along with packages that group modules hierarchically.
+
+$b_{total}(\text{Python}) = 2$ (modules and packages)
+
+However, Python does not enforce strict export control: although the special variable \texttt{\_\_all\_\_} can define an explicit export list, it only affects wildcard imports (\texttt{from module import *}) and does not prevent direct access to non-exported attributes. Additionally, all names remain accessible via standard attribute lookup, reflecting the specification’s philosophy of open access rather than enforced encapsulation.
+
+$b_{strict}(\text{Python}) = 0$
+
+\[
+    M(L)=0.5
+\]
+
+
+\textbf{3) Interface Abstraction Capacity $I(L)$}
+
+In Python, abstraction is supported through:
+\begin{itemize}
+    \item abstract base classes provided by the \texttt{abc} module
+    \item structural \textit{Protocols} introduced in PEP 544, which define behavior independently of inheritance.
+\end{itemize}
+
+$n_{abstraction_constructs}(\text{Python}) = 2$
+The primary object-defining construct in Python is the class (functions are not object-defining in the same structural sense).
+
+$n_{object}(\text{Python}) = 1$.
+
+\[
+    I(Python)=\frac{2}{1}=2 \Rightarrow \text{normalized } \approx 1
+\]
+
+
+\textbf{4) Encapsulation Enforcement Coefficient $E(L)$}
+
+In Python, encapsulation is not strictly enforced: all object attributes are accessible via standard mechanisms such as \texttt{getattr}, \texttt{setattr}, direct dictionary manipulation through \texttt{\_\_dict\_\_}, and introspection/reflection facilities defined in the language specification. Python also lacks restrictions on reflective capabilities and does not provide a type system that enforces access boundaries at runtime. Therefore, encapsulation violations are not prevented, and the language explicitly permits unrestricted access to object internals.
+
+\[
+    E(Python) = 0.2
+\]
+
+\textbf{Final metric value:}
+\[
+    AE(Python) = 0.2 \cdot V(L) + 0.25 \cdot M(L) + 0.25 \cdot I(L) + 0.3 \cdot E(L)
+\]
+
+\subsubsection{Inheritance Semantics and Hierarchy Management}
+
+\textbf{1) Hierarchy Simplicity Factor $H_s(L)$}
+
+In Python, the class definition syntax explicitly allows multiple inheritance, i.e., a class can inherit from an arbitrary number of base classes (e.g., \texttt{class C(A, B, ...)}), implying that $M(\text{Python}) > 1$. Since there is no fixed upper bound in the specification, Python effectively reaches the maximal considered value in comparative analysis.
+\[
+    M(\text{Python}) = M_{max}
+    H_s(L) = 1 - \frac{M(Python) - 1}{M_{max} - 1} = 0
+\]
+
+
+\textbf{2) Linearization Determinism Score $L_d(L)$}
+
+In Python, the MRO is explicitly defined in the language specification via the C3 linearization algorithm, which ensures a consistent and monotonic resolution order for multiple inheritance hierarchies. This algorithm is formally described and guarantees determinism across all compliant implementations, eliminating ambiguity in method lookup. Since Python fully specifies its linearization strategy and enforces it uniformly, it satisfies the condition for a formally defined and deterministic MRO.
+
+\[
+    L_d(Python)=1
+\]
+
+
+\textbf{3) Constraint Protection Coefficient $C_p(L)$}
+
+$p_1=0$ because, although \texttt{typing.final} exists, it is not enforced by the core language semantics and remains advisory for static type checkers only.
+
+$p_2=0$ since Python does not provide sealed or closed class hierarchies.
+
+$p_3=0$ because method overriding does not require an explicit \texttt{override} annotation.
+
+$p_4=0$ as all methods are effectively virtual by default due to dynamic dispatch.
+
+$p_5=1$ since Python formally distinguishes abstract base classes via the \texttt{abc} module, enforcing abstract/interface separation constraints at instantiation time.
+
+$p_6=0$ because there are no compile-time restrictions on inheritance in the dynamically typed core language.
+
+\[
+    C_p(\text{Python}) = \frac{0+0+0+0+1+0}{6} \approx 0.17,
+\]
+
+
+\textbf{4) Fragile Base Mitigation Factor $F_b(L)$}
+
+$s_1=0$ since Python does not require a mandatory \texttt{override} annotation, making accidental overriding possible.
+
+$s_2=0$ because visibility control is limited to conventions (e.g., single or double underscore name mangling) rather than strict access modifiers enforced by the language.
+
+$s_3=0$ as calls to \texttt{super()} are not required and method resolution order permits implicit behavior
+$s_4=1$ since the static typing system defines variance rules (e.g., invariance of generics unless specified otherwise) that are enforced by type checkers.
+
+$s_5=0$ because all methods are virtual and overridable by default.
+
+$s_6=0$ as there are no compile-time guarantees in the language itself, with consistency checks delegated to optional external type checkers. Therefore,
+
+\[
+    F_b(\text{Python}) = \frac{0+0+0+1+0+0}{6} \approx 0.17,
+\]
+
+\textbf{Final metric value:}
+\[
+    ISRI(Python) = 0.2 \cdot H_s(L) + 0.25 \cdot L_d(L) + 0.3 \cdot C_p(L) + 0.25 \cdot F_b(L)
+\]
+
+\subsubsection{Composition and Alternatives to Inheritance}
+
+\textbf{1) Class-Based Delegation Score $D_{cls}(L)$}
+
+In Python, the language specification does not define dedicated delegation keywords or constructs. The delegation is typically implemented manually using composition and forwarding methods or via dynamic features such as \texttt{\_\_getattr\_\_} and \texttt{\_\_getattribute\_\_}, which allow an object to redirect attribute access to another object. Since this approach relies on user-defined patterns rather than built-in syntax, delegation is considered emulated via adapters. 
+Python does not provide automatic delegation mechanisms that eliminate boilerplate forwarding code at the language level; even with dynamic attribute hooks, explicit implementation is required
+
+\[
+    K_{del}(\text{Python})=0.5, \quad S_{fwd}(\text{Python})=0 \Rightarrow D_{cls}(\text{Python})=0.25
+\]
+
+\textbf{2) Trait Expressiveness Score $T_{exp}(L)$}
+
+In Python, mixins are implemented using multiple inheritance, and name conflict resolution is governed by the formally specified method resolution order (C3 linearization), which resolves conflicts deterministically based on declaration order rather than explicit exclusion or aliasing mechanisms.
+Python does not provide a dedicated language-level construct for declaring required methods or properties within mixins themselves.
+
+\[
+    R_{conf}(\text{Python}) = 0.5, \quad O_{conf}(\text{Python}) = 0 \Rightarrow T_{exp}=0.25
+\]
+
+\textbf{3) Interface Composition Capacity $I_{comp}(L)$}
+
+In Python, there is no dedicated \textit{interface} construct in the core language specification; however, abstract base classes (ABCs) and \textit{Protocols} (PEP 544) serve as functional analogues. A class may inherit from multiple abstract base classes or conform to multiple protocols without restriction. 
+Furthermore, abstract base classes in Python may include concrete method implementations alongside abstract methods, enabling default behavior reuse, while protocols may also define method bodies.
+
+\[
+    N_{impl}(\text{Python}) = 1, \quad D_{def}(\text{Python}) = 1 \Rightarrow I_{comp} = 1
+\]
+
+\textbf{Final metric value:}
+\[
+    CRFI(Python) = 0.3 \cdot D_{cls}(L) + 0.35 \cdot T_{exp}(L) + 0.35 \cdot I_{comp}(L)
+\]
+
+\subsubsection{Object Representation and Creation Model}
+
+\textbf{1) Identity Semantics Score $S_{id}(L)$}
+
+In Python, the language specification defines a uniform object model in which all user-defined types (i.e., classes) produce objects with identity, accessible via operations such as \texttt{id()} and compared using the \texttt{is} operator. There are no alternative user-definable value-type categories with copy semantics distinct from reference behavior; even immutable types (e.g., tuples) preserve identity at the object level.
+All user-defined types are reference types:
+
+\[
+    S_{id}(Python)=1
+\]
+
+\textbf{2) Instantiation Paradigm Diversity $S_{cr}(L)$}
+
+The object creation is primarily class-based via constructor invocation (e.g., calling a class object, which internally triggers \texttt{\_\_new\_\_} and \texttt{\_\_init\_\_}), and literal-based construction for built-in container types (e.g., lists, dictionaries, sets), both formally defined in the language. Additionally, Python supports factory-based instantiation patterns through first-class functions and metaclass customization, but these are extensions of the class-based model rather than distinct paradigms such as prototype cloning or actor spawning.
+\[
+    S_{cr}(Python) = \frac{2}{P_{max}}
+\]
+
+\textbf{3) Meta-level Extensibility Score $S_{meta}(L)$}
+
+Python provides extensive meta-programming capabilities: it supports full introspection (e.g., via \texttt{dir()}, \texttt{type()}, reflection APIs), runtime structural modification (e.g., dynamic attribute addition, modification of \texttt{\_\_dict\_\_}), and, critically, allows overriding the object creation protocol through metaobjects such as metaclasses and customization hooks like \texttt{\_\_new\_\_}, \texttt{\_\_init\_\_}, and \texttt{\_\_call\_\_}.
+
+\[
+    S_{meta}(Python)= \frac{3}{I_{max}}
+\]
+
+\textbf{Final metric value:}
+\[
+    ORCI(Python) = 0.35 \cdot S_{id}(L) + 0.3 \cdot S_{cr}(L) + 0.35 \cdot S_{meta}(L)
+\]
+
+\subsubsection{Polymorphism and Dispatch Mechanisms}
+
+\textbf{1) Dispatch Scope Mechanism $M_{scope}(L)$}
+
+In Python, single dispatch is natively supported through method invocation on the receiver object, as defined by the object model and method resolution order.
+
+$I_{single}(\text{Python}) = 1$
+
+Multiple dispatch is not natively supported in the core language; although libraries (e.g., \texttt{functools.singledispatch}) provide limited function overloading based on a single argument, full argument-based multiple dispatch across all parameters is not part of the specification.
+
+$I_{multi}(\text{Python}) = 0$
+
+Predicate-based dispatch is also not a built-in language feature, as conditional branching must be expressed explicitly in code rather than declaratively in dispatch rules.
+
+$I_{pred}(\text{Python}) = 0$
+
+\[
+    M_{scope} = \frac{1}{5} = 0.2
+\]
+
+\textbf{2) Dispatch Safety Guarantee $S_{disp}(L)$}
+
+First, Python does not provide compile-time guarantees of dispatch correctness: method resolution and function dispatch are determined at runtime via dynamic typing and late binding, while static type checkers (e.g., \texttt{mypy}) remain external and non-mandatory. 
+
+$I_{static}(L)=0$
+
+Second, the language does not enforce exhaustiveness of dispatch definitions; even with structural pattern matching (\texttt{match} statement, PEP 634), exhaustiveness checking is not required or guaranteed by the specification. 
+
+$I_{exhaust}(L)=0$
+
+\[
+    S_{disp}(\text{Python}) = \frac{0 + 0}{2} = 0,
+\]
+
+\textbf{3) Virtualization Optimization Potential $O_{virt}(L)$}
+
+In Python, the specification does not provide enforced \texttt{final} or non-virtual methods; all methods are dynamically dispatched and overrideable, and annotations such as \texttt{final} are not enforced at runtime.
+
+$K_{final} = 0$
+
+Similarly, Python does not support sealed class hierarchies that restrict subclassing.
+
+$K_{sealed} = 0$ 
+
+Although Python includes \texttt{@staticmethod}, this construct does not serve as a static dispatch optimization hint but rather defines methods without implicit receiver binding, and does not eliminate dynamic lookup semantics.
+
+$K_{static} = 0$
+
+\[
+    O_{virt}=0
+\]
+
+\textbf{Final metric value:}
+\[
+    PDEI(Python) = 0.35 \cdot M_{scope}(L) + 0.35 \cdot S_{disp}(L) + 0.3 \cdot O_{virt}(L)
+\]
+
+\subsubsection{State Model, Mutability, and Concurrency Guarantees}
+
+\textbf{1) Default Mutability Score $M_{def}(L)$}
+
+In Python, according to its language specification and data model, objects are not uniformly immutable by default: core built-in types such as integers, floats, strings, and tuples are immutable, whereas lists, dictionaries, and sets are mutable without requiring any explicit annotation. The language does not enforce immutability as a default semantic constraint, nor does it require developers to explicitly declare objects as mutable; instead, mutability is an inherent property of each type and is directly accessible without syntactic modifiers.
+
+\[
+    M_{def}=0
+\]
+
+\textbf{2) Static Reference Constraint Density $S_{dens}(L)$}
+
+The type system is dynamically enforced and does not impose compile-time constraints on aliasing, mutability, or reference usage; there are no native syntactic constructs analogous to const qualifiers, borrow checking, or ownership types that restrict references statically. Although optional type hints exist, they are not enforced at compile time by the language itself and therefore do not qualify as static constraints under the formal rules.
+
+\[
+    S_{dens} = 0
+\]
+
+\textbf{3) Concurrency Primitive Safety $P_{conc}(L)$}
+
+First, Python does not provide compile-time guarantees of data race freedom in its type system; instead, it relies primarily on programmer discipline when using shared-memory concurrency (e.g., via the \texttt{threading} module). Although the Global Interpreter Lock (GIL) in CPython restricts true parallel execution of bytecode, it does not eliminate logical data races on shared mutable state, nor is it a formal runtime race detection mechanism as defined by the metric. 
+
+$S_{race}(\text{Python}) = 0$ 
+
+Second, Python provides structured concurrency abstractions such as \texttt{asyncio} with tasks, futures, and event loops, which correspond to the “structured concurrency” category rather than purely low-level primitives; however, it does not natively enforce higher-level models like Actors or CSP as first-class language constructs. 
+
+$S_{model}(\text{Python}) = 0.5$
+
+\[
+    P_{conc}=0.25
+\]
+
+\textbf{Final metric value:}
+\[
+    SCSI(Python) = 0.35 \cdot M_{def}(L) + 0.25 \cdot S_{dens}(L) + 0.4 \cdot P_{conc}(L)
+\]
+
+\subsubsection{Support for Formal Specification and Verifiability}
+
+\textbf{1) Native Contract Constructs Score $C_{nat}(L)$}
+
+First, Python does not include native syntax or semantics for preconditions; while developers may express them using \texttt{assert} statements or external libraries (e.g., \texttt{icontract}, \texttt{deal}), these are not specified as formal precondition constructs in the language definition. 
+
+$n_{pre} = 0$ 
+
+Second, Python similarly lacks native postcondition constructs; no built-in mechanism enforces conditions on function outputs beyond general assertions or external tooling.
+
+$n_{post} = 0$ 
+
+Third, Python does not provide first-class invariant constructs (e.g., class invariants) at the language level; such behavior must be manually encoded or delegated to third-party libraries.
+
+$n_{inv} = 0$
+
+\[
+    C_{nat} = 0
+\]
+
+\textbf{2) Verification Enforcement Level $V_{enf}(L)$}
+
+Python does not provide static verification or compile-time proof mechanisms within its standard language definition; type hints are optional and not enforced by the interpreter, serving only as annotations for external static analyzers. However, Python does support runtime checking through constructs such as \texttt{assert} statements and dynamic type checking during execution, which can enforce certain correctness properties at runtime. 
+
+\[
+    V_{enf}=0.5
+\]
+
+\textbf{Final metric value:}
+\[
+    FSVI(Python) = 0.45 \cdot C_{nat}(L) + 0.55 \cdot V_{enf}(L)
+\]
+
+\subsection{Metrics Evaluation for Ruby}
+
+\subsubsection{Introduction}
+
+Ruby is a dynamically typed, purely object-oriented programming language with a highly reflective metaobject protocol and a strong emphasis on programmer flexibility. According to Flanagan and Matsumoto, “Ruby is a pure object-oriented language: all data in Ruby are objects” \cite{flanagan2008ruby}. However, this flexibility comes at the cost of formal guarantees in several aspects of object modeling, particularly in type safety, verification, and concurrency. In this subsection, we systematically evaluate Ruby using the previously defined metrics, grounding each numerical assignment in the formal language specification and authoritative literature such as \cite{flanagan2008ruby}.
+
+\subsubsection{1) Type System and Subtyping Model (TSSI)}
+
+Ruby employs a dynamically typed system without a formal static type specification. Subtyping is implicit and primarily behavioral (duck typing), rather than formally defined.
+
+\textbf{1) Nominal–Structural Typing Score $S_{nom}(L)$}
+
+Ruby is a dynamically typed, object-oriented language that employs \emph{duck typing}, meaning that type compatibility is determined by the presence of methods rather than explicit type declarations; however, this behavior is not formalized as structural subtyping with explicit typing judgments or inference rules in the specification.
+
+$I_{struct}(L)=0$
+
+At the same time, Ruby supports nominal typing through its class-based object model, where subtyping relationships are explicitly declared via inheritance (e.g., using \texttt{<} for subclassing), and method lookup follows the class hierarchy, which satisfies the condition for nominal typing.
+
+$I_{nom}(L)=1$
+
+\[
+S_{nom}(Ruby) = \frac{1 + 0}{2} = 0.5
+\]
+
+\textbf{2) Variance Formalization Score $S_{var}(L)$}
+
+Ruby does not natively support parametric polymorphism (generics) in its core language specification; although recent extensions such as RBS and type checkers (e.g., Sorbet) introduce generic-like constructs, these are external and not part of the official language semantics.
+
+$V_{exp}(L)=0$
+
+The variance (covariance/contravariance) is not formally defined within the Ruby language specification and there are no typing judgments or proofs ensuring type safety for such mechanisms, the soundness component is also absent.
+
+$V_{sound}(L)=0$
+
+\[
+S_{var}(Ruby) = 0
+\]
+
+\textbf{3) Inheritance–Subtyping Separation Score $S_{rel}(L)$}
+
+First, Ruby does not provide explicit constructs for subtyping independent of inheritance (e.g., no interfaces or type declarations distinct from class hierarchies), and type compatibility is determined dynamically via method availability rather than formally declared subtype relations.
+
+$I_{dec}(L)=0$
+
+Second, subtyping is not defined as an independent formal relation in the specification but is effectively derived from class inheritance and mixin inclusion semantics.
+
+$I_{ind}(L)=0$
+
+Third, the Ruby specification does not formally distinguish inheritance and subtyping as separate relations with independent typing judgments.
+
+$I_{form}(L)=0$.
+
+\[
+    S_{rel}(L)=\frac{0+0+0}{3}=0
+\]
+
+\textbf{Final metric value:}
+
+\[
+    TSSI(Ruby) = 0.3 \cdot S_{nom}(L) + 0.3 \cdot S_{var}(L) + 0.4 \cdot S_{rel}(L) = 
+\]
+
+\subsubsection{Abstraction and Encapsulation Mechanisms}
+
+\textbf{1) Visibility Granularity Index $V(L)$}
+
+For Ruby, the Visibility Granularity Index $V(L)$ is evaluated by analyzing its access control model as defined in the language specification. Ruby provides three semantically distinct visibility levels for methods: \texttt{public}, \texttt{protected}, and \texttt{private} \cite{flanagan2008ruby}.
+
+\[
+V(Ruby) = \frac{3}{n_{max}}
+\]
+
+\textbf{2) Module Isolation Strength $M(L)$}
+
+Ruby provides modularization through \texttt{class} and \texttt{module} constructs, which define namespaces and method lookup scopes. 
+
+$b_{total}(L)=2$
+
+However, Ruby does not support explicit export control lists or enforced visibility at the module or file boundary level, and all constants within a module or class are accessible via namespace qualification.
+
+$b_{strict}(L)=0$
+
+\[
+    M(Ruby) = 0
+\]
+
+\textbf{3) Interface Abstraction Capacity $I(L)$}
+
+Ruby does not provide dedicated interface or protocol constructs; instead, it relies on implicit behavioral abstraction via duck typing and mixins (modules), where \texttt{module} can define method signatures but also includes implementations, thus not serving as a purely abstract specification mechanism. Therefore, only one abstraction-related construct (\texttt{module}) can be partially attributed to behavioral abstraction. 
+
+$n_{abstraction\_constructs}(Ruby)=1$
+
+The language defines two primary object-defining constructs, \texttt{class} and \texttt{module}, both of which can produce objects or object-like namespaces.
+
+$n_{object}(Ruby)=2$
+
+\[
+    I(Ruby) = \frac{1}{2} = 0.5
+\]
+
+\textbf{4) Encapsulation Enforcement Coefficient $E(L)$}
+
+Ruby provides reflection and metaprogramming facilities (e.g., \texttt{send}, \texttt{instance\_eval}, \texttt{class\_eval}) that allow invocation of private methods and modification of object internals regardless of declared visibility, effectively bypassing encapsulation constraints. Additionally, instance variables can be accessed and modified dynamically without compile-time checks, and method visibility is not strictly enforced at the runtime level when reflective mechanisms are used. Since these capabilities are part of the core language semantics and are not restricted by a sound type system, Ruby permits encapsulation violations. 
+
+\[
+    E(Ruby) = 0
+\]
+
+\textbf{Final metric value:}
+
+\[
+    AE(Ruby) = 0.2 \cdot V(L) + 0.25 \cdot M(L) + 0.25 \cdot I(L) + 0.3 \cdot E(L)
+\]
+
+\subsubsection{Inheritance Semantics and Hierarchy Management}
+
+\textbf{1) Hierarchy Simplicity Factor $H_s(L)$}
+
+Ruby enforces single inheritance for classes, meaning each class can have exactly one direct superclass (specified using the \texttt{<} syntax), while additional code reuse is achieved via mixins (\texttt{module} inclusion) rather than multiple inheritance; thus, the formal inheritance hierarchy remains strictly single-parent.
+
+\[
+    H_s(Ruby) = 1
+\]
+
+\textbf{2) Linearization Determinism Score $L_d(L)$}
+
+Ruby specifies a well-defined and deterministic method lookup algorithm based on a linearized ancestor chain, where the search order follows the class, included modules (in reverse order of inclusion), superclass, and so on up to \texttt{BasicObject}. This linearization is explicitly defined in the language semantics and consistently applied across implementations, ensuring predictable method dispatch even in the presence of mixins \cite{flanagan2008ruby}.
+
+\[
+    L_d(Ruby) = 1
+\]
+
+\textbf{3) Constraint Protection Coefficient $C_p(L)$}
+
+$p_1(L)=0$: Ruby does not support final classes or methods.
+
+$p_2(L)=0$: It lacks sealed or closed hierarchies.
+
+$p_3(L)=0$: There is no requirement for explicit \texttt{override} annotations.
+
+$p_4(L)=0$: Methods are virtual by default.
+
+$p_5(L)=0$: The language does not enforce abstract/interface separation constraints due to the absence of formal interfaces.
+
+$p_6(L)=0$: The language does not impose compile-time inheritance restrictions, as classes can be freely extended and reopened at runtime.
+
+\[
+    C_p(L)=\frac{0+0+0+0+0+0}{6}=0
+\]
+
+\textbf{4) Fragile Base Mitigation Factor $F_b(L)$}
+
+$s_1(L)=0$: Ruby does not require explicit \texttt{override} annotations. 
+
+$s_2(L)=1$: However, it provides method visibility modifiers (\texttt{public}, \texttt{protected}, \texttt{private}), which partially restrict unintended access and override scope. 
+
+$s_3(L)=0$: The language does not enforce mandatory superclass invocation. 
+
+$s_4(L)=0$: The language lacks formal variance constraints due to the absence of a static type system. 
+
+$s_5(L)=0$: Methods are overridable by default. 
+
+$s_6(L)=0$: There are no compile-time checks for override consistency. 
+
+\[
+    F_b(L)=\frac{0+1+0+0+0+0}{6}=\frac{1}{6}\approx 0.17
+\]
+
+\textbf{Final metric value:}
+
+\[
+    ISRI(Ruby) = 0.2 \cdot H_s(L) + 0.25 \cdot L_d(L) + 0.3 \cdot C_p(L) + 0.25 \cdot F_b(L)
+\]
+
+\subsubsection{Composition and Alternatives to Inheritance}
+
+\textbf{1) Class-Based Delegation Score $D_{cls}(L)$}
+
+Ruby does not provide built-in delegation keywords at the core language syntax level; however, delegation can be idiomatically achieved via standard library facilities such as \texttt{Forwardable} and metaprogramming constructs, which emulate delegation without requiring explicit adapter boilerplate for each method. 
+Furthermore, Ruby supports automatic method forwarding through dynamic features such as \texttt{method\_missing} and utilities like \texttt{SimpleDelegator}, which allow forwarding of method calls to an internal object with minimal or no boilerplate, satisfying the condition for automatic delegation.
+
+\[
+    K_{del}=0.5,\quad S_{fwd}=0 \Rightarrow D_{cls}=0.25
+\]
+
+\textbf{2) Trait Expressiveness Score $T_{exp}(L)$}
+
+The method name conflicts during mixin composition are resolved deterministically by linearization order (i.e., the last included module takes precedence in the method lookup chain), without requiring explicit exclusion or aliasing constructs at the language level. 
+Additionally, modules do not provide formal mechanisms to declare required methods or constraints on the including class within the language specification (no native “requires” clauses), meaning mixins must rely on implicit assumptions or runtime errors
+
+\[
+    R_{conf}=0.5,\quad O_{mod}=0 \Rightarrow T_{exp}=0.25
+\]
+
+\textbf{3) Interface Composition Capacity $I_{comp}(L)$}
+
+Ruby does not define interfaces as separate constructs; however, modules serve as compositional units that can be included in classes without restriction on their number, effectively acting as interface-like mechanisms. 
+Furthermore, unlike traditional interfaces, Ruby modules can contain full method implementations, allowing them to act as reusable behavioral units rather than pure type specifications
+
+\[
+    N_{iml}(Ruby)=1,\quad D_{def}(Ruby)=1 \Rightarrow I_{comp} = 1
+\]
+
+\textbf{Final metric value:}
+
+\[
+    CRFI(Ruby) = 0.3 \cdot D_{cls}(L) + 0.35 \cdot T_{exp}(L) + 0.35 \cdot I_{comp}(L)
+\]
+
+\subsubsection{Object Representation and Creation Model}
+
+\textbf{1) Identity Semantics Score $S_{id}(L)$}
+
+Ruby follows a uniform object model in which all user-defined entities are objects created via \texttt{class} or \texttt{module}, and all variables store references to these objects rather than values
+
+\[
+    S_{id}(Ruby) = 1
+\]
+
+\textbf{2) Instantiation Paradigm Diversity $S_{cr}(L)$}
+
+Ruby primarily supports class-based instantiation via the \texttt{new} method (which internally invokes \texttt{allocate} and \texttt{initialize}), and also provides literal-based construction for built-in object types such as arrays, hashes, strings, and numeric values, which constitute a second paradigm of object creation. The language supports advanced metaprogramming facilities such as \texttt{Class.new}, \texttt{define\_method}, and dynamic evaluation via \texttt{eval}, which enable runtime generation of classes and objects. Ruby does not natively support prototype-based cloning as a primary paradigm (despite \texttt{clone} and \texttt{dup}, which operate on existing objects rather than serving as independent instantiation models), nor actor-based spawning in its core specification.
+
+\[
+    S_{cr}(Ruby) = \frac{3}{P_{max}}
+\]
+
+\textbf{3) Meta-level Extensibility Score $S_{meta}(L)$}
+
+Ruby provides full reflective capabilities, including introspection (e.g., \texttt{methods}, \texttt{instance\_variables}), structural modification (e.g., \texttt{define\_method}, \texttt{class\_eval}, \texttt{module\_eval}), and, critically, the ability to override the object creation protocol via hooks such as \texttt{allocate}, \texttt{initialize}, and dynamic class construction with \texttt{Class.new}. These features allow programmers to intercept and redefine how objects are instantiated and structured at runtime, satisfying the highest level of intercession.
+
+\[
+    S_{meta}(Ruby) = \frac{3}{I_{max}}
+\]
+
+\textbf{Final metric value:}
+
+\[
+    ORCI(Ruby) = 0.35 \cdot S_{id}(L) + 0.3 \cdot S_{cr}(L) + 0.35 \cdot S_{meta}(L)
+\]
+
+\subsubsection{Polymorphism and Dispatch Mechanisms}
+
+\textbf{1) Dispatch Scope Mechanism $M_{scope}(L)$}
+
+Ruby natively supports single dispatch, where method selection is based on the receiver object and resolved through a deterministic method lookup chain.
+
+$I_{single}=1$
+
+However, Ruby does not provide native multiple dispatch based on the dynamic types of multiple arguments.
+
+$I_{multi}=0$
+
+Additionally, predicate-based dispatch is not part of the formal method dispatch mechanism in the specification; although conditional logic can be implemented manually within methods, it is not integrated into the dispatch system itself.
+
+$I_{pred}=0$
+
+\[
+    M_{scope} = \frac{1}{5} = 0.2
+\]
+
+\textbf{2) Dispatch Safety Guarantee $S_{disp}(L)$}
+
+First, Ruby is dynamically typed and does not perform compile-time checking of method existence or dispatch correctness; method resolution occurs at runtime and may raise exceptions such as \texttt{NoMethodError}.
+
+$I_{static}(L)=0$ 
+
+Second, Ruby does not enforce exhaustive dispatch definitions (e.g., no requirement to cover all possible cases in polymorphic behavior or pattern matching at the specification level).
+
+$I_{exhaust}(L)=0$
+
+\[
+    S_{disp}(L)=\frac{0+0}{2}=0
+\]
+
+\textbf{3) Virtualization Optimization Potential $O_{virt}(L)$}
+
+Ruby does not support \texttt{final} or non-virtual methods, as all methods are dynamically dispatched and can be overridden at runtime.
+
+$K_{final}=0$
+
+Similarly, Ruby does not provide sealed class hierarchies or any mechanism to restrict subclassing.
+
+$K_{sealed}=0$
+
+Furthermore, the language lacks static dispatch constructs or annotations (such as \texttt{static} methods or compiler hints for devirtualization), since all method calls are resolved dynamically.
+
+$K_{static}=0$
+
+\[
+    O_{virt} = 0
+\]
+
+\textbf{Final metric value:}
+
+\[
+    PDEI(Ruby) = 0.35 \cdot M_{scope}(L) + 0.35 \cdot S_{disp}(L) + 0.3 \cdot O_{virt}(L)
+\]
+
+\subsubsection{State Model, Mutability, and Concurrency Guarantees}
+
+\textbf{1) Default Mutability Score $M_{def}(L)$}
+
+In Ruby, all values are objects, and most objects are \emph{mutable by default}; for instance, instances of classes such as \texttt{String}, \texttt{Array}, and \texttt{Hash} can be modified in place using methods like \texttt{<<}, \texttt{push}, or direct element assignment. Although Ruby provides mechanisms to enforce immutability (e.g., the \texttt{freeze} method), such immutability must be explicitly invoked and is not the default behavior. Furthermore, there is no requirement for explicit annotation to enable mutability, as mutation is inherently permitted unless restricted.
+
+\[
+    M_{def} = 0
+\]
+
+\textbf{2) Static Reference Constraint Density $S_{dens}(L)$}
+
+In Ruby, all variables are references to objects, and syntactic constructs include local variables, instance variables (\texttt{@x}), class variables (\texttt{@@x}), global variables (\texttt{\$x}), constants, and method parameters.
+
+$N_{ref}(\text{Ruby}) = 6$ as distinct reference-related constructs explicitly represented in the language syntax. 
+
+Next, we determine $N_{constr}(L)$ by checking which of these impose \emph{compile-time} constraints on reference usage; however, Ruby is a dynamically typed language with no static type system or compile-time enforcement of aliasing, mutability, or reference restrictions (all checks occur at runtime, and features like \texttt{freeze} are dynamic).
+
+$N_{constr}(L) = 0$ 
+
+\[
+    S_{dens} = 0
+\]
+
+\textbf{3) Concurrency Primitive Safety $P_{conc}(L)$}
+
+First, Ruby does not provide compile-time guarantees of data race freedom, as it lacks a static type system capable of enforcing aliasing or ownership constraints; moreover, while implementations such as MRI include a Global Interpreter Lock (GIL), this is an implementation detail rather than a language-level guarantee and does not eliminate race conditions in all cases (e.g., with native extensions or alternative runtimes). There are also no systematic runtime mechanisms that universally detect or prevent data races. Therefore, concurrency safety relies primarily on programmer discipline.
+
+$S_{race}(\text{Ruby}) = 0$
+
+Second, Ruby’s core concurrency primitives consist of low-level threads (\texttt{Thread}) and synchronization mechanisms such as \texttt{Mutex}, without built-in high-level models like Actors or CSP channels in the core language (libraries may provide them, but they are not part of the language specification).
+
+$S_{model}(\text{Ruby}) = 0$
+
+\[
+    P_{conc}(Ruby)=0
+\]
+
+\textbf{Final metric value:}
+
+\[
+    SCSI(Ruby) = 0.35 \cdot M_{def}(L) + 0.25 \cdot S_{dens}(L) + 0.4 \cdot P_{conc}(L)
+\]
+
+\subsubsection{Support for Formal Specification and Verifiability}
+
+\textbf{1) Native Contract Constructs Score $C_{nat}(L)$}
+
+Ruby does not include native support for design-by-contract features such as preconditions, postconditions, or invariants; specifically, there are no built-in keywords or type-system constructs to declare and enforce such properties at the language level. While developers may simulate preconditions and postconditions using runtime checks (e.g., \texttt{raise} statements) and invariants via method definitions or metaprogramming, these approaches rely on libraries or idiomatic patterns rather than standardized syntax or semantics defined by the language.
+
+\[
+    C_{nat}=0
+\]
+
+\textbf{2) Verification Enforcement Level $V_{enf}(L)$}
+
+Ruby does not support static verification: it lacks a static type system and does not include compile-time proof mechanisms for correctness properties such as contracts, invariants, or type safety. However, Ruby does support runtime checking through dynamic features, including exception handling (e.g., \texttt{raise}), assertions implemented via standard or third-party libraries, and reflective capabilities that allow validation during execution. These mechanisms enable enforcement of certain correctness properties, but only at runtime rather than compile time. 
+
+\[
+    V_{enf}=0.5
+\]
+
+\textbf{Final metric value:}
+
+\[
+    FSVI(Ruby) = 0.45 \cdot C_{nat}(L) + 0.55 \cdot V_{enf}(L)
+\]
