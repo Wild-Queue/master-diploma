@@ -16,18 +16,16 @@ C++ does not define structural subtyping\cite{stroustrup1994design} ((ISO/IEC 14
 C++ is fundamentally nominally typed: subtype relationships are explicitly declared via class inheritance (e.g., \texttt{class B : public A}), and the standard formally specifies these relationships through inheritance and access control rules. 
 
 \[
-    I_{nom}(C++) = 1, \quad I_{struct}(C++) = 0, \quad S_{nom}(C++) = \frac{I_{struct}(L) + I_{nom}(L)}{2}
-    \Rightarrow S_{nom}(C++) = 0.5
+    I_{nom}(\text{C++}) = 1, I_{struct}(\text{C++}) = 0 \Rightarrow S_{nom}(\text{C++}) = 0.5
 \]
 
 \textbf{2) Variance Formalization Score $S_{var}(L)$}
 
-C++ supports parametric polymorphism via templates, but variance (covariance or contravariance) is neither explicitly declared nor syntactically annotated; instead, any variance behavior arises implicitly through pointer/reference conversions and template instantiation rules, without first-class variance constructs. 
-The language enforces type safety through well-defined template instantiation and conversion rules, but does not provide a formally specified or proven variance system; moreover, certain constructs demonstrate that variance is only partially restricted rather than formally sound \cite{pierce2002types}.
+C++ supports parametric polymorphism via templates, but variance (covariance or contravariance) is neither explicitly declared nor syntactically annotated. Any variance behavior arises implicitly through pointer/reference conversions and template instantiation rules, without first-class variance constructs. 
+The language enforces type safety through well-defined template instantiation and conversion rules, but does not provide a formally specified or proven variance system. Moreover, certain constructs demonstrate that variance is only partially restricted rather than formally sound \cite{pierce2002types}.
 
 \[
-    V_{exp}(C++) = 0.5, \quad V_{sound}(C++) = 0.5, \quad S_{var}(L) = \frac{V_{exp}(L) + V_{sound}(L)}{2}
-    \Rightarrow S_{var}(C++) = 0.5
+    V_{exp}(\text{C++}) = 0.5, V_{sound}(\text{C++}) = 0.5 \Rightarrow S_{var}(\text{C++}) = 0.5
 \]
 
 \textbf{3) Inheritance–Subtyping Separation Score $S_{rel}(L)$}
@@ -40,7 +38,7 @@ Second, subtyping rules—such as implicit conversion from derived to base class
 
 $I_{ind}(\text{C++}) = 0$
 
-Third, the specification does not formally distinguish inheritance and subtyping as separate relations; instead, substitutability is an emergent property of inheritance rules and type conversion mechanisms, without an explicit formal separation.
+Third, the specification does not formally distinguish inheritance and subtyping as separate relations. The substitutability is an emergent property of inheritance rules and type conversion mechanisms, without an explicit formal separation.
 
 $I_{form}(\text{C++}) = 0$
 
@@ -50,7 +48,11 @@ $I_{form}(\text{C++}) = 0$
 
 \textbf{Final metric value:}
 \[
-    TSSI(C++) = 0.3 \cdot S_{nom}(L) + 0.3 \cdot S_{var}(L) + 0.4 \cdot S_{rel}(L) = 
+\begin{aligned}
+    TSSI(\text{C++}) = 0.3 \cdot S_{nom}(\text{C++}) + 0.3 \cdot S_{var}(\text{C++}) + 0.4 \cdot S_{rel}(\text{C++}) \\
+    = 0.3 \cdot 0.5 + 0.3 \cdot 0.5 + 0.4 \cdot 0 \\
+    = 0.3
+\end{aligned}
 \]
 
 \subsubsection{Abstraction and Encapsulation Mechanisms}
@@ -60,38 +62,34 @@ $I_{form}(\text{C++}) = 0$
 The language provides three semantically distinct access levels: \texttt{private}, \texttt{protected}, and \texttt{public}, each formally specified to constrain member accessibility in class hierarchies and across translation units.
 
 \[
-V(C++) = \frac{3}{4} = 0.75
+    n_{levels}(\text{C\#})=7 \Rightarrow V(\text{C++}) = \frac{3}{7}
 \]
 
 
 \textbf{2) Module Isolation Strength $M(L)$}
 
 The language provides two primary boundary mechanisms: namespaces and modules. 
-Namespaces serve as organizational scopes but do not enforce strict access control, as all members are visible once declared; hence, they are not counted as strict boundaries. 
+Namespaces serve as organizational scopes but do not enforce strict access control, as all members are visible once declared. They are not counted as strict boundaries. 
 In contrast, C++20 modules introduce explicit export control via \texttt{export} declarations, forming well-defined interface boundaries that restrict visibility across translation units.
 
-\begin{itemize}
-    \item $b_{strict}(\text{C++}) = 1$
-    \item $b_{total}(\text{C++}) = 2$
-\end{itemize}
-
 \[
-M(C++) = 0.5
+\begin{aligned}
+    b_{strict}(\text{C++}) = 1, b_{total}(\text{C++}) = 2 \\
+    \Rightarrow M(\text{C++}) = 0.5
+\end{aligned}
 \]
 
 
 \textbf{3) Interface Abstraction Capacity $I(L)$}
 
-The language does not provide a dedicated \textit{interface} keyword; instead, abstraction is achieved primarily through abstract classes and, more recently, through \texttt{concepts}, which define compile-time behavioral constraints. 
+The language does not provide a dedicated \textit{interface} keyword. Abstraction is achieved primarily through abstract classes and, more recently, through \texttt{concepts}, which define compile-time behavioral constraints. 
 Regarding object-defining constructs, C++ includes \texttt{class}, \texttt{struct}, and \texttt{union}, all formally specified as distinct type constructors.
 
-\begin{itemize}
-    \item $n_{abstraction_constructs}(\text{C++}) = 2$ 
-    \item $n_{object}(\text{C++}) = 3$
-\end{itemize}
-
 \[
-    I(C++) = \frac{2}{3} = 0.67
+\begin{aligned}
+    n_{abstraction_constructs}(\text{C++}) = 2, n_{object}(\text{C++}) = 3 \\
+    \Rightarrow I(\text{C++}) = \frac{2}{3} = 0.67
+\end{aligned}
 \]
 
 
@@ -100,12 +98,16 @@ Regarding object-defining constructs, C++ includes \texttt{class}, \texttt{struc
 C++ enforces multiple mechanisms that allow bypassing encapsulation constraints: pointer arithmetic, type casting (e.g., \texttt{reinterpret\_cast}), direct memory manipulation, and undefined behavior that can expose or modify object internals without restriction. Furthermore, the absence of runtime enforcement and the presence of low-level operations mean that encapsulation is not strictly preserved under all conditions.
 
 \[
-    E(C++) = 0
+    E(\text{C++}) = 0
 \]
 
 \textbf{Final metric value:}
 \[
-    AE(C++) = 0.2 \cdot V(L) + 0.25 \cdot M(L) + 0.25 \cdot I(L) + 0.3 \cdot E(L)
+\begin{aligned}
+    AE(\text{C++}) = 0.2 \cdot V(\text{C++}) + 0.25 \cdot M(\text{C++}) + 0.25 \cdot I(\text{C++}) + 0.3 \cdot E(\text{C++}) \\
+    = 0.2 \cdot \frac{3}{7} + 0.25 \cdot 0.5 + 0.25 \cdot \frac{2}{3} + 0.3 \cdot 0 \\
+    \approx 0.3774
+\end{aligned}
 \]
 
 \subsubsection{Inheritance Semantics and Hierarchy Management}
@@ -115,8 +117,7 @@ C++ enforces multiple mechanisms that allow bypassing encapsulation constraints:
 C++ class may inherit from multiple base classes using a comma-separated base-specifier list, which implies that the maximum number of direct superclasses $M(L)$ is unbounded in practice (i.e., $M(L) > 1$ and limited only by implementation constraints). Since there is no fixed upper bound in the specification, C++ effectively reaches the maximal considered value in comparative analysis.
 
 \[
-    M(\text{C++}) = M_{max}
-    H_s(C++) = 1 - \frac{M(C++) - 1}{M_{max} - 1} = 0
+    M(\text{C++}) = M_{max} \Rightarrow H_s(\text{C++}) = 1 - \frac{M(\text{C++}) - 1}{M_{max} - 1} = 0
 \]
 
 \textbf{2) Linearization Determinism Score $L_d(L)$}
@@ -124,7 +125,7 @@ C++ class may inherit from multiple base classes using a comma-separated base-sp
 The C++ standard does not define a global, formally specified method resolution order (MRO) comparable to linearization algorithms, instead, name lookup and overload resolution are governed by a combination of rules including scope-based lookup, unqualified and qualified name lookup, and class member access control. In multiple inheritance scenarios, ambiguities may arise (e.g., the diamond problem), and the programmer must explicitly disambiguate member access using scope resolution or employ virtual inheritance to alter object layout and lookup behavior. Since the standard specifies lookup procedures but does not define a single deterministic linearization sequence for all cases, the effective resolution strategy is only partially specified.
 
 \[
-    L_d(C++) = 0.5
+    L_d(\text{C++}) = 0.5
 \]
 
 \textbf{3) Constraint Protection Coefficient $C_p(L)$}
@@ -165,7 +166,11 @@ $s_6 = 1$: Finally, the compiler performs strict compile-time checks on overridi
 
 \textbf{Final metric value:}
 \[
-    ISRI(C++) = 0.2 \cdot H_s(L) + 0.25 \cdot L_d(L) + 0.3 \cdot C_p(L) + 0.25 \cdot F_b(L)
+\begin{aligned}
+    ISRI(\text{C++}) = 0.2 \cdot H_s(\text{C++}) + 0.25 \cdot L_d(\text{C++}) + 0.3 \cdot C_p(\text{C++}) + 0.25 \cdot F_b(\text{C++}) \\
+    = 0.2 \cdot 0 + 0.25 \cdot 0.5 + 0.3 \cdot 0.33 + 0.25 \cdot \frac{4}{6} \\
+    \approx 0.3907
+\end{aligned}
 \]
 
 \subsubsection{Composition and Alternatives to Inheritance}
@@ -176,17 +181,16 @@ There is no dedicated keyword or built-in construct (such as \texttt{delegate}) 
 Furthermore,  C++ does not provide automatic method forwarding mechanisms, meaning developers must explicitly define forwarding functions.
 
 \[
-    K_{del}(C++) = 0.5, \quad S_{fwd}(C++) = 0
-    \Rightarrow D_{cls}(C++) = 0.25
+    K_{del}(\text{C++}) = 0.5, S_{fwd}(\text{C++}) = 0 \Rightarrow D_{cls}(\text{C++}) = 0.25
 \]
 
 \textbf{2) Trait Expressiveness Score $T_{exp}(L)$}
 
-In cases of multiple inheritance, name conflicts between base classes result in ambiguity errors unless explicitly resolved by the programmer using qualified names; however, the language does not provide trait-style exclusion or aliasing mechanisms. 
+In cases of multiple inheritance, name conflicts between base classes result in ambiguity errors unless explicitly resolved by the programmer using qualified names. However, the language does not provide trait-style exclusion or aliasing mechanisms. 
 C++ templates and mixin patterns do not support explicit declaration of required methods or properties within the mixin itself.
 
 \[
-    T_{exp}(C++) = 0
+    T_{exp}(\text{C++}) = 0
 \]
 
 \textbf{3) Interface Composition Capacity $I_{comp}(L)$}
@@ -195,12 +199,16 @@ C++ allows a class to inherit from an arbitrary number of base classes, includin
 Unlike traditional interface-only constructs, abstract classes in C++ may contain fully defined member functions alongside pure virtual functions, effectively supporting default method implementations within interface-like structures. 
 
 \[
-    I_{comp}(C++) = 1
+    I_{comp}(\text{C++}) = 1
 \]
 
 \textbf{Final metric value:}
 \[
-    CRFI(C++) = 0.3 \cdot D_{cls}(L) + 0.35 \cdot T_{exp}(L) + 0.35 \cdot I_{comp}(L)
+\begin{aligned}
+    CRFI(\text{C++}) = 0.3 \cdot D_{cls}(\text{C++}) + 0.35 \cdot T_{exp}(\text{C++}) + 0.35 \cdot I_{comp}(\text{C++}) \\
+    = 0.3 \cdot 0.25 + 0.35 \cdot 0 + 0.35 \cdot 1 \\
+    = 0.425
+\end{aligned}
 \]
 
 \subsubsection{Object Representation and Creation Model}
@@ -210,7 +218,7 @@ Unlike traditional interface-only constructs, abstract classes in C++ may contai
 The primary user-definable type categories include classes, structs, unions and enums. In C++, all these types follow value semantics by default: objects are copied on assignment and passed by value unless explicitly handled via pointers or references, which are not independent user-defined type categories but rather type modifiers.
 
 \[
-    S_{id}(C++) = \frac{0}{4} = 0
+    S_{id}(\text{C++}) = \frac{0}{4} = 0
 \]
 
 \textbf{2) Instantiation Paradigm Diversity $S_{cr}(L)$}
@@ -218,7 +226,7 @@ The primary user-definable type categories include classes, structs, unions and 
 First, C++ supports direct construction via constructors, including stack allocation and dynamic allocation using the \texttt{new} operator, which together represent a single class-based instantiation paradigm. Second, the language supports copy and move construction (including cloning via copy constructors), which forms a prototype-like paradigm grounded in object copying semantics. Third, C++ provides aggregate and uniform initialization (including brace-initialization), which constitutes a literal-style construction mechanism for certain types.
 
 \[
-    S_{cr}(C++) = \frac{3}{P_{max}}
+    P_{supported}(\text{C\#}) = 4 \Rightarrow S_{cr}(\text{C++}) = \frac{3}{4}
 \]
 
 \textbf{3) Meta-level Extensibility Score $S_{meta}(L)$}
@@ -226,12 +234,16 @@ First, C++ supports direct construction via constructors, including stack alloca
 The language provides limited runtime introspection via mechanisms such as \texttt{typeid} and \texttt{dynamic\_cast}, which allow querying certain aspects of an object's dynamic type within polymorphic hierarchies. However, the language does not support structural modification of objects at runtime, nor does it provide a metaobject protocol for overriding object instantiation or altering class definitions dynamically. All type structures are fixed at compile time, and templates operate purely at compile time without enabling runtime intercession.
 
 \[
-    I_{level}(C++) = 1 \Rightarrow S_{meta}(C++) = \frac{1}{I_{max}}
+    I_{level}(\text{C++}) = 1, I_{level}(\text{JS/Python/Ruby}) = 3 \Rightarrow S_{meta}(\text{C++}) = \frac{1}{3}
 \]
 
 \textbf{Final metric value:}
 \[
-    ORCI(C++) = 0.35 \cdot S_{id}(L) + 0.3 \cdot S_{cr}(L) + 0.35 \cdot S_{meta}(L)
+\begin{aligned}
+    ORCI(\text{C++}) = 0.35 \cdot S_{id}(\text{C++}) + 0.3 \cdot S_{cr}(\text{C++}) + 0.35 \cdot S_{meta}(\text{C++}) \\
+    = 0.35 \cdot 0 + 0.3 \cdot \frac{3}{4} + 0.35 \cdot \frac{1}{3} \\
+    \approx 0.3417
+\end{aligned}
 \]
 
 \subsubsection{Polymorphism and Dispatch Mechanisms}
@@ -240,18 +252,18 @@ The language provides limited runtime introspection via mechanisms such as \text
 
 First, C++ supports single dispatch via virtual functions, where method selection is determined by the dynamic type of the receiver object.
 
-$I_{single}=1$
+$I_{single}(\text{C++})=1$
 
-Second, C++ does not natively support multiple dispatch (i.e., dispatch based on the runtime types of multiple arguments); instead, such behavior must be emulated using patterns like double dispatch or visitor.
+Second, C++ does not natively support multiple dispatch (i.e., dispatch based on the runtime types of multiple arguments). Such behavior must be emulated using patterns like double dispatch or visitor.
 
-$I_{multi}=0$
+$I_{multi}(\text{C++})=0$
 
 Third, predicate-based dispatch (selection based on arbitrary runtime conditions or guards integrated into the dispatch mechanism) is not part of the language semantics and must be implemented manually using conditional logic.
 
-$I_{pred}=0$
+$I_{pred}(\text{C++})=0$
 
 \[
-    M_{scope}(C++) = \frac{1}{5} = 0.2
+    M_{scope}(\text{C++}) = \frac{1}{5} = 0.2
 \]
 
 \textbf{2) Dispatch Safety Guarantee $S_{disp}(L)$}
@@ -272,23 +284,27 @@ $I_{exhaust}(\text{C++}) = 0$
 
 First, C++ supports non-virtual methods by default and provides the \texttt{final} specifier for both classes and virtual functions, preventing further overriding and enabling compiler optimizations.
 
-$K_{final}=1$
+$K_{final}(\text{C++})=1$
 
 Second, the \texttt{final} specifier applied to classes effectively creates sealed hierarchies by prohibiting inheritance.
 
-$K_{sealed}=1$
+$K_{sealed}(\text{C++})=1$
 
 Third, C++ supports static dispatch through non-virtual member functions, free functions, and templates, all of which are resolved at compile time and provide strong hints for devirtualization.
 
-$K_{static}=1$
+$K_{static}(\text{C++})=1$
 
 \[
-    O_{virt}(C++) = \frac{1 + 1 + 1}{3} = 1
+    O_{virt}(\text{C++}) = \frac{1 + 1 + 1}{3} = 1
 \]
 
 \textbf{Final metric value:}
 \[
-    PDEI(C++) = 0.35 \cdot M_{scope}(L) + 0.35 \cdot S_{disp}(L) + 0.3 \cdot O_{virt}(L)
+\begin{aligned}
+    PDEI(\text{C++}) = 0.35 \cdot M_{scope}(\text{C++}) + 0.35 \cdot S_{disp}(\text{C++}) + 0.3 \cdot O_{virt}(\text{C++}) \\
+    = 0.35 \cdot 0.2 + 0.35 \cdot 0 + 0.3 \cdot 1 \\
+    = 0.37
+\end{aligned}
 \]
 
 \subsubsection{State Model, Mutability, and Concurrency Guarantees}
@@ -298,7 +314,7 @@ $K_{static}=1$
 By default, any variable declared without the \texttt{const} qualifier permits modification of its stored value after initialization, which directly implies that mutability does not require any additional annotation, whereas immutability does. The \texttt{const} qualifier must be explicitly applied to enforce immutability, and this requirement is purely opt-in rather than default behavior.
 
 \[
-    M_{def}(C++) = 0
+    M_{def}(\text{C++}) = 0
 \]
 
 \textbf{2) Static Reference Constraint Density $S_{dens}(L)$}
@@ -307,12 +323,18 @@ In C++, the set of reference-related constructs includes syntactic forms that in
 
 $N_{ref}(\text{C++}) = 6$
 
-Among these, constructs that impose static constraints include: (1) \texttt{const} qualification, which enforces compile-time immutability constraints on referenced objects; (2) lvalue references, which must bind to valid lvalues and cannot be reseated; (3) rvalue references, which restrict binding to temporaries and enable move semantics; and (4) \texttt{std::unique\_ptr}, which enforces exclusive ownership semantics at compile time via deleted copy constructors.
+Among these, constructs that impose static constraints include: 
+\begin{itemize}
+    \item \texttt{const} qualification, which enforces compile-time immutability constraints on referenced objects.
+    \item \texttt{lvalue} references, which must bind to valid lvalues and cannot be reseated.
+    \item \texttt{rvalue} references, which restrict binding to temporaries and enable move semantics
+    \item \texttt{std::unique\_ptr}, which enforces exclusive ownership semantics at compile time via deleted copy constructors.
+\end{itemize}
 
 $N_{constr}(\text{C++}) = 4$
 
 \[
-    S_{dens}(C++) \approx 0.67
+    S_{dens}(\text{C++}) = \frac{4}{6} \approx 0.67
 \]
 
 \textbf{3) Concurrency Primitive Safety $P_{conc}(L)$}
@@ -321,27 +343,31 @@ In C++, concurrency semantics are defined by the ISO C++ standard (e.g., §1.10 
 
 $S_{race}(\text{C++}) = 0$
 
-Regarding abstraction level, C++ primarily offers low-level threading and synchronization constructs, although it also includes \texttt{std::future} and \texttt{std::async}, which provide limited structured concurrency; however, these do not constitute a fully structured or high-level concurrency model such as actors or CSP channels, and the dominant paradigm remains explicit threads and locks.
+Regarding abstraction level, C++ primarily offers low-level threading and synchronization constructs, although it also includes \texttt{std::future} and \texttt{std::async}, which provide limited structured concurrency. However, these do not constitute a fully structured or high-level concurrency model such as actors or CSP channels, and the dominant paradigm remains explicit threads and locks.
 
-$S_{model}(C++) = 0$
+$S_{model}(\text{C++}) = 0$
 
 \[
-    P_{conc}(C++) = 0
+    P_{conc}(\text{C++}) = 0
 \]
 
 \textbf{Final metric value:}
 \[
-    SCSI(C++) = 0.35 \cdot M_{def}(L) + 0.25 \cdot S_{dens}(L) + 0.4 \cdot P_{conc}(L)
+\begin{aligned}
+    SCSI(\text{C++}) = 0.35 \cdot M_{def}(\text{C++}) + 0.25 \cdot S_{dens}(\text{C++}) + 0.4 \cdot P_{conc}(\text{C++}) \\
+    = 0.35 \cdot 0 + 0.25 \cdot \frac{4}{6} + 0.4 \cdot 0 \\
+    \approx 0.1667
+\end{aligned}
 \]
 
 \subsubsection{Support for Formal Specification and Verifiability}
 
 \textbf{1) Native Contract Constructs Score $C_{nat}(L)$}
 
-The ISO C++ standard  does not include fully adopted and semantically enforced language-level support for contracts. Consequently, there are no first-class syntactic constructs for specifying preconditions, postconditions, or invariants within the core language; instead, developers rely on mechanisms such as \texttt{assert}, comments, or external libraries, which do not satisfy the requirement of being both syntactically native and semantically defined by the language specification.
+The ISO C++ standard  does not include fully adopted and semantically enforced language-level support for contracts. Consequently, there are no first-class syntactic constructs for specifying preconditions, postconditions, or invariants within the core language. The developers rely on mechanisms such as \texttt{assert}, comments, or external libraries, which do not satisfy the requirement of being both syntactically native and semantically defined by the language specification.
 
 \[
-    C_{nat}(C++) = 0
+    C_{nat}(\text{C++}) = 0
 \]
 
 \textbf{2) Verification Enforcement Level $V_{enf}(L)$}
@@ -349,12 +375,16 @@ The ISO C++ standard  does not include fully adopted and semantically enforced l
 In C++, verification enforcement must be assessed based on mechanisms defined by the ISO C++ standard, which does not provide built-in facilities for formal static verification. While the language supports runtime checking mechanisms such as \texttt{assert} and exception handling, these operate exclusively at runtime and are not part of a formal verification system guaranteed by the compiler.
 
 \[
-    V_{enf}(C++) = 0.5
+    V_{enf}(\text{C++}) = 0.5
 \]
 
 \textbf{Final metric value:}
 \[
-    FSVI(C++) = 0.45 \cdot C_{nat}(L) + 0.55 \cdot V_{enf}(L)
+\begin{aligned}
+    FSVI(\text{C++}) = 0.45 \cdot C_{nat}(\text{C++}) + 0.55 \cdot V_{enf}(\text{C++}) \\
+    = 0.45 \cdot 0 + 0.55 \cdot 0.5 \\
+    = 0.275
+\end{aligned}
 \]
 
 \subsection{Metrics Evaluation for C}
@@ -363,57 +393,56 @@ In C++, verification enforcement must be assessed based on mechanisms defined by
 
 The C programming language, standardized by ISO/IEC 9899, represents a minimalistic procedural paradigm with a weak notion of abstraction and no native support for object-oriented constructs. As noted by Kernighan and Ritchie, “C provides no direct support for object-oriented programming” \cite{ritchie1978c}. Consequently, evaluating C under object-model-oriented metrics requires interpreting its type system, memory model, and modularization mechanisms through the lens of emulated object-oriented patterns. This subsection computes the defined metrics strictly based on the formal language specification and authoritative analyses \cite{iso9899_2024, pierce2002types}.
 
-\subsubsection{1) Type System and Subtyping Model (TSSI)}
+\subsubsection{1) Type System and Subtyping Model}
 
 \textbf{1) Nominal–Structural Typing Score $S_{nom}(L)$}
 
 Structural subtyping is absent in C, since type compatibility is not based on structural equivalence with subtyping rules, but rather on strict compatibility rules without a formal subtype relation (ISO/IEC 9899).
 
-$I_{struct}(C)=0$. 
+$I_{struct}(\text{C})=0$. 
 
 Nominal typing with explicit subtype declarations is also absent: although C provides named types via \texttt{struct}, \texttt{union}, and \texttt{typedef}, it does not support inheritance or explicit subtype relationships between named types, as required by nominal subtyping systems.
 
-$I_{nom}(C)=0$.
+$I_{nom}(\text{C})=0$.
 
 \[
-S_{nom}(C) = 0
+    S_{nom}(\text{C}) = 0
 \]
 
 \textbf{2) Variance Formalization Score $S_{var}(L)$}
 
-C does not support generics in the sense required for variance (i.e., no parameterized types with subtype relations), as its type system lacks constructs such as type parameters; therefore, variance annotations are inapplicable.
+C does not support generics in the sense required for variance (i.e., no parameterized types with subtype relations), as its type system lacks constructs such as type parameters. Therefore, variance annotations are inapplicable.
 
-$V_{exp}(C)=0$. 
+$V_{exp}(\text{C})=0$. 
+
 Since variance is not defined at all in the language specification, there are no formal rules governing covariance, contravariance, or invariance, nor any associated soundness proofs.
 
-$V_{sound}(C)=0$.
+$V_{sound}(\text{C})=0$.
 
 \[
-    S_{var}(C) = 0
+    S_{var}(\text{C}) = 0
 \]
 
 \textbf{3) Inheritance–Subtyping Separation Score $S_{rel}(L)$}
 
-Since C defines neither inheritance nor subtyping:
-\[
-    E_{inh}(C) = \varnothing, \quad E_{sub}(C) = \varnothing
-\]
+C is a procedural language with a type system based on compatibility rather than subtype polymorphism. The constructs such as \texttt{struct} composition and pointer conversions do not constitute explicit subtyping relations defined by the language semantics.
 
-C is a procedural language with a type system based on compatibility rather than subtype polymorphism; constructs such as \texttt{struct} composition and pointer conversions do not constitute explicit subtyping relations defined by the language semantics.
+$I_{dec}(\text{C}) = 0$ because the language does not provide explicit subtyping independent of inheritance (nor inheritance itself).
 
-$I_{dec}(\mathrm{C}) = 0$ because the language does not provide explicit subtyping independent of inheritance (nor inheritance itself).
+$I_{ind}(\text{C}) = 0$ since no independent subtyping rules are specified.
 
-$I_{ind}(\mathrm{C}) = 0$ since no independent subtyping rules are specified.
-
-$I_{form}(\mathrm{C}) = 0$ because there is no formal distinction between inheritance and subtyping in the specification. 
+$I_{form}(\text{C}) = 0$ because there is no formal distinction between inheritance and subtyping in the specification. 
 
 \[
-    S_{rel}(\mathrm{C}) = \frac{0 + 0 + 0}{3} = 0
+    S_{rel}(\text{C}) = \frac{0 + 0 + 0}{3} = 0
 \]
 
 \textbf{Final metric value:}
 \[
-    TSSI(C) = 0.3 \cdot S_{nom}(L) + 0.3 \cdot S_{var}(L) + 0.4 \cdot S_{rel}(L) = 
+\begin{aligned}
+    TSSI(\text{C}) = 0.3 \cdot S_{nom}(\text{C}) + 0.3 \cdot S_{var}(\text{C}) + 0.4 \cdot S_{rel}(\text{C}) \\
+    = 0.3 \cdot 0 + 0.3 \cdot 0 + 0.4 \cdot 0 = 0
+\end{aligned}
 \]
 
 \subsubsection{Abstraction and Encapsulation Mechanisms}
@@ -423,11 +452,7 @@ $I_{form}(\mathrm{C}) = 0$ because there is no formal distinction between inheri
 C supports two semantically distinct visibility scopes via storage-class specifiers and linkage rules: \textit{external linkage} (identifiers visible across translation units) and \textit{internal linkage} (restricted to a single translation unit using the \texttt{static} keyword).
 
 \[
-    n_{levels}(C) = 2
-\]
-
-\[
-    V(C) = \frac{2}{n_{max}}
+    n_{levels}(\text{C\#})=7, n_{levels}(\text{C}) = 2 \Rightarrow V(\text{C}) = \frac{2}{7}
 \]
 
 
@@ -437,8 +462,7 @@ C provides a single primary modularization construct: the \textit{translation un
 However, this boundary does not enforce explicit export control lists: visibility across translation units is governed implicitly by linkage rules (external vs. internal) and declarations in header files, rather than by a formal mechanism requiring explicit export specifications. Consequently, there are no boundaries with enforced export control.
 
 \[
-b_{strict}(C) = 0, \quad b_{total}(C) = 1
-\Rightarrow M(C) = 0
+    b_{strict}(\text{C}) = 0, b_{total}(\text{C}) = 1 \Rightarrow M(\text{C}) = 0
 \]
 
 
@@ -447,7 +471,7 @@ b_{strict}(C) = 0, \quad b_{total}(C) = 1
 C does not provide dedicated language-level constructs for behavioral abstraction such as interfaces, abstract classes, or protocols. Abstraction is achieved idiomatically using header files and function declarations, which are not distinct semantic constructs in the type system.
 
 \[
-    I(C) = 0
+    I(\text{C}) = 0
 \]
 
 
@@ -456,12 +480,16 @@ C does not provide dedicated language-level constructs for behavioral abstractio
 C does not enforce encapsulation at the language level: it allows unrestricted memory access via pointers, including arbitrary casting between incompatible types (subject only to undefined behavior constraints), direct field access to \texttt{struct} members, and manipulation of object representations through pointer arithmetic. Additionally, there are no runtime checks preventing access violations, nor controlled unsafe regions distinct from safe code.
 
 \[
-    E(C) = 0
+    E(\text{C}) = 0
 \]
 
 \textbf{Final metric value:}
 \[
-    AE(C) = 0.2 \cdot V(L) + 0.25 \cdot M(L) + 0.25 \cdot I(L) + 0.3 \cdot E(L)
+\begin{aligned}
+    AE(\text{C}) = 0.2 \cdot V(\text{C}) + 0.25 \cdot M(\text{C}) + 0.25 \cdot I(\text{C}) + 0.3 \cdot E(\text{C}) \\
+    = 0.2 \cdot \frac{2}{7} + 0.25 \cdot 0 + 0.25 \cdot 0 + 0.3 \cdot 0 \\
+    \approx 0.0571
+\end{aligned}
 \]
 
 \subsubsection{Inheritance Semantics and Hierarchy Management}
@@ -469,15 +497,14 @@ C does not enforce encapsulation at the language level: it allows unrestricted m
 According to the ISO C standard, C does not support inheritance:
 
 \[
-    M(C) = 0 \Rightarrow H_s(C) = 0
-    L_d(C) = 0
-    C_p(C) = 0
-    F_b(C) = 0
+\begin{aligned}
+    H_s(\text{C}) = 0, L_d(\text{C}) = 0, C_p(\text{C}) = 0, F_b(\text{C}) = 0
+\end{aligned}
 \]
 
 \textbf{Final metric value:}
 \[
-    ISRI(C) = 0.2 \cdot H_s(L) + 0.25 \cdot L_d(L) + 0.3 \cdot C_p(L) + 0.25 \cdot F_b(L)
+    ISRI(\text{C}) = 0.2 \cdot H_s(\text{C}) + 0.25 \cdot L_d(\text{C}) + 0.3 \cdot C_p(\text{C}) + 0.25 \cdot F_b(\text{C}) = 0
 \]
 
 \subsubsection{Composition and Alternatives to Inheritance}
@@ -488,8 +515,7 @@ C provides neither keywords nor built-in constructs for delegation. However, del
 The language requires explicit function calls and does not include any facility for automatic method delegation or forwarding without boilerplate code. 
 
 \[
-    K_{del}(C) = 0.5, \quad S_{fwd}(C) = 0
-    \Rightarrow D_{cls}(C) = 0.25
+    K_{del}(\text{C}) = 0.5, S_{fwd}(\text{C}) = 0 \Rightarrow D_{cls}(\text{C}) = 0.25
 \]
 
 \textbf{2) Trait Expressiveness Score $T_{exp}(L)$}
@@ -498,19 +524,23 @@ Since C does not support traits or multiple composition units with overlapping m
 C lacks traits or mixins entirely, and thus provides no facility to specify required methods or fields for composition. 
 
 \[
-    T_{exp}(C) = 0
+    T_{exp}(\text{C}) = 0
 \]
 
 \textbf{3) Interface Composition Capacity $I_{comp}(L)$}
 
 No interfaces:
 \[
-I_{comp}(C) = 0
+    I_{comp}(\text{C}) = 0
 \]
 
 \textbf{Final metric value:}
 \[
-    CRFI(C) = 0.3 \cdot D_{cls}(L) + 0.35 \cdot T_{exp}(L) + 0.35 \cdot I_{comp}(L)
+\begin{aligned}
+    CRFI(\text{C}) = 0.3 \cdot D_{cls}(\text{C}) + 0.35 \cdot T_{exp}(\text{C}) + 0.35 \cdot I_{comp}(\text{C}) \\
+    = 0.3 \cdot 0.25 + 0.35 \cdot 0 + 0.35 \cdot 0 \\
+    = 0.075
+\end{aligned}
 \]
 
 \subsubsection{Object Representation and Creation Model}
@@ -520,86 +550,93 @@ I_{comp}(C) = 0
 The set of user-definable type categories includes \texttt{struct}, \texttt{union}, and \texttt{enum}. These types are defined with value semantics: objects of these types are copied on assignment and passed by value unless explicitly manipulated via pointers, meaning the language does not enforce reference semantics for any user-defined type category.
 
 \[
-T_{user}(C) = 3, \quad T_{ref}(C) = 0
-\Rightarrow S_{id}(C) = 0
+    T_{user}(\text{C}) = 3, T_{ref}(\text{C}) = 0 \Rightarrow S_{id}(\text{C}) = 0
 \]
 
 \textbf{2) Instantiation Paradigm Diversity $S_{cr}(L)$}
 
-C does not provide high-level instantiation constructs such as \texttt{new}, prototype cloning, or actor-based spawning; instead, it supports two fundamental paradigms: (1) static or automatic allocation (e.g., stack or global variables) and (2) dynamic allocation via standard library functions such as \texttt{malloc}. These mechanisms correspond to low-level memory allocation rather than abstract object instantiation models, but they are the only native paradigms available in the language.
+C does not provide high-level instantiation constructs such as \texttt{new}, prototype cloning, or actor-based spawning. It supports two fundamental paradigms: static or automatic allocation and dynamic allocation via standard library functions such as \texttt{malloc}. These mechanisms correspond to low-level memory allocation rather than abstract object instantiation models, but they are the only native paradigms available in the language.
 
 \[
-    S_{cr}(C) = \frac{2}{P_{max}}
+    P_{supported}(\text{C\#}) = 4 \Rightarrow S_{cr}(\text{C}) = \frac{2}{4}
 \]
 
 \textbf{3) Meta-level Extensibility Score $S_{meta}(L)$}
 
-C does not provide any built-in mechanisms for runtime introspection or structural modification of objects; all type information is resolved at compile time, and no standardized runtime type system exists.
+C does not provide any built-in mechanisms for runtime introspection or structural modification of objects. All type information is resolved at compile time, and no standardized runtime type system exists.
 
 \[
-    I_{level}(C) = 0 \Rightarrow S_{meta}(C) = 0
+    I_{level}(\text{C}) = 0 \Rightarrow S_{meta}(\text{C}) = 0
 \]
 
 \textbf{Final metric value:}
 \[
-    ORCI(C) = 0.35 \cdot S_{id}(L) + 0.3 \cdot S_{cr}(L) + 0.35 \cdot S_{meta}(L)
+\begin{aligned}
+    ORCI(\text{C}) = 0.35 \cdot S_{id}(\text{C}) + 0.3 \cdot S_{cr}(\text{C}) + 0.35 \cdot S_{meta}(\text{C}) \\
+    = 0.35 \cdot 0 + 0.3 \cdot \frac{2}{4} + 0.35 \cdot 0 \\
+    = 0.15
+\end{aligned}
 \]
 
 \subsubsection{Polymorphism and Dispatch Mechanisms}
 
 \textbf{1) Dispatch Scope Mechanism $M_{scope}(L)$}
 
-C does not support single dispatch in the object-oriented sense, as there are no methods or implicit receiver-based calls; function calls are resolved statically at compile time.
+C does not support single dispatch in the object-oriented sense, as there are no methods or implicit receiver-based calls, function calls are resolved statically at compile time.
 
-$I_{single} = 0$
+$I_{single}(\text{C}) = 0$
 
 Similarly, C does not provide multiple dispatch (i.e., dynamic selection based on multiple argument types).
 
-$I_{multi} = 0$
+$I_{multi}(\text{C}) = 0$
 
-Predicate-based dispatch is also not natively supported; although conditional logic (e.g., \texttt{if}, \texttt{switch}) can be used to manually implement behavior selection, this is not part of the language's dispatch semantics.
+Predicate-based dispatch is also not natively supported. Although conditional logic (e.g., \texttt{if}, \texttt{switch}) can be used to manually implement behavior selection, this is not part of the language's dispatch semantics.
 
-$I_{pred} = 0$
+$I_{pred}(\text{C}) = 0$
 
 \[
-    M_{scope}(C) = 0
+    M_{scope}(\text{C}) = 0
 \]
 
 \textbf{2) Dispatch Safety Guarantee $S_{disp}(L)$}
 
 C does not provide built-in polymorphic dispatch mechanisms. Instead, dispatch is performed either statically via direct function calls or manually through function pointers. Although direct calls are type-checked, the use of function pointers does not guarantee full compile-time verification of dispatch correctness.
 
-$I_{static}(\mathrm{C}) = 0$
+$I_{static}(\text{C}) = 0$
 
 C does not enforce exhaustive dispatch definitions: constructs like \texttt{switch} statements do not require covering all possible cases (even for enumerations), and missing cases are not mandated to be diagnosed by the compiler.
 
-$I_{exhaust}(\mathrm{C}) = 0$
+$I_{exhaust}(\text{C}) = 0$
 
 \[
-    S_{disp}(\mathrm{C}) = \frac{0 + 0}{2} = 0
+    S_{disp}(\text{C}) = \frac{0 + 0}{2} = 0
 \]
 
 \textbf{3) Virtualization Optimization Potential $O_{virt}(L)$}
 
 Since C does not define virtual methods or dynamic dispatch, the notion of \texttt{final} methods is not applicable.
 
-$K_{final} = 0$
+$K_{final}(\text{C}) = 0$
 
 Likewise, C lacks class hierarchies entirely, and therefore provides no mechanism for restricting subclassing (i.e., sealed hierarchies).
 
-$K_{sealed} = 0$
+$K_{sealed}(\text{C}) = 0$
 
 However, all function calls in C are statically bound by default (except via function pointers), and the \texttt{static} keyword allows internal linkage and potential compiler optimizations, which can be interpreted as a form of static dispatch hint within the language specification.
 
-$K_{static} = 1$ 
+$K_{static}(\text{C}) = 1$ 
 
 \[
-    O_{virt}(C) = \frac{1}{3}
+    O_{virt}(\text{C}) = \frac{1}{3}
 \]
 
 \textbf{Final metric value:}
 \[
-    PDEI(C) = 0.35 \cdot M_{scope}(L) + 0.35 \cdot S_{disp}(L) + 0.3 \cdot O_{virt}(L)
+\begin{aligned}
+    PDEI(\text{C}) = 0.35 \cdot M_{scope}(\text{C}) + 0.35 \cdot S_{disp}(\text{C}) + 0.3 \cdot O_{virt}(\text{C}) \\
+    = 0.35 \cdot 0 + 0.35 \cdot 0 + 0.3 \cdot \frac{1}{3} \\
+    = 0.1
+\end{aligned}
 \]
 
 \subsubsection{State Model, Mutability, and Concurrency Guarantees}
@@ -609,40 +646,44 @@ $K_{static} = 1$
 In C, all objects are mutable by default unless explicitly qualified with the \texttt{const} type qualifier, as defined in the ISO C standard (e.g., ISO/IEC 9899), which states that the absence of \texttt{const} permits modification of stored values through lvalues.
 
 \[
-    M_{def}(C) = 0
+    M_{def}(\text{C}) = 0
 \]
 
 \textbf{2) Static Reference Constraint Density $S_{dens}(L)$}
 
-In C, references are represented exclusively via pointers: (1) pointer types (\texttt{T*}), (2) pointer qualifiers such as \texttt{const}, \texttt{volatile}, and \texttt{restrict}, and (3) array-to-pointer decay in expressions.
+In C, references are represented exclusively via pointers: pointer types (\texttt{T*}), pointer qualifiers such as \texttt{const}, \texttt{volatile}, and \texttt{restrict}, and array-to-pointer decay in expressions.
 
-$N_{ref}(\mathrm{C}) = 3$ 
+$N_{ref}(\text{C}) = 3$ 
 
-Next, distinct syntactic constructs include: the \texttt{const} qualifier enforces compile-time immutability of the referenced object, and \texttt{restrict} imposes aliasing constraints that enable compiler optimizations by guaranteeing exclusive access within a scope; \texttt{volatile} does not impose aliasing or mutability constraints but rather affects optimization semantics, and pointer types and decay introduce no restrictions.
+Next, distinct syntactic constructs include: the \texttt{const} qualifier enforces compile-time immutability of the referenced object, and \texttt{restrict} imposes aliasing constraints that enable compiler optimizations by guaranteeing exclusive access within a scope, \texttt{volatile} does not impose aliasing or mutability constraints but rather affects optimization semantics, and pointer types and decay introduce no restrictions.
 
-$N_{constr}(\mathrm{C}) = 2$
+$N_{constr}(\text{C}) = 2$
 
 \[
-    S_{dens}(C) = \frac{2}{3}
+    S_{dens}(\text{C}) = \frac{2}{3}
 \]
 
 \textbf{3) Concurrency Primitive Safety $P_{conc}(L)$}
 
 First, C provides no type-system or runtime enforcement of data race freedom. Although the standard defines a memory model and introduces atomic operations via \texttt{\_Atomic} and \texttt{stdatomic.h}, correct synchronization is entirely the programmer’s responsibility, and violations result in undefined behavior.
 
-$S_{race}(\mathrm{C}) = 0$
+$S_{race}(\text{C}) = 0$
 
 Second, C only offers low-level concurrency primitives, such as threads (via \texttt{threads.h}) and mutexes, without higher-level abstractions like actors, channels, or structured task systems.
 
-$S_{model}(\mathrm{C}) = 0$
+$S_{model}(\text{C}) = 0$
 
 \[
-    P_{conc}(C) = 0
+    P_{conc}(\text{C}) = 0
 \]
 
 \textbf{Final metric value:}
 \[
-    SCSI(C) = 0.35 \cdot M_{def}(L) + 0.25 \cdot S_{dens}(L) + 0.4 \cdot P_{conc}(L)
+\begin{aligned}
+    SCSI(\text{C}) = 0.35 \cdot M_{def}(\text{C}) + 0.25 \cdot S_{dens}(\text{C}) + 0.4 \cdot P_{conc}(\text{C}) \\
+    = 0.35 \cdot 0 + 0.25 \cdot \frac{2}{3} + 0.4 \cdot 0 \\
+    \approx 0.1667
+\end{aligned}
 \]
 
 \subsubsection{Support for Formal Specification and Verifiability}
@@ -652,18 +693,435 @@ $S_{model}(\mathrm{C}) = 0$
 The language provides no native support for design-by-contract features: preconditions and postconditions are not part of the function signature or type system, and invariants are not expressible as built-in semantic constructs.
 
 \[
-    C_{nat}(C) = 0
+    C_{nat}(\text{C}) = 0
 \]
 
 \textbf{2) Verification Enforcement Level $V_{enf}(L)$}
 
-C does not support static verification in the sense of compile-time proof of program correctness; its type system is not expressive enough to encode and verify formal specifications.
+C does not support static verification in the sense of compile-time proof of program correctness. The type system is not expressive enough to encode and verify formal specifications.
 
 \[
-    V_{enf}(C) = 0
+    V_{enf}(\text{C}) = 0
 \]
 
 \textbf{Final metric value:}
 \[
-    FSVI(C) = 0.45 \cdot C_{nat}(L) + 0.55 \cdot V_{enf}(L)
+\begin{aligned}
+    FSVI(\text{C}) = 0.45 \cdot C_{nat}(\text{C}) + 0.55 \cdot V_{enf}(\text{C}) \\
+    = 0.45 \cdot 0 + 0.55 \cdot 0 = 0
+\end{aligned}
+\]
+
+
+\subsection{Metrics Evaluation for Golang}
+
+\subsubsection{Introduction}
+
+The Go programming language (Golang) represents a statically typed, compiled language that deliberately departs from classical object-oriented paradigms \cite{go_spec}. Unlike languages such as C++ or C\#, Go does not provide inheritance, subtype polymorphism via class hierarchies, or explicit object constructs. Instead, it adopts a composition-based design philosophy combined with structural typing through interfaces. Pike et al., that Go is not an object-oriented language, because it has no classes, inheritance, and explicit method hierarchies \cite{pike2012go}.
+
+\subsubsection{1) Type System and Subtyping Model}
+
+\textbf{1) Nominal–Structural Typing Score $S_{nom}(L)$}
+
+Go supports structural typing through its interface system: a type satisfies an interface implicitly if it implements the required method set, without explicit declaration, which corresponds to structural subtyping governed by formal assignability and method-set rules in the specification. 
+
+$I_{struct}(\text{Golang})=1$
+
+Go does not support nominal subtyping with explicit subtype declarations (e.g., no \texttt{extends} or inheritance hierarchy). The type relationships are not declared but inferred structurally, and even named types are distinct unless explicitly converted. 
+
+$I_{nom}(\text{Golang})=0$
+
+\[
+    S_{nom}(\text{Golang})=\frac{1+0}{2}=0.5
+\]
+
+\textbf{2) Variance Formalization Score $S_{var}(L)$}
+
+Go does not provide explicit variance annotations (such as covariance or contravariance keywords). All type parameters are invariant, and variance behavior is implicitly restricted by the type system design, particularly through constraint interfaces and the absence of subtyping between instantiated generic types. 
+
+$V_{exp}(\text{Golang})=0.5$
+
+The specification defines clear and conservative typing and instantiation rules that prevent common variance-related unsoundness (e.g., no array covariance), but it does not include formally proven variance theorems or an explicit formalization of variance properties. The soundness is achieved through restriction and simplicity. 
+
+$V_{sound}(\text{Golang})=0.5$
+
+\[
+    S_{var}(\text{Golang})=\frac{0.5+0.5}{2}=0.5
+\]
+
+\textbf{3) Inheritance–Subtyping Separation Score $S_{rel}(L)$}
+
+Go allows subtyping (in the form of interface satisfaction) without any inheritance constructs such as class extension. The types implement interfaces implicitly based on method sets, independent of declaration. 
+
+$I_{dec}(\text{Golang})=1$
+
+The subtyping rules are defined entirely through assignability and interface implementation semantics, which are specified independently of any inheritance mechanism. 
+
+$I_{ind}(\text{Golang})=1$
+
+Although the specification clearly distinguishes named types, interface types, and implementation rules, it does not formalize inheritance as a relation at all, and the separation is therefore implicit rather than expressed as two formally distinct relations. 
+
+$I_{form}(\text{Golang})=0.5$
+
+
+$S_{rel}(\text{Golang})=\frac{1+1+0.5}{3}\approx0.83$, 
+
+\textbf{Final metric value:}
+\[
+\begin{aligned}
+    TSSI(\text{Golang}) = 0.3 \cdot S_{nom}(\text{Golang}) + 0.3 \cdot S_{var}(\text{Golang}) + 0.4 \cdot S_{rel}(\text{Golang}) \\
+    = 0.3 \cdot 0.5 + 0.3 \cdot 0.5 + 0.4 \cdot \frac{5}{6} \\
+    \approx 0.6334
+\end{aligned}
+\]
+
+\subsubsection{Abstraction and Encapsulation Mechanisms}
+
+\textbf{1) Visibility Granularity Index $V(L)$}
+
+Go provides a single mechanism for visibility based on identifier capitalization: identifiers starting with an uppercase letter are exported (public at the package level), while those starting with a lowercase letter are unexported (private to the package), with no additional scopes such as protected, file-level, or module-level visibility. 
+
+\[
+    n_{levels}(\text{C\#})=7, n_{levels}(\text{Golang}) = 2 \Rightarrow V(\text{Golang}) = \frac{2}{7}
+\]
+
+
+\textbf{2) Module Isolation Strength $M(L)$}
+
+Go provides two primary boundaries: packages and modules. However, only packages enforce access control via export rules (identifiers are visible outside the package only if exported), while modules (defined via \texttt{go.mod}) serve as dependency and versioning units without introducing additional visibility restrictions. 
+
+\[
+    b_{strict}(\text{Golang}) = 1, b_{total}(\text{Golang})=2 \Rightarrow M(\text{Golang}) =\frac{1}{2}=0.5
+\]
+
+
+\textbf{3) Interface Abstraction Capacity $I(L)$}
+
+Go provides a single dedicated abstraction construct—interfaces—which define behavior via method sets independently of implementation. 
+
+$n_{abstraction_constructs}(\text{Golang})=1$
+
+For object-defining constructs, Go includes concrete struct types as the primary means of defining composite data objects, Go does not include classes or alternative object forms. Interfaces are satisfied implicitly by any type whose method set matches, enabling strong separation of specification from implementation without inheritance.
+
+$n_{object}(\text{Golang})=1$
+
+\[
+    I(\text{Golang})=\frac{1}{1}=1
+\]
+
+
+\textbf{4) Encapsulation Enforcement Coefficient $E(L)$}
+
+Although Go enforces encapsulation at the language level via package-based visibility rules, it also provides mechanisms that can bypass these guarantees. In particular, the \texttt{unsafe} package allows arbitrary memory access and pointer manipulation beyond type safety, and the \texttt{reflect} package enables inspection and, in limited cases, modification of otherwise inaccessible data at runtime. Because these mechanisms permit circumvention of encapsulation constraints, even if explicitly marked and discouraged, the condition of strictly preventing uncontrolled access is not satisfied. 
+
+\[
+    E(\text{Golang})=0
+\]
+
+\textbf{Final metric value:}
+\[
+\begin{aligned}
+    AE(\text{Golang}) = 0.2 \cdot V(\text{Golang}) + 0.25 \cdot M(\text{Golang}) + 0.25 \cdot I(\text{Golang}) + 0.3 \cdot E(\text{Golang}) \\
+    = 0.2 \cdot \frac{2}{7} + 0.25 \cdot 0.5 + 0.25 \cdot 1 + 0.3 \cdot 0 \\
+    \approx 0.4321
+\end{aligned}
+\]
+
+\subsubsection{Inheritance Semantics and Hierarchy Management}
+
+\textbf{1) Hierarchy Simplicity Factor $H_s(L)$}
+
+Go does not support class-based inheritance or superclass declarations. It relies on composition and interface-based polymorphism, meaning that the notion of direct superclasses is not defined. 
+
+\[
+    M(\text{Golang}) = 1 \Rightarrow H_s(\text{Golang}) = 1 - \frac{1-1}{M_{max}-1}=1
+\]
+
+\textbf{2) Linearization Determinism Score $L_d(L)$}
+
+Go does not implement inheritance or multiple inheritance, and therefore does not require a method resolution order (MRO) or linearization algorithm. Instead, method selection is determined deterministically via static rules over method sets and interface satisfaction, with no ambiguity or need for precedence resolution among multiple parent types. 
+
+\[
+    L_d(\text{Golang})=1
+\]
+
+\textbf{3) Constraint Protection Coefficient $C_p(L)$}
+
+$p_1=0$: no \texttt{final} constructs.
+
+$p_2=0$: no sealed hierarchies.
+
+$p_3=0$: no \texttt{override} annotation due to absence of overriding.
+
+$p_4=1$: methods are non-virtual by default in the sense that dispatch is static unless via interfaces.
+
+$p_5=1$: clear separation between interfaces and concrete types is enforced by the type system.
+
+$p_6=0$: no inheritance restriction rules exist because inheritance itself is absent.
+
+\[
+    C_p(\text{Golang})=\frac{2}{6}\approx0.33
+\]
+
+
+\textbf{4) Fragile Base Mitigation Factor $F_b(L)$}
+
+$s_1=0$: there is no override mechanism and thus no requirement for explicit override annotations. 
+
+$s_2=1$: Go enforces strict visibility via export rules (identifiers starting with uppercase are exported, otherwise package-private), preventing unintended external overriding.
+
+$s_3=0$: there is no superclass or \texttt{super} invocation model.
+
+$s_4=1$: type system enforces strict method set matching for interface satisfaction, disallowing unsafe variance in overriding-like behavior.
+
+$s_5=1$: methods are not overridable by default due to the absence of inheritance—polymorphism is explicitly opt-in via interfaces.
+
+$s_6=1$: the compiler performs static checks ensuring exact signature compatibility when a type satisfies an interface. 
+
+\[
+    F_b(\text{Golang}) = (0+1+0+1+1+1)/6 \approx 0.67
+\]
+
+\textbf{Final metric value:}
+\[
+\begin{aligned}
+    ISRI(\text{Golang}) = 0.2 \cdot H_s(\text{Golang}) + 0.25 \cdot L_d(\text{Golang}) + 0.3 \cdot C_p(\text{Golang}) + 0.25 \cdot F_b(\text{Golang}) \\
+    = 0.2 \cdot 1 + 0.25 \cdot 1 + 0.3 \cdot \frac{2}{6} + 0.25 \cdot \frac{4}{6} \\
+    \approx 0.7167
+\end{aligned}
+\]
+
+\subsubsection{Composition and Alternatives to Inheritance}
+
+\textbf{1) Class-Based Delegation Score $D_{cls}(L)$}
+
+The delegation is not provided via explicit keywords but is partially supported through \emph{type embedding}, which promotes methods of embedded fields to the outer type. However, this mechanism is not a first-class delegation construct but rather a composition feature.
+
+$K_{del}(\text{Golang})=0.5$
+
+Go does not provide fully automatic forwarding of all method calls in the general case (e.g., no universal forwarding construct comparable to language-level delegation keywords), since method promotion only applies to embedded types and does not dynamically forward arbitrary calls.
+
+$S_{fwd}(\text{Golang})=0$
+
+\[
+    K_{del}(\text{Golang}) = 0.5, S_{fwd}(\text{Golang}) = 0 \Rightarrow D_{cls}(\text{Golang}) = 0.25
+\]
+
+\textbf{2) Trait Expressiveness Score $T_{exp}(L)$}
+
+The Go Language Specification does not define traits or mixins as first-class constructs. Composition is achieved via interfaces and struct embedding (\textit{Interfaces}, \textit{Method sets}, \textit{Embedding}). When multiple embedded types introduce methods with identical names, Go does not provide aliasing or exclusion mechanisms. Such ambiguity leads to a compile-time error unless explicitly disambiguated by qualification.
+
+$R_{conf}(\text{Golang})=0$
+
+Go interfaces can specify required method sets that a type must implement, effectively expressing behavioral requirements. However, these requirements are defined externally (in interfaces) rather than within reusable composition units analogous to traits, so composition units themselves (embedded structs) cannot declare constraints.
+
+$O_{mod}(\text{Golang})=0$
+
+\[
+    T_{exp}(\text{Golang}) = (0 + 0)/2 = 0
+\]
+
+\textbf{3) Interface Composition Capacity $I_{comp}(L)$}
+
+In the Go Language Specification (\textit{Interfaces}, \textit{Type sets}), a type implicitly implements any number of interfaces by satisfying their method sets without explicit declaration, implying no restriction on the number of interfaces.
+
+$N_{impl}(\text{Golang})=1$
+
+Go interfaces are purely behavioral contracts and may only contain method signatures (and, since Go 1.18, type sets for constraints), but they do not allow method bodies or default implementations.
+
+$D_{def}(\text{Golang})=0$
+
+\[
+    I_{comp}(\text{Golang}) = (1 + 0)/2 = 0.5
+\]
+
+\textbf{Final metric value:}
+\[
+\begin{aligned}
+    CRFI(\text{Golang}) = 0.3 \cdot D_{cls}(\text{Golang}) + 0.35 \cdot T_{exp}(\text{Golang}) + 0.35 \cdot I_{comp}(\text{Golang}) \\
+    = 0.3 \cdot 0.25 + 0.35 \cdot 0 + 0.35 \cdot 0.5 \\
+    = 0.25
+\end{aligned}
+\]
+
+\subsubsection{Object Representation and Creation Model}
+
+\textbf{1) Identity Semantics Score $S_{id}(L)$}
+
+According to the Go Language Specification, user-definable type categories include \emph{struct}, \emph{array}, \emph{slice}, \emph{map}, \emph{channel}, \emph{function}, and \emph{interface} types.
+
+$T_{user}(\text{Golang})=7$
+
+Among these, only a subset enforces reference semantics by design: slices, maps, channels, functions, and interfaces exhibit reference-like behavior (they internally contain descriptors referencing underlying data structures), while structs and arrays are strictly value types copied on assignment.
+
+$T_{ref}(\text{Golang})=5$
+
+\[
+    S_{id}(\text{Golang}) = \frac{5}{7} \approx 0.71
+\]
+
+\textbf{2) Instantiation Paradigm Diversity $S_{cr}(L)$}
+
+The Go Language Specification (\textit{Composite literals}, \textit{Allocation}, \textit{Making slices, maps, and channels}) defines several native instantiation paradigms: 
+
+\begin{itemize}
+    \item Allocation via \texttt{new} returning a pointer to zero-initialized storage.
+    \item Literal construction using composite literals for structs, arrays, slices, and maps.
+    \item Specialized initialization via \texttt{make} for slices, maps, and channels with internal runtime setup.
+\end{itemize}
+
+
+\[
+    P_{supported}(\text{Golang})=3, P_{supported}(\text{C\#}) = 4 \Rightarrow
+    S_{cr}(\text{Golang}) = \frac{3}{4}
+\]
+
+\textbf{3) Meta-level Extensibility Score $S_{meta}(L)$}
+
+According to the Go Language Specification and its \textit{reflect} package model (\textit{Reflection}), Go provides runtime introspection capabilities that allow programs to query type information, method sets, and value properties dynamically. However, it does not permit structural modification of existing types or objects at runtime, nor does it support overriding object creation protocols via metaobjects. 
+
+\[
+    I_{level}(\text{JS/Python/Ruby}) = 3, I_{level}(\text{Golang}) = 1 
+    \Rightarrow S_{meta}(\text{Golang}) = \frac{1}{3}
+\]
+
+\textbf{Final metric value:}
+\[
+\begin{aligned}
+    ORCI(\text{Golang}) = 0.35 \cdot S_{id}(\text{Golang}) + 0.3 \cdot S_{cr}(\text{Golang}) + 0.35 \cdot S_{meta}(\text{Golang}) \\
+    = 0.35 \cdot \frac{5}{7} + 0.3 \cdot 0.75 + 0.35 \cdot \frac{1}{3} \\
+    \approx 0.5917
+\end{aligned}
+\]
+
+\subsubsection{Polymorphism and Dispatch Mechanisms}
+
+\textbf{1) Dispatch Scope Mechanism $M_{scope}(L)$}
+
+According to the Go Language Specification (\textit{Method sets}, \textit{Interfaces}), Go supports receiver-based method invocation, which corresponds to single dispatch determined by the dynamic type of the receiver in interface calls.
+
+$I_{single}(\text{Golang})=1$
+
+However, Go does not natively support multiple dispatch, as method selection is not based on the runtime types of multiple arguments but solely on the receiver.
+
+$I_{multi}(\text{Golang})=0$
+
+Similarly, predicate-based dispatch is not part of the language specification, conditional logic must be expressed explicitly via control flow constructs rather than dispatch mechanisms.
+
+$I_{pred}(\text{Golang})=0$
+
+\[
+    M_{scope}(\text{Golang}) = (1 \cdot 1 + 2 \cdot 0 + 2 \cdot 0) / (1+2+2) = 1/5 = 0.2
+\]
+
+\textbf{2) Dispatch Safety Guarantee $S_{disp}(L)$}
+
+According to the Go Language Specification (\textit{Interfaces}, \textit{Method sets}, \textit{Type assertions}, \textit{Type switches}), dispatch correctness is partially verified at compile time: the compiler ensures that a concrete type satisfies an interface before assignment or usage, guaranteeing method set compatibility.
+
+$I_{static}(\text{Golang})=1$
+
+However, Go does not enforce exhaustiveness of dispatch constructs.
+
+$I_{exhaust}(\text{Golang})=0$
+
+\[
+    S_{disp}(\text{Golang}) = (1 + 0)/2 = 0.5
+\]
+
+\textbf{3) Virtualization Optimization Potential $O_{virt}(L)$}
+
+The Go Language Specification (\textit{Method declarations}, \textit{Interfaces}) does not define virtual methods or inheritance-based dispatch. The method calls on concrete types are statically bound, and dynamic dispatch occurs only through interfaces without user-level control over virtualization. 
+
+$K_{final}(\text{Golang})=0$: there is no notion of marking methods as final or non-virtual. 
+
+$K_{sealed}(\text{Golang})=0$: Go lacks class hierarchies and therefore provides no mechanism for sealing inheritance.
+
+$K_{static}(\text{Golang})=0$: there are no explicit language-level annotations or keywords for influencing dispatch optimization. 
+
+\[
+    O_{virt}(\text{Golang}) = (0+0+0)/3 = 0
+\]
+
+\textbf{Final metric value:}
+\[
+\begin{aligned}
+    PDEI(\text{Golang}) = 0.35 \cdot M_{scope}(\text{Golang}) + 0.35 \cdot S_{disp}(\text{Golang}) + 0.3 \cdot O_{virt}(\text{Golang}) \\
+    = 0.35 \cdot 0.2 + 0.35 \cdot 0.5 + 0.3 \cdot 0 \\
+    = 0.245
+\end{aligned}
+\]
+
+\subsubsection{State Model, Mutability, and Concurrency Guarantees}
+
+\textbf{1) Default Mutability Score $M_{def}(L)$}
+
+In Go, variables declared using the \texttt{var} keyword or short declaration operator \texttt{:=} are mutable unless explicitly constrained otherwise. There is no built-in language construct to declare variables as immutable after initialization. The Go specification explicitly defines variables as storage locations whose values can be changed during program execution, and while constants (declared via \texttt{const}) are immutable, they represent a distinct category of compile-time values rather than general-purpose objects.
+
+\[
+    M_{def}(\text{Golang}) = 0
+\]
+
+\textbf{2) Static Reference Constraint Density $S_{dens}(L)$}
+
+According to the Go specification, reference-related constructs include: pointers, slices (descriptor referencing an underlying array), maps (reference to runtime hash table), channels (reference to communication object), and function values (which internally reference closures).
+
+$N_{ref}(\text{Golang}) = 5$
+
+The type system does not provide constructs that restrict aliasing (no ownership, borrowing, or uniqueness types) nor mutability of referenced data at compile time. All listed constructs allow unrestricted aliasing and mutation subject only to basic type safety. 
+
+$N_{constr}(\text{Golang}) = 0$
+
+\[
+    S_{dens}(\text{Golang}) = \frac{0}{5} = 0
+\]
+
+\textbf{3) Concurrency Primitive Safety $P_{conc}(L)$}
+
+Go does not provide compile-time guarantees of data race freedom via its type system. The language offers a runtime data race detector (enabled via tooling such as \texttt{-race}) that dynamically identifies conflicting memory accesses, implying partial enforcement rather than formal prevention. 
+
+$S_{race}(\text{Golang}) = 0.5$
+
+Go natively implements a high-level concurrency model based on Communicating Sequential Processes (CSP), with goroutines and typed channels as first-class language constructs enabling structured communication and synchronization without explicit shared-memory coordination, as specified in its memory model and concurrency semantics.
+
+$S_{model}(\text{Golang}) = 1$
+
+\[
+    P_{conc}(\text{Golang}) = \frac{0.5 + 1}{2} = 0.75
+\]
+
+\textbf{Final metric value:}
+\[
+\begin{aligned}
+    SCSI(\text{Golang}) = 0.35 \cdot M_{def}(\text{Golang}) + 0.25 \cdot S_{dens}(\text{Golang}) + 0.4 \cdot P_{conc}(\text{Golang}) \\
+    = 0.35 \cdot 0 + 0.25 \cdot 0 + 0.4 \cdot 0.75 = 0.3    
+\end{aligned}
+\]
+
+\subsubsection{Support for Formal Specification and Verifiability}
+
+\textbf{1) Native Contract Constructs Score $C_{nat}(L)$}
+
+The Go specification does not include any native language features for design-by-contract: there are no keywords or type-system mechanisms to declare preconditions, or invariants that are enforced either at compile time or runtime. Such constraints are typically expressed through explicit \texttt{if}-statements, error handling patterns, or documentation comments, which fall outside the definition of native constructs. 
+
+\[
+\begin{aligned}
+    n_{pre} = 0, n_{post} = 0, n_{inv} = 0 \\
+    C_{nat}(\text{Golang}) = \frac{0 + 0 + 0}{3} = 0
+\end{aligned}
+\]
+
+\textbf{2) Verification Enforcement Level $V_{enf}(L)$}
+
+Go does not support formal static verification within its type system or compiler. There are no dependent types, refinement types, or built-in verification frameworks. However, Go does support runtime checking through explicit error handling, \texttt{panic}/\texttt{recover} mechanisms, and testing frameworks, which allow developers to validate properties during execution, though these are not enforced as formal contracts by the language itself.
+
+\[
+    V_{enf}(\text{Golang}) = 0.5
+\]
+
+\textbf{Final metric value:}
+\[
+\begin{aligned}
+    FSVI(\text{Golang}) = 0.45 \cdot C_{nat}(\text{Golang}) + 0.55 \cdot V_{enf}(\text{Golang}) \\
+    = 0.45 \cdot 0 + 0.55 \cdot 0.5 = 0.275
+\end{aligned}
 \]

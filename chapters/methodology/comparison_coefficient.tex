@@ -5,7 +5,7 @@ The selection of weighting coefficients for the proposed metrics is guided by th
 \subsection{Type System and Subtyping Model}
 
 \[
-    \alpha = 0.3, \quad \beta = 0.3, \quad \gamma = 0.4
+    \alpha = 0.3, \beta = 0.3, \gamma = 0.4
 \]
 
 The highest weight is assigned to the inheritance–subtyping separation component ($\gamma = 0.45$). This decision is grounded in extensive literature identifying the conflation of inheritance and subtyping as a fundamental flaw in mainstream object-oriented languages \cite{cook1989inheritance}. Failure to distinguish them leads to violations of the Liskov Substitution Principle and undermines sound modular reasoning. Liskov and Wing further formalize this issue, noting that subtype relationships must preserve behavioral specifications independently of implementation structure \cite{liskov1999behavioral}. This separation is treated as the most critical factor influencing the overall soundness of the object model.
@@ -17,7 +17,7 @@ The nominal–structural typing balance component receives a slightly lower weig
 \subsection{Abstraction and Encapsulation Mechanisms}
 
 \[
-    \alpha = 0.20, \quad \beta = 0.25, \quad \gamma = 0.25, \quad \delta = 0.30
+    \alpha = 0.20, \beta = 0.25, \gamma = 0.25, \delta = 0.30
 \]
 
 The highest weight is assigned to the encapsulation enforcement coefficient ($\delta = 0.30$), as enforcement mechanisms represent the final guarantee that abstraction boundaries are respected at runtime. Encapsulation, as originally formulated by Parnas, is fundamentally about information hiding to reduce system complexity and improve maintainability \cite{parnas1972criteria}. However, this principle is only effective if the language prevents unauthorised access to the internal state. 
@@ -31,7 +31,7 @@ The visibility granularity index receives the lowest weight ($\alpha = 0.20$), a
 \subsection{Inheritance Semantics and Hierarchy Management}
 
 \[
-\alpha = 0.20, \quad \beta = 0.25, \quad \gamma = 0.30, \quad \delta = 0.25
+\alpha = 0.20, \beta = 0.25, \gamma = 0.30, \delta = 0.25
 \]
 
 The highest weight is assigned to the constraint protection coefficient ($\gamma = 0.30$), as explicit language-level restrictions on inheritance are the primary mechanism for preventing incorrect or unsafe extension of class hierarchies. Unconstrained inheritance has long been recognised as a source of design fragility and unintended coupling. Meyer notes that unrestricted inheritance enables improper extension and redefinition, leading to violations of class invariants and behavioural contracts \cite{meyer1997object}. 
@@ -45,7 +45,7 @@ The hierarchy simplicity factor receives the lowest weight ($\alpha = 0.20$), as
 \subsection{Composition and Alternatives to Inheritance}
 
 \[
-\alpha = 0.30, \quad \beta = 0.35, \quad \gamma = 0.35
+\alpha = 0.30, \beta = 0.35, \gamma = 0.35
 \]
 
 The highest weights are assigned to trait expressiveness and interface composition capacity ($\beta = 0.35$, $\gamma = 0.35$), as these mechanisms provide the most semantically rich and scalable alternatives to classical inheritance. The shift toward composition over inheritance has been widely advocated in the literature. This principle is motivated by the need to reduce tight coupling and increase flexibility in system design. Trait and mixin systems represent a formalization of composition-based reuse. Similarly, interface composition capacity is highly significant, as modern languages increasingly extend interfaces beyond pure type declarations. 
@@ -56,7 +56,7 @@ The class-based delegation score receives a slightly lower weight ($\alpha = 0.3
 \subsection{Object Representation and Creation Model}
 
 \[
-\alpha = 0.35, \quad \beta = 0.30, \quad \gamma = 0.35
+\alpha = 0.35, \beta = 0.30, \gamma = 0.35
 \]
 
 The highest weights are assigned to identity semantics and meta-level extensibility ($\alpha = 0.35$, $\gamma = 0.35$), as these components directly determine the conceptual integrity and expressive power of the object model. 
@@ -71,7 +71,7 @@ The instantiation paradigm diversity component receives a slightly lower weight 
 \subsection{Polymorphism and Dispatch Mechanisms}
 
 \[
-\alpha = 0.35, \quad \beta = 0.35, \quad \gamma = 0.30
+\alpha = 0.35, \beta = 0.35, \gamma = 0.30
 \]
 
 The highest weights are assigned to dispatch scope and dispatch safety ($\alpha = 0.35$, $\beta = 0.35$), as these components fundamentally determine both the expressive capabilities and the semantic reliability of polymorphic behavior.
@@ -87,7 +87,7 @@ The virtualization optimization potential receives a slightly lower weight ($\ga
 \subsection{State Model, Mutability, and Concurrency Guarantees}
 
 \[
-    \alpha = 0.35, \quad \beta = 0.25, \quad \gamma = 0.40
+    \alpha = 0.35, \beta = 0.25, \gamma = 0.40
 \]
 
 The highest weight is assigned to the concurrency primitive safety component ($\gamma = 0.40$), as concurrency-related errors constitute one of the most critical and difficult classes of defects in modern software systems. As emphasized by \textit{Adve and Boehm}, data races lead to undefined or unpredictable behavior in most programming language memory models \cite{boehm2008foundations}. Languages that provide formal guarantees of race freedom or enforce structured concurrency significantly reduce the cognitive burden on developers and improve system reliability. Consequently, the ability of a language to provide safe and expressive concurrency primitives directly impacts its suitability for large-scale object-oriented systems.
@@ -100,7 +100,7 @@ The static reference constraint density component ($\beta = 0.25$) is assigned a
 \subsection{Support for Formal Specification and Verifiability}
 
 \[
-\alpha = 0.45, \quad \beta = 0.55
+\alpha = 0.45, \beta = 0.55
 \]
 
 The verification enforcement component ($\beta = 0.55$) is assigned a slightly higher weight, as the mere presence of specification constructs does not guarantee their practical effectiveness without enforcement mechanisms. Formal specifications only contribute to software reliability if they are systematically checked. Static verification, in particular, enables compile-time guarantees about program correctness, significantly reducing the risk of runtime failures. Meyer further argues that contracts are only meaningful when they are both documented and automatically checked \cite{meyer2002applying}. Therefore, enforcement—especially at compile time—plays a decisive role in ensuring that formal specifications are not merely descriptive but operational.
