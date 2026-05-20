@@ -4,7 +4,7 @@ The criteria defined in the previous chapter establish the basis for the analysi
 
 \subsection{Type System and Subtyping Model}
 
-The TSSI metric is based on research on language metrics and subtyping theory: the idea of representing language properties as normalized measurable components is taken from the work of \cite{fayzrakhmanov2022introducing}, and the distinction between nominal and structural typing, as well as the difference between inheritance and subtyping, is based on the study of \cite{cardelli1985understanding}. The component related to variance conceptually goes back to the formalization of parametric polymorphism and generic security generics in research on generic systems \cite{pierce2002types}.
+The Type System and Subtyping Soundness Index (TSSI) metric is based on research on language metrics and subtyping theory: the idea of representing language properties as normalized measurable components is taken from the work of \cite{fayzrakhmanov2022introducing}, and the distinction between nominal and structural typing, as well as the difference between inheritance and subtyping, is based on the study of \cite{cardelli1985understanding}. The component related to variance conceptually goes back to the formalization of parametric polymorphism and generic security generics in research on generic systems \cite{pierce2002types}.
 
 \subsubsection{Metric Definition}
 
@@ -121,7 +121,7 @@ Metric aimed for comparison of the number of module or namespace boundaaries tha
 \[
     M(L) = \frac{b_{strict}(L)}{b_{total}(L)}
 \]
-where $b_{strict}(L)$ is the amount of boundaries with enforced export control (e.g., modules with explicit export lists), and $b_{total}(L)$ is the total number of modularization constructs.
+where $b_{strict}(L)$ is the amount of boundaries with enforced export control (e.g., modules with explicit export lists), and $b_{total}(L)$ is the total number of modularisation constructs.
 
 
 \textbf{3) Interface Abstraction Capacity $I(L)$}
@@ -129,7 +129,7 @@ Measures the ability to separate specification from implementation (e.g., interf
 \[
     I(L) = \frac{n_{abstraction_constructs}(L)}{n_{object}(L)}
 \]
-where $n_{abstraction_constructs}(L)$ counts distinct language-level constructs dedicated to behavioral abstraction and $n_{object}(L)$ is the number of object-defining constructs.
+where $n_{abstraction\_constructs}(L)$ counts distinct language-level constructs dedicated to behavioural abstraction and $n_{object}(L)$ is the number of object-defining constructs.
 
 
 \textbf{4) Encapsulation Enforcement Coefficient $E(L)$}
@@ -183,11 +183,11 @@ Measures availability of hierarchy restriction mechanisms:
 \[
     C_p(L) = \frac{\sum_{i=1}^{k} p_i(L)}{k}
 \]
-where $p_i(L)$ — binary indicator defined шт specification.
+where $p_i(L)$ - binary indicator defined in specification.
 Сomparison includes:
 
 \begin{itemize}
-    \item $p_1$: Finalization of classes/methods (e.g., \texttt{final}, non-inheritable declarations)
+    \item $p_1$: finalisation of classes/methods (e.g., \texttt{final}, non-inheritable declarations)
     \item $p_2$: Sealed or closed hierarchies (restricted subclassing sets)
     \item $p_3$: Explicit override enforcement (mandatory \texttt{override} annotation)
     \item $p_4$: Non-virtual-by-default semantics
@@ -201,7 +201,7 @@ Reflects language-level safeguards against fragile base class effects:
 \[
     F_b(L) = \frac{\sum_{i=1}^{k} s_i(L)}{k}
 \]
-where $s_i(L)$ — binary variable reflecting whether safeguard $i$ is explicitly defined at the language specification level.
+where $s_i(L)$ - binary variable reflecting whether safeguard $i$ is explicitly defined at the language specification level.
 Comparison includes:
 \begin{itemize}
     \item $s_1$: Mandatory explicit override annotation (prevents accidental overriding)
@@ -214,7 +214,7 @@ Comparison includes:
 
 \subsection{Composition and Alternatives to Inheritance}
 
-For the CRFI metric: the key idea of paying сonsideration flexibility through traits and mixins taken from the works of \cite{scharli2003traits}. The component related to naming conflicts and requirements for the using class is based on the formalization of traits and their composition mechanisms \cite{scharli2003traits}. The idea of interpreting interfaces as carriers of behavior, not just contracts, is consistent with the evolution of default methods in languages with interfaces \cite{bracha2004generics}.
+For the CRFI metric: the key idea of paying сonsideration flexibility through traits and mixins taken from the works of \cite{scharli2003traits}. The component related to naming conflicts and requirements for the using class is based on the formalization of traits and their composition mechanisms \cite{scharli2003traits}. The idea of interpreting interfaces as carriers of behaviour, not just contracts, is consistent with the evolution of default methods in languages with interfaces \cite{bracha2004generics}.
 
 \subsubsection{Metric Definition}
 
@@ -312,7 +312,7 @@ where:
     \end{cases}
     \]
 \end{itemize}
-This parameter evaluates whether interfaces function solely as types or also as units of composable behavior, approaching the role of mixins.
+This parameter evaluates whether interfaces function solely as types or also as units of composable behaviour, approaching the role of mixins.
 
 \subsection{Object Representation and Creation Model}
 
@@ -381,7 +381,7 @@ $I_{max}$ is the maximum intercession level defined for the comparison languages
 
 \subsection{Polymorphism and Dispatch Mechanisms}
 
-The PDEI metric is based on research on polymorphism, multiple dispatch, and expression problem: the relationship between extensibility of behavior and the typical structure of language is discussed in \cite{castagna1995covariance}. The idea of separating secure dispatch from just dynamic dispatch is based on the formal criteria of exhaustion and compile-time correctness, and the final/sealed/static hints component is associated with de-virtualization and limiting late binding \cite{pierce2002types}.
+The PDEI metric is based on research on polymorphism, multiple dispatch, and expression problem: the relationship between extensibility of behaviour and the typical structure of language is discussed in \cite{castagna1995covariance}. The idea of separating secure dispatch from just dynamic dispatch is based on the formal criteria of exhaustion and compile-time correctness, and the final/sealed/static hints component is associated with de-Virtualisation and limiting late binding \cite{pierce2002types}.
 
 \subsubsection{Metric Definition}
 
@@ -444,7 +444,7 @@ where:
     \end{cases}
 \]
 
-\textbf{3) Virtualization Optimization Potential $O_{virt}(L)$}
+\textbf{3) Virtualisation Optimization Potential $O_{virt}(L)$}
 
 \[
 O_{virt}(L) = \frac{K_{final} + K_{sealed} + K_{static}}{3}
@@ -454,7 +454,7 @@ where:
 \begin{itemize}
     \item $K_{final} = 1$ if language support final/non-virtual methods; $0$ otherwise.
     \item $K_{sealed} = 1$ if language support sealed class hierarchies restricting subclassing; $0$ otherwise.
-    \item $K_{static} = 1$ if language support static dispatch hints (e.g., \texttt{static} methods, explicit devirtualization annotations); $0$ otherwise.
+    \item $K_{static} = 1$ if language support static dispatch hints (e.g., \texttt{static} methods, explicit deVirtualisation annotations); $0$ otherwise.
 \end{itemize}
 
 \subsection{State Model, Mutability, and Concurrency Guarantees}

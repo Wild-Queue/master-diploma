@@ -8,7 +8,7 @@ A fundamental issue in typed object-oriented languages concerns the conflation o
 
 The distinction between inheritance and subtyping stems from type-theoretic considerations. Cardelli and Wegner in their analysis of type systems establishes that inheritance as an implementation mechanism and subtyping represent orthogonal concerns \cite{cardelli1985understanding}. Their concepts demonstrates that subtyping relations require adherence to the Liskov substitution principle, whereas inheritance mechanisms impose additional constraints that compromise expressiveness \cite{pierce1994simple}. The consequence of this theoretical inconsistency is that inheritance-based type hierarchies cannot enforce type safety without either compromising expressiveness or  introducing type insecurities. Eiffel exemplifies this problem: by identifying classes with types and inheritance with subtyping, the language exhibits type insecurities as documented by Cardelli and Wegner \cite{cardelli1985understanding}.
 
-The following C\# example \ref{fig:csharp-inheritance-without-proper-subtyping} demonstrates how inheritance does not automatically guarantee proper subtyping behavior \ref{fig:csharp-inheritance-without-proper-subtyping-manifestation}, particularly with covariance and contravariance in method signatures:
+The following C\# example \ref{fig:csharp-inheritance-without-proper-subtyping} demonstrates how inheritance does not automatically guarantee proper subtyping behaviour \ref{fig:csharp-inheritance-without-proper-subtyping-manifestation}, particularly with covariance and contravariance in method signatures:
 
 \begin{figure}
     \centering
@@ -398,7 +398,7 @@ public class OrderItem {
     \label{fig:orderitem-support}
 \end{figure}
 
-The examples demonstrate two critical manifestations of excessive coupling in object-oriented systems. Figures \ref{fig:account-base} and \ref{fig:savings-derived} illustrate inheritance-induced coupling where \texttt{SavingsAccount} becomes dependent on implementation details of its parent \texttt{Account}: the protected field \texttt{balance}, the internal workflow sequence (deposit $\rightarrow$ log), and the assumption that \texttt{logTransaction()} executes after state modification. This breaks encapsulation because the subclass gains access to superclass internals that should remain hidden. Critically, any modification to \texttt{Account}'s implementation—renaming \texttt{balance}, reordering workflow steps, or changing \texttt{logTransaction()}'s signature—necessitates corresponding changes in \texttt{SavingsAccount}, creating ripple effects through the inheritance hierarchy. Figures~\ref{fig:order-circular} \ref{fig:customer-circular} \ref{fig:orderitem-support} exhibit architectural coupling through circular dependencies between \texttt{Order} and \texttt{Customer}, where each class maintains a direct reference to the other. This mutual dependency prevents independent reuse of either component, violates modular decomposition principles, and creates domino effects where changes to \texttt{Order}'s calculation logic (\texttt{calculateTotal()}) propagate unpredictably to \texttt{Customer.getLifetimeValue()}.
+The examples demonstrate two critical manifestations of excessive coupling in object-oriented systems. Figures \ref{fig:account-base} and \ref{fig:savings-derived} illustrate inheritance-induced coupling where \texttt{SavingsAccount} becomes dependent on implementation details of its parent \texttt{Account}: the protected field \texttt{balance}, the internal workflow sequence (deposit $\rightarrow$ log), and the assumption that \texttt{logTransaction()} executes after state modification. This breaks encapsulation because the subclass gains access to superclass internals that should remain hidden. Critically, any modification to \texttt{Account}'s implementation-renaming \texttt{balance}, reordering workflow steps, or changing \texttt{logTransaction()}'s signature-necessitates corresponding changes in \texttt{SavingsAccount}, creating ripple effects through the inheritance hierarchy. Figures~\ref{fig:order-circular} \ref{fig:customer-circular} \ref{fig:orderitem-support} exhibit architectural coupling through circular dependencies between \texttt{Order} and \texttt{Customer}, where each class maintains a direct reference to the other. This mutual dependency prevents independent reuse of either component, violates modular decomposition principles, and creates domino effects where changes to \texttt{Order}'s calculation logic (\texttt{calculateTotal()}) propagate unpredictably to \texttt{Customer.getLifetimeValue()}.
 
 \subsection{Multiple Inheritance and Ambiguity Resolution}
 
@@ -419,7 +419,7 @@ public:
     }
 };
     \end{minted}
-    \caption{Base class \texttt{Animal} defining shared state and behavior in diamond inheritance hierarchy}
+    \caption{Base class \texttt{Animal} defining shared state and behaviour in diamond inheritance hierarchy}
     \label{fig:diamond-animal}
 \end{figure}
 
@@ -428,7 +428,7 @@ public:
     \begin{minted}[breaklines=true,fontsize=\footnotesize]{cpp}
 class Mammal : public Animal {
     // NO override of breathe(); inherits Animal::breathe() directly
-    // NO modification of health initialization
+    // NO modification of health initialisation
 };
     \end{minted}
     \caption{Intermediate class \texttt{Mammal} inheriting from \texttt{Animal} without overriding base methods}
@@ -440,7 +440,7 @@ class Mammal : public Animal {
     \begin{minted}[breaklines=true,fontsize=\footnotesize]{cpp}
 class Bird : public Animal {
     // NO override of breathe(); inherits Animal::breathe() directly
-    // NO modification of health initialization
+    // NO modification of health initialisation
 };
     \end{minted}
     \caption{Intermediate class \texttt{Bird} inheriting from \texttt{Animal} without overriding base methods}
@@ -518,7 +518,7 @@ print(Bat.__mro__)          # Shows linearization path
     \label{fig:py-diamond-bat}
 \end{figure}
 
-In the C++ implementation (Figs. \ref{fig:diamond-animal}, \ref{fig:diamond-mammal}, \ref{fig:diamond-bird}, \ref{fig:diamond-bat}), class \texttt{Bat} contains two distinct subobjects of \texttt{Animal}—one through the \texttt{Mammal} path and another through the \texttt{Bird} path—each maintaining independent state (\texttt{health}). This duplication violates the object identity principle: a bat logically possesses a single health value, yet the inheritance model creates two physically separate instances. Access to inherited members becomes ambiguous at compile time, requiring explicit path qualification (\texttt{bat.Mammal::breathe()}) that exposes implementation details and defeats encapsulation. The Python implementation (Figs.~\ref{fig:py-diamond-animal} , \ref{fig:py-diamond-mammal}, \ref{fig:py-diamond-bird}, \ref{fig:py-diamond-bat}) mitigates lookup ambiguity through C3 linearization, but the fundamental conceptual problem persists: multiple inheritance paths to a single logical ancestor create tension between the inheritance graph's topology and the linear method resolution order. 
+In the C++ implementation (Figs. \ref{fig:diamond-animal}, \ref{fig:diamond-mammal}, \ref{fig:diamond-bird}, \ref{fig:diamond-bat}), class \texttt{Bat} contains two distinct subobjects of \texttt{Animal}-one through the \texttt{Mammal} path and another through the \texttt{Bird} path-each maintaining independent state (\texttt{health}). This duplication violates the object identity principle: a bat logically possesses a single health value, yet the inheritance model creates two physically separate instances. Access to inherited members becomes ambiguous at compile time, requiring explicit path qualification (\texttt{bat.Mammal::breathe()}) that exposes implementation details and defeats encapsulation. The Python implementation (Figs.~\ref{fig:py-diamond-animal} , \ref{fig:py-diamond-mammal}, \ref{fig:py-diamond-bird}, \ref{fig:py-diamond-bat}) mitigates lookup ambiguity through C3 linearization, but the fundamental conceptual problem persists: multiple inheritance paths to a single logical ancestor create tension between the inheritance graph's topology and the linear method resolution order. 
 
 \subsection{The Reusability Paradox}
 
@@ -602,15 +602,15 @@ public class InstrumentedSet<E> implements Set<E> {
     \label{fig:instrumented-set-composition}
 \end{figure}
 
-The inheritance-based approach in Fig.~\ref{fig:instrumented-hashset-inheritance} exemplifies the reusability paradox: despite leveraging inheritance to extend \texttt{HashSet}'s functionality, the derived class becomes tightly coupled to implementation details invisible in the public interface. Specifically, \texttt{HashSet.addAll()} internally invokes \texttt{add()} for each element—a behavioral detail not specified in the \texttt{Set} interface contract. Consequently, when clients invoke \texttt{addAll(\{'apple', 'banana', 'cherry'\})}, the counter increments six times (three via the overridden \texttt{addAll()} and three via subsequent \texttt{add()} calls), violating expectations. The composition-based solution in Fig.~\ref{fig:instrumented-set-composition} achieves reliable reuse by decoupling instrumentation logic from the underlying set implementation through explicit delegation.
+The inheritance-based approach in Fig.~\ref{fig:instrumented-hashset-inheritance} exemplifies the reusability paradox: despite leveraging inheritance to extend \texttt{HashSet}'s functionality, the derived class becomes tightly coupled to implementation details invisible in the public interface. Specifically, \texttt{HashSet.addAll()} internally invokes \texttt{add()} for each element-a behavioural detail not specified in the \texttt{Set} interface contract. Consequently, when clients invoke \texttt{addAll(\{'apple', 'banana', 'cherry'\})}, the counter increments six times (three via the overridden \texttt{addAll()} and three via subsequent \texttt{add()} calls), violating expectations. The composition-based solution in Fig.~\ref{fig:instrumented-set-composition} achieves reliable reuse by decoupling instrumentation logic from the underlying set implementation through explicit delegation.
 
 \subsection{State Management Complexity and Object Identity}
 
-Object-oriented systems organize code around mutable state encapsulated within objects. This approach fundamentally differs from functional programming's emphasis on immutability and pure functions. The combination of mutable state, object identity, and encapsulation creates complexity in reasoning about program behavior. When objects maintain mutable internal state, analyzing program correctness requires understanding not only the method calls but also the complete history of state modifications, increasing the difficulty of formal verification and testing.
+Object-oriented systems organize code around mutable state encapsulated within objects. This approach fundamentally differs from functional programming's emphasis on immutability and pure functions. The combination of mutable state, object identity, and encapsulation creates complexity in reasoning about program behaviour. When objects maintain mutable internal state, analyzing program correctness requires understanding not only the method calls but also the complete history of state modifications, increasing the difficulty of formal verification and testing.
 
 Reynolds' distinction between values (immutable, state-based equality) and entities (distinct identity, mutable state) illustrates the conceptual tension in OOP \cite{reynolds1985three}. In value-oriented systems, equality testing is unambiguous and immutability simplifies reasoning. In object-oriented systems, the notion of object identity introduces questions about whether two references point to the same object or equivalent objects, complications that functional approaches avoid entirely through immutable values.
 
-Furthermore, the emphasis on object identity creates problems in concurrent systems where mutable shared state becomes a liability. Multiple threads attempting to access and modify object state require extensive synchronization, complicating concurrent programming compared to functional approaches based on immutable data and pure transformations \cite{reynolds1985three}.
+Furthermore, the emphasis on object identity creates problems in concurrent systems where mutable shared state becomes a liability. Multiple threads attempting to access and modify object state require extensive synchronisation , complicating concurrent programming compared to functional approaches based on immutable data and pure transformations \cite{reynolds1985three}.
 
 \begin{figure}[htbp]
 \centering
@@ -692,7 +692,7 @@ Figure~\ref{fig:bankaccount} defines \texttt{BankAccount} as an entity with muta
 
 \subsection{Absence of Clear Separation Between Specification and Implementation}
 
-OOP languages typically conflate class specifications with implementation details through a single construct. Unlike languages supporting explicit separation between interfaces and implementations, OOP classes bundle these concerns, making it difficult to understand what behavior clients should depend upon versus what represents implementation-specific detail. This conflation particularly affects evolution and maintenance: modifications to implementation details that preserve external contracts can nonetheless break derived classes through the fragile base class problem.
+OOP languages typically conflate class specifications with implementation details through a single construct. Unlike languages supporting explicit separation between interfaces and implementations, OOP classes bundle these concerns, making it difficult to understand what behaviour clients should depend upon versus what represents implementation-specific detail. This conflation particularly affects evolution and maintenance: modifications to implementation details that preserve external contracts can nonetheless break derived classes through the fragile base class problem.
 
 \subsection{Empirical Evidence of Design Difficulties}
 
@@ -762,7 +762,7 @@ abstract class PaymentProcessor extends AbstractEnterpriseProcessor {
     }
 }
 \end{minted}
-\caption{Inheritance layer introducing payment and transaction persistence behavior.}
+\caption{Inheritance layer introducing payment and transaction persistence behaviour.}
 \label{fig:payment_processor}
 \end{figure}
 
@@ -866,7 +866,7 @@ class EnterpriseOrderProcessor extends RetryableProcessor {
 
 The example presented in Figures~\ref{fig:abstract_processor},\ref{fig:payment_processor},\ref{fig:fraud_processor},\ref{fig:retry_processor},\ref{fig:enterprise_processor} illustrates structural characteristics empirically associated with reduced maintainability and increased defect proneness in object-oriented systems.
 
-First, the hierarchy exhibits a Depth of Inheritance Tree (DIT) equal to five. Understanding the runtime behavior of the \texttt{process} operation requires analysis across multiple abstraction layers. It has been empirically correlated with decreased comprehensibility and increased maintenance effort.
+First, the hierarchy exhibits a Depth of Inheritance Tree (DIT) equal to five. Understanding the runtime behaviour of the \texttt{process} operation requires analysis across multiple abstraction layers. It has been empirically correlated with decreased comprehensibility and increased maintenance effort.
 
 Second, the final concrete class demonstrates high Coupling Between Object classes (CBO). The \texttt{EnterpriseOrderProcessor} directly depends on numerous infrastructural and domain services. When combined with inherited dependencies from ancestor classes, the total number of external collaborators exceeds fifteen distinct services. High CBO values have been consistently associated with increased fault proneness and testing complexity.
 
@@ -883,7 +883,7 @@ The critical examination conducted in the preceding subsections reveals a cohere
 
     \item \textbf{Compositional and Reusability Deficiencies:} Contrary to its core promises, OOP often hinders effective code reuse. The \textit{Reusability Paradox} highlights that deep inheritance hierarchies bind classes to extensive implementation dependency graphs, making isolated reuse difficult. Furthermore, the challenges of \textit{Multiple Inheritance}, such as the diamond problem, demonstrate the paradigm's struggle to manage complexity when composing behaviors from multiple sources.
 
-    \item \textbf{State Management and Concurrency Deficiencies:} The paradigm's emphasis on mutable state and object identity complicates reasoning about program behavior, especially in concurrent and distributed environments. The need to manage and synchronize shared mutable state stands in stark contrast to the simplicity offered by immutable data models, making OOP a suboptimal choice for highly concurrent systems.
+    \item \textbf{State Management and Concurrency Deficiencies:} The paradigm's emphasis on mutable state and object identity complicates reasoning about program behaviour, especially in concurrent and distributed environments. The need to manage and synchronize shared mutable state stands in stark contrast to the simplicity offered by immutable data models, making OOP a suboptimal choice for highly concurrent systems.
 
     \item \textbf{Design and Evolvability Deficiencies:} The absence of a clear separation between specification and implementation within the class construct impedes system evolution and maintenance. This, combined with the inherent coupling, leads to well-documented design anti-patterns. Empirical evidence, including software metrics and the proliferation of design patterns, confirms a systematic tendency toward complex, tightly coupled designs that are fault-prone and difficult to comprehend.
 \end{enumerate}

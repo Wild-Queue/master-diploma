@@ -19,7 +19,7 @@ $object-oriented = data\space abstractions + object\space types + type\space inh
 Booch, in his seminal work Object-Oriented Analysis and Design with Applications, describes the object model as a conceptual representation of the organized complexity of software systems \cite{booch2008object}.
 
 \begin{quote}
-    Booch (p. 40-41) concludes that the conceptual framework for anything object-oriented is the object model—a conceptual representation of the organized complexity of software. It consists of four major elements, i.e. abstraction, encapsulation, modularity, and hierarchy. In addition, the object model contains three minor element, i.e. typing, concurrency, and persistence.
+    Booch (p. 40-41) concludes that the conceptual framework for anything object-oriented is the object model-a conceptual representation of the organized complexity of software. It consists of four major elements, i.e. abstraction, encapsulation, modularity, and hierarchy. In addition, the object model contains three minor element, i.e. typing, concurrency, and persistence.
 \end{quote} 
 
 This distinction between major and minor elements is fundamental: without the major elements, the model ceases to be object-oriented, whereas the minor elements are useful but not essential for supporting object orientation.
@@ -31,23 +31,23 @@ The four major components of the object model form the fundamental basis on whic
 
 \subsubsection{Abstraction}
 
-Abstraction is the process of extracting essential characteristics of an object or concept while suppressing unnecessary implementation details. As Liskov \cite{liskov1987keynote} emphasizes, data abstraction is a valuable method for organizing programs to make them easier to modify and maintain. 
+Abstraction is the process of extracting essential characteristics of an object or concept while suppressing unnecessary implementation details. As Liskov \cite{liskov1987keynote} emphasises, data abstraction is a valuable method for organizing programs to make them easier to modify and maintain. 
 
 According to Liskov's foundational work \cite{liskov1987keynote}, a data abstraction is characterized by the separation of what an abstraction is from how it is implemented, such that implementations of the same abstraction can be substituted freely. The implementation of a data object is concerned with how that object is represented in memory, and this information is hidden from programs that use the abstraction by restricting those programs so that they cannot manipulate the representation directly, but instead must call the operations defined by the abstraction.
 
 \subsubsection{Encapsulation}
 
-Encapsulation is the bundling of data (attributes) and the methods that operate on that data into a single cohesive unit, typically implemented as a class. More importantly, encapsulation involves the enforcement of access controls that restrict direct manipulation of an object's internal state. This concept originated from Parnas's pioneering work on information hiding \cite{parnas1972criteria}, which established the principle that modules should be designed such that they hide information from other modules—information that is likely to change. Parnas \cite{parnas1972criteria} articulated this principle by stating: 
+Encapsulation is the bundling of data (attributes) and the methods that operate on that data into a single cohesive unit, typically implemented as a class. More importantly, encapsulation involves the enforcement of access controls that restrict direct manipulation of an object's internal state. This concept originated from Parnas's pioneering work on information hiding \cite{parnas1972criteria}, which established the principle that modules should be designed such that they hide information from other modules-information that is likely to change. Parnas \cite{parnas1972criteria} articulated this principle by stating: 
 
 \begin{quote}
     Every module in the second decomposition is characterized by its knowledge of a design decision which it hides from all others. Its interface or definition was chosen to reveal as little as possible about its inner workings. 
 \end{quote}
 
-Encapsulation hides the internal representation of an object from external access, enabling interaction with the object exclusively through its public interface—a set of methods specifically provided for this purpose. Besides providing data protection, encapsulation provides a stable interface that allows developers to refactor and optimize the internal implementation without affecting dependent code. 
+Encapsulation hides the internal representation of an object from external access, enabling interaction with the object exclusively through its public interface-a set of methods specifically provided for this purpose. Besides providing data protection, encapsulation provides a stable interface that allows developers to refactor and optimize the internal implementation without affecting dependent code. 
 
 \subsubsection{Modularity}
 
-The principle of modularity is designing software systems as sets of discrete, independent units or components that can be designed, implemented, and maintained separately. Parnas' \cite{parnas1972criteria} fundamental idea of modular decomposition: modules should be designed and implemented independently, be simple enough to be fully understandable, and allow changing the implementation of a module without affecting the behavior of other modules.
+The principle of modularity is designing software systems as sets of discrete, independent units or components that can be designed, implemented, and maintained separately. Parnas' \cite{parnas1972criteria} fundamental idea of modular decomposition: modules should be designed and implemented independently, be simple enough to be fully understandable, and allow changing the implementation of a module without affecting the behaviour of other modules.
 
 In object-oriented programming, modularity comes about by packaging classes and objects into coherent units with well-defined boundaries and minimal interdependencies. According to Liskov \cite{liskov1987keynote}, the data abstractions offer a mechanism to structure the programs into modules in which each module is responsible for implementing an abstraction.
 
@@ -55,11 +55,11 @@ In object-oriented programming, modularity comes about by packaging classes and 
 
 Hierarchy is the organization of abstractions into ordered structures in which more general or abstract concepts are connected to more specific or concrete concepts through “is-a” and “part of” relationships. In object-oriented programming, hierarchy is implemented using two main mechanisms: inheritance hierarchies and composition hierarchies.
 
-In inheritance hierarchies, classes are organized into tree-like or lattice structures in which subclasses inherit attributes and behavior from their superclasses. The principle underlying such structures is Liskov's substitution principle, formulated by Liskov \cite{liskov1987keynote} and formalized in subsequent works \cite{liskov1999behavioral}. This principle states that objects of a base type must be replaceable with objects of derived types without changing the correctness of the program. 
+In inheritance hierarchies, classes are organized into tree-like or lattice structures in which subclasses inherit attributes and behaviour from their superclasses. The principle underlying such structures is Liskov's substitution principle, formulated by Liskov \cite{liskov1987keynote} and formalized in subsequent works \cite{liskov1999behavioral}. This principle states that objects of a base type must be replaceable with objects of derived types without changing the correctness of the program. 
 
 In composition hierarchies, objects combine simpler objects through a “part-of” relationship, creating structures where complex objects are aggregates from simpler components. This organizational principle allows systems of any complexity to be built from well-understood, reusable building blocks. As noted in the seminal work on design patterns \cite{gamma1995design}, composition provides a more flexible alternative to inheritance, allowing changes to be made to the relationships between objects at runtime that would otherwise be fixed at compile time.
 
-Hierarchy provides several critical benefits: it enables the management of complexity through layered abstraction; it promotes code reuse through inheritance of common behavior; it establishes natural relationships between concepts that mirror real-world domain structures; and it facilitates polymorphism and dynamic dispatch, allowing for flexible, extensible program architectures.
+Hierarchy provides several critical benefits: it enables the management of complexity through layered abstraction; it promotes code reuse through inheritance of common behaviour; it establishes natural relationships between concepts that mirror real-world domain structures; and it facilitates polymorphism and dynamic dispatch, allowing for flexible, extensible program architectures.
 
 \subsection{Minor Components of the Object Model}
 
@@ -85,4 +85,4 @@ The object model includes persistence through various approaches. The orthogonal
 
 Based on the conducted literature review, the following definition of the object model is adopted for the purposes of this work:
 
-The object model is a conceptual framework that integrates a set of interrelated components — four major ones (abstraction, encapsulation, modularity, and hierarchy) and three minor ones (typing, concurrency, and persistence). It defines the means by which a programming language represents, organizes, and supports objects, classes, their interactions, inheritance relationships, mechanisms of polymorphism, and other related abstractions for the effective management of software system complexity.
+The object model is a conceptual framework that integrates a set of interrelated components - four major ones (abstraction, encapsulation, modularity, and hierarchy) and three minor ones (typing, concurrency, and persistence). It defines the means by which a programming language represents, organizes, and supports objects, classes, their interactions, inheritance relationships, mechanisms of polymorphism, and other related abstractions for the effective management of software system complexity.

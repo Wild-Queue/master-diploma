@@ -1,7 +1,7 @@
 % Zonnon 
 \subsection{Metrics Evaluation for Zonnon}
 
-Zonnon is a statically-typed, object-oriented language in the Pascal/Modula-2/Oberon lineage, designed with an emphasis on abstraction unification, concurrency, and modular composition \cite{gutknecht2004zonnon}. Its object model is centered around four primary constructs—\textit{module}, \textit{object}, \textit{definition}, and \textit{implementation}—which collectively define both structural and behavioral aspects of programs. The language explicitly separates interface specification (\textit{definitions}) from implementation and supports concurrency via active objects and protocol-controlled interactions. In this section, we compute the proposed object-model metrics based strictly on the formal language specification.
+Zonnon is a statically-typed, object-oriented language in the Pascal/Modula-2/Oberon lineage, designed with an emphasis on abstraction unification, concurrency, and modular composition \cite{gutknecht2004zonnon}. Its object model is centered around four primary constructs-\textit{module}, \textit{object}, \textit{definition}, and \textit{implementation}-which collectively define both structural and behavioural aspects of programs. The language explicitly separates interface specification (\textit{definitions}) from implementation and supports concurrency via active objects and protocol-controlled interactions. In this section, we compute the proposed object-model metrics based strictly on the formal language specification.
 
 \subsubsection{Type System and Subtyping Model}
 
@@ -22,7 +22,7 @@ Conversely, there is no evidence of structural subtyping based solely on shape c
 
 \textbf{2) Variance Formalization Score $S_{var}(L)$}
 
-Zonnon does not support parametric polymorphism (generics) or type constructors with variance annotations. It relies on object types, definitions (interfaces), and explicit implementation relations without any mechanism for parameterized type abstraction. Consequently, variance cannot be expressed at the language level.
+Zonnon does not support parametric polymorphism (generics) or type constructors with variance annotations. The language relies on object types, definitions (interfaces), and explicit implementation relations without any mechanism for parameterised type abstraction. Variance cannot be expressed at the language level.
 Furthermore, since variance is not part of the type system, there are no formal rules, constraints, or proofs of soundness related to variance in the specification.
 
 \[
@@ -82,9 +82,11 @@ Zonnon provides explicit visibility modifiers \texttt{private} and \texttt{publi
 
 \textbf{2) Module Isolation Strength $M(L)$}
 
-The language defines four primary program units: \texttt{module}, \texttt{object}, \texttt{definition}, and \texttt{implementation}, which together form the basis of program composition and encapsulation. 
-Among these, \texttt{module}, \texttt{definition}, and \texttt{object} enforce strict export control via explicit use of visibility modifiers (e.g., \texttt{public}) and require explicit \texttt{import} declarations for external access, thereby acting as boundaries with enforced interface exposure. 
-In contrast, \texttt{implementation} serves as a reusable code container aggregated into other units and does not independently enforce a strict export boundary.
+The language defines four basic programming units: \texttt{module}, \texttt{object}, \texttt{definition}, and \texttt{implementation}. They provide program composition and encapsulation.
+
+\texttt{module}, \texttt{definition}, and \texttt{object} control exports through visibility modifiers and require explicit use of \texttt{import} for external access. These units define the boundaries of the interfaces.
+
+\texttt{implementation} serves as a container for code reuse and does not set its own export boundaries.
 
 \[
     M(\text{Zonnon})=\frac{3}{4} = 0.75
@@ -93,7 +95,7 @@ In contrast, \texttt{implementation} serves as a reusable code container aggrega
 \textbf{3) Interface Abstraction Capacity $I(L)$}
 
 The language defines \texttt{definition} as a dedicated abstraction construct representing an interface (a set of method signatures and fields), clearly decoupled from implementation, while \texttt{implementation} provides reusable method bodies, and \texttt{object} serves as the concrete type that implements one or more definitions via the \texttt{implements} clause \cite{gutknecht2004zonnon}. 
-Additionally, \texttt{protocol} types describe interaction behavior but are primarily oriented toward concurrency rather than general interface abstraction, and thus are not counted as core abstraction constructs.
+Additionally, \texttt{protocol} types describe interaction behaviour but are primarily oriented toward concurrency rather than general interface abstraction, and thus are not counted as core abstraction constructs.
 
 \[
 \begin{aligned}
@@ -134,7 +136,7 @@ According to the specification, Zonnon does not support class-based inheritance 
 
 \textbf{2) Linearization Determinism Score $L_d(L)$}
 
-The language does not support class inheritance hierarchies and therefore does not require a method resolution order (MRO) for multiple inheritance. Instead, behavior composition is achieved through explicit \texttt{implements} relations with \texttt{definition}s and optional aggregation from \texttt{implementation} units, where method bindings are statically defined and unambiguous at compile time \cite{gutknecht2004zonnon}. Since there is no inheritance-based method overriding chain requiring linearization, and all method resolutions are explicitly specified and deterministic by construction, the language effectively satisfies the strongest determinism condition.
+The language does not support class inheritance hierarchies and therefore does not require a method resolution order (MRO) for multiple inheritance. Instead, behaviour composition is achieved through explicit \texttt{implements} relations with \texttt{definition}s and optional aggregation from \texttt{implementation} units, where method bindings are statically defined and unambiguous at compile time \cite{gutknecht2004zonnon}. The language does not use method redefinition chains through inheritance. The language resolves all methods explicitly and deterministically.
 
 \[
     L_d(\text{Zonnon})=1
@@ -166,7 +168,7 @@ $s_1=0$: Zonnon does not require mandatory \texttt{override} annotations.
 
 $s_2=1$: Zonnon enforces strict visibility control through module-based encapsulation and access modifiers, limiting unintended exposure of overridable members.
 
-$s_3=0$: Zonnon does not mandate explicit superclass invocation (e.g., enforced \texttt{super} calls).
+$s_3=0$: Zonnon does not mandate explicit superclass invocation.
 
 $s_4=1$: Zonnon relies on a statically typed system with type-safe method redefinitions, implying basic variance safety. 
 
@@ -207,7 +209,7 @@ Zonnon does not include mechanisms for automatic forwarding of method calls (i.e
 \textbf{2) Trait Expressiveness Score $T_{exp}(L)$}
 
 Zonnon does not provide traits or mixins as first-class language constructs. It supports composition via \texttt{implementation} aggregation and interface conformance via \texttt{definition}. In cases where multiple implementations introduce conflicting method names, the specification requires explicit resolution at the object level, and there is no support for aliasing or exclusion mechanisms, conflicts result in a compilation requirement for disambiguation. 
-Additionally, \texttt{implementation} units do not declare behavioral requirements on consuming objects (unlike traits with required methods). They are purely containers of reusable code without constraint specification.
+Additionally, \texttt{implementation} units do not declare behavioural requirements on consuming objects (unlike traits with required methods). They are purely containers of reusable code without constraint specification.
 
 \[
     T_{exp}(\text{Zonnon})=0
@@ -216,7 +218,7 @@ Additionally, \texttt{implementation} units do not declare behavioral requiremen
 \textbf{3) Interface Composition Capacity $I_{comp}(L)$}
 
 In Zonnon, \texttt{object} types can implement multiple \texttt{definition}s (interfaces) via the \texttt{implements} clause without any specified upper bound, implying unrestricted interface composition \cite{gutknecht2004zonnon}. 
-However, \texttt{definition} constructs serve purely as abstract interfaces containing field declarations and method signatures. They do not allow method implementations, as behavior is provided separately via \texttt{implementation} or directly within \texttt{object}s.
+However, \texttt{definition} constructs serve purely as abstract interfaces containing field declarations and method signatures. They do not allow method implementations, as behaviour is provided separately via \texttt{implementation} or directly within \texttt{object}s.
 
 \[
 \begin{aligned}
@@ -238,7 +240,7 @@ However, \texttt{definition} constructs serve purely as abstract interfaces cont
 
 \textbf{1) Identity Semantics Score $S_{id}(L)$}
 
-According to the specification, the primary user-definable types are \texttt{object} and \texttt{record}. Objects in Zonnon can be declared with modifiers \texttt{ref} (reference semantics) or \texttt{value} (value semantics), with \texttt{value} being the default, while \texttt{record} is explicitly defined as a value object type \cite{gutknecht2004zonnon}. Since reference semantics are not enforced uniformly across all user-defined types—only optionally for \texttt{object} types—there is no type category that strictly enforces reference semantics by definition.
+According to the specification, the primary user-definable types are \texttt{object} and \texttt{record}. Objects in Zonnon can be declared with modifiers \texttt{ref} (reference semantics) or \texttt{value} (value semantics), with \texttt{value} being the default, while \texttt{record} is explicitly defined as a value object type \cite{gutknecht2004zonnon}. Since reference semantics are not enforced uniformly across all user-defined types-only optionally for \texttt{object} types-there is no type category that strictly enforces reference semantics by definition.
 
 Zonnon distinguishes value and reference objects:
 
@@ -260,7 +262,7 @@ The specification defines instantiation primarily via the \texttt{new} operator,
 
 \textbf{3) Meta-level Extensibility Score $S_{meta}(L)$}
 
-The specification defines a reflection mechanism that enables querying program structure and metadata (e.g., via XML schema representations), allowing inspection of types, declarations, and program composition at runtime \cite{gutknecht2004zonnon}. However, there is no support for modifying object structures dynamically, nor for altering the instantiation process or introducing metaobject protocols. Thus, Zonnon provides introspection without structural or behavioral intercession.
+The specification defines a reflection mechanism that enables querying program structure and metadata (e.g., via XML schema representations), allowing inspection of types, declarations, and program composition at runtime \cite{gutknecht2004zonnon}. However, there is no support for modifying object structures dynamically, nor for altering the instantiation process or introducing metaobject protocols. Thus, Zonnon provides introspection without structural or behavioural intercession.
 
 \[
     I_{level}(\text{JS/Python/Ruby}) = 3 \Rightarrow
@@ -281,11 +283,11 @@ The specification defines a reflection mechanism that enables querying program s
 
 \textbf{1) Dispatch Scope Mechanism $M_{scope}(L)$}
 
-Zonnon supports single dispatch, where method invocation is determined by the dynamic type of the receiver object (i.e., receiver-based method binding) \cite{gutknecht2004zonnon}. 
+Zonnon supports single dispatch. The language defines a method call based on the dynamic type of the recipient object \cite{gutknecht2004zonnon}. 
 
 $I_{single}=1$
 
-However, the language does not support multiple dispatch, as method selection is not based on the runtime types of multiple arguments.
+The language does not support multiple dispatch. The method selection is not based on the runtime types of multiple arguments.
 
 $I_{multi}=0$
 
@@ -314,7 +316,7 @@ $I_{exhaust}(\text{Zonnon})=0$
     S_{disp}(\text{Zonnon})=\frac{1 + 0}{2} = 0.5
 \]
 
-\textbf{3) Virtualization Optimization Potential $O_{virt}(L)$}
+\textbf{3) Virtualisation Optimization Potential $O_{virt}(L)$}
 
 Zonnon does not support classical method overriding or virtual dispatch. All methods are effectively non-virtual due to the absence of class inheritance and overriding semantics, which corresponds to implicit support for final methods \cite{gutknecht2004zonnon}.
 
@@ -354,7 +356,7 @@ The \texttt{object} types are mutable by default, allowing modification of their
 
 \textbf{2) Static Reference Constraint Density $S_{dens}(L)$}
 
-The language provides reference semantics primarily through \texttt{ref} objects and implicitly via object references, which constitute reference-related constructs alongside qualifiers such as \texttt{immutable} that affect reference behavior \cite{gutknecht2004zonnon}. 
+The language provides reference semantics primarily through \texttt{ref} objects and implicitly via object references, which constitute reference-related constructs alongside qualifiers such as \texttt{immutable} that affect reference behaviour \cite{gutknecht2004zonnon}. 
 
 $N_{ref}(\text{Zonnon})=2$ (reference objects via \texttt{ref}, and reference qualifiers such as \texttt{immutable}). 
 
@@ -374,11 +376,11 @@ $N_{constr}(\text{Zonnon}) = 2$
 
 \textbf{3) Concurrency Primitive Safety $P_{conc}(L)$}
 
-The language introduces concurrency through \texttt{activity} constructs, which encapsulate independent threads of execution and communicate via well-defined interfaces and synchronization mechanisms, resembling an actor-like model \cite{gutknecht2004zonnon}. However, the specification does not provide formal guarantees of data race freedom enforced by the type system. The shared state may still be accessed, and correctness relies on disciplined use of synchronization constructs.
+The language introduces concurrency through \texttt{activity} constructs, which encapsulate independent threads of execution and communicate via well-defined interfaces and synchronisation mechanisms, resembling an actor-like model \cite{gutknecht2004zonnon}. However, the specification does not provide formal guarantees of data race freedom enforced by the type system. The shared state may still be accessed, and correctness relies on disciplined use of synchronisation constructs.
 
 $S_{race}(\text{Zonnon})=0$
 
-On the other hand, the active object model represents a higher-level abstraction compared to raw threads and locks, as it structures concurrency around object interaction and implicit synchronization, aligning partially with actor-like paradigms but without strict isolation guarantees. It corresponds to structured/high-level primitives.
+On the other hand, the active object model represents a higher-level abstraction compared to raw threads and locks, as it structures concurrency around object interaction and implicit synchronisation , aligning partially with actor-like paradigms but without strict isolation guarantees. It corresponds to structured/high-level primitives.
 
 $S_{model}(\text{Zonnon})=0.5$
 

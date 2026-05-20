@@ -6,7 +6,7 @@ When developing object models for programming language, a systematic and reprodu
 
 The selection of comparison criteria is justified by a number of fundamental works on programming language design. Cardelli and Wegner \cite{cardelli1985understanding} established three key requirements for defining an object-oriented language: support for objects as data abstractions, the association of objects with a specific type, and type inheritance. These requirements form a basic classification of languages and allow one to distinguish object-oriented languages from those that merely support some object-based features.
 
-Booch \cite{booch2008object} defined four core elements of the object model~--- abstraction, encapsulation, modularity, and hierarchy~--- as well as three secondary elements~--- as well as three secondary elements—typing, concurrency, and persistence. According to Booch, without the core elements, a model ceases to be object-oriented; however, the secondary elements significantly impact the model's practical applicability. This hierarchical approach to identifying elements helps determine which language characteristics are critical.
+Booch \cite{booch2008object} defined four core elements of the object model~--- abstraction, encapsulation, modularity, and hierarchy~--- as well as three secondary elements~--- as well as three secondary elements-typing, concurrency, and persistence. According to Booch, without the core elements, a model ceases to be object-oriented; however, the secondary elements significantly impact the model's practical applicability. This hierarchical approach to identifying elements helps determine which language characteristics are critical.
 
 The methodology for evaluating programming languages is based on a comprehensive approach discussed in works on language assessment criteria. Sebesta \cite{sebesta2016concepts} proposed four primary criteria for evaluating languages: readability, writability, reliability, and cost. Furthermore, readability and writability depend on a wide range of language characteristics, including syntactic simplicity, support for abstraction, and orthogonality. Modern works on code quality and software maintainability emphasize the importance of metrics such as modularity, reusability, analyzability, and modifiability \cite{iso25010}, which are directly influenced by the characteristics of a specific language's object model.
 
@@ -93,19 +93,19 @@ This dimension determines object identity semantics, dispatch strategy, and layo
 
 Polymorphism is central to OOP theory. The comparison must distinguish between static (compile-time) and dynamic (runtime) dispatch and evaluate trade-offs between flexibility and predictability.
 
-\textbf{Relevance:} Dispatch rules determine behavioral substitutability and performance characteristics.
+\textbf{Relevance:} Dispatch rules determine behavioural substitutability and performance characteristics.
 
 \subsubsection{7. State Model, Mutability, and Concurrency Guarantees}
 
 Reynolds distinguishes between values and entities, highlighting the conceptual implications of mutable object identity \cite{reynolds1985three}. Mutable shared state complicates reasoning, particularly under concurrency.
 
-Languages differ in whether they enforce immutability by default, provide ownership models, or rely on synchronization primitives. This dimension is essential for evaluating architectural scalability and suitability for concurrent systems.
+Languages differ in whether they enforce immutability by default, provide ownership models, or rely on synchronisation primitives. This dimension is essential for evaluating architectural scalability and suitability for concurrent systems.
 
 \textbf{Relevance:} Increasingly critical in modern multi-core environments.
 
 \subsubsection{8. Support for Formal Specification and Verifiability}
 
-The theoretical separation between behavioral subtyping and implementation inheritance \cite{cook1989inheritance} implies the need for explicit contracts. Languages that support invariants, preconditions, and postconditions allow formal reasoning about substitutability.
+The theoretical separation between behavioural subtyping and implementation inheritance \cite{cook1989inheritance} implies the need for explicit contracts. Languages that support invariants, preconditions, and postconditions allow formal reasoning about substitutability.
 
 The absence of clear separation between specification and implementation has been identified as a structural weakness of mainstream OOP systems \cite{mikhajlov1998study}. Thus, the methodology assesses the availability of contract models and formal type semantics.
 
@@ -116,8 +116,8 @@ The absence of clear separation between specification and implementation has bee
 Certain criteria from the initial list were excluded:
 
 \begin{itemize}
-    \item \textit{Exception handling} — although relevant to language philosophy, it does not directly define the object model architecture.
-    \item \textit{Packages and modular organization} — considered secondary to encapsulation and hierarchy, already captured under modular abstraction.
-    \item \textit{Persistence} — treated as an orthogonal runtime concern rather than a defining structural property.
-    \item \textit{Metaprogramming} — important for language flexibility but not foundational for object model semantics.
+    \item \textit{Exception handling} - although relevant to language philosophy, it does not directly define the object model architecture.
+    \item \textit{Packages and modular organization} - considered secondary to encapsulation and hierarchy, already captured under modular abstraction.
+    \item \textit{Persistence} - treated as an orthogonal runtime concern rather than a defining structural property.
+    \item \textit{Metaprogramming} - important for language flexibility but not foundational for object model semantics.
 \end{itemize}

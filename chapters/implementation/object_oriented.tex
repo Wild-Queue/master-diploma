@@ -4,9 +4,7 @@
 
 \subsection{Metrics Evaluation for C\#}
 
-\subsubsection{Introduction}
-
-C\# is a statically typed, object-oriented programming language standardized as ECMA-334 and commonly used in conjunction with the Common Language Runtime (CLR) \cite{ecma334}. The type system and object model include nominal typing, interface-based abstraction, and managed runtime semantics.
+C\# is a statically typed, object-oriented programming language standardised as ECMA-334 and commonly used in conjunction with the Common Language Runtime (CLR) \cite{ecma334}. The type system and object model include nominal typing, interface-based abstraction, and managed runtime semantics.
 
 In this section, we evaluate the language against the defined metrics, grounding each assessment in the formal specification and relevant academic literature.
 
@@ -73,8 +71,8 @@ $M(\text{C\#}) = 0$
 
 \textbf{3) Interface Abstraction Capacity $I(L)$}
 
-C\# provides interfaces, abstract classes and delegate for construction dedecited to behavior abstraction
-C\# provides class, struct, record and record struct for construction dedecited to behavior abstraction
+C\# provides interfaces, abstract classes and delegate for construction dedecited to behaviour abstraction
+C\# provides class, struct, record and record struct for construction dedecited to behaviour abstraction
 
 $I(\text{C\#}) = \frac{3}{4} = 0.75$
 
@@ -112,7 +110,7 @@ $L_d(\text{C\#}) = 1$
 
 \textbf{3) Constraint Protection Coefficient $C_p(L)$}
 
-$p_1=1$: C\# provides explicit finalization mechanisms via the \texttt{sealed} modifier for classes and methods, preventing further inheritance or overriding. 
+$p_1=1$: C\# provides explicit finalisation mechanisms via the \texttt{sealed} modifier for classes and methods, preventing further inheritance or overriding. 
 
 $p_2=0$: while \texttt{sealed} prevents extension, C\# does not support fully closed hierarchies with enumerated subclasses (as in algebraic data types), thus lacking strict sealed hierarchy sets. 
 
@@ -131,17 +129,17 @@ $p_6=1$: the compiler enforces multiple inheritance restrictions (e.g., no multi
 
 \textbf{4) Fragile Base Mitigation Factor $F_b(L)$}
 
-$s_1=1$: C\# requires explicit \texttt{override} annotations, preventing accidental overriding. 
+$s_1=1$: C\# requires explicit \texttt{override} annotations, guarding against inadvertent overriding.
 
-$s_2=1$: strict access modifiers (e.g., \texttt{private}, \texttt{protected}, \texttt{internal}) control the visibility and overridability of members, limiting unintended exposure. 
+$s_2=1$: strict access modifiers (e.g., \texttt{private/protected/internal}) control visibility and overridability of members. 
 
-$s_3=0$: invocation of base class implementations via \texttt{base} is optional rather than mandatory, thus not enforcing controlled superclass delegation. 
+$s_3=0$: invocation of base class implementations via \texttt{base} is optional, so it does not enforce controlled superclass delegation. 
 
-$s_4=1$: C\# enforces variance rules (covariance and contravariance) in generics and method overriding to preserve type safety. 
+$s_4=1$: the language enforces variance (covariance and contravariance) rules in generics and method overriding. 
 
-$s_5=1$: methods are non-virtual by default, requiring explicit opt-in for polymorphic behavior. 
+$s_5=1$: methods are non-virtual by default and requires explicit opt-in to any polymorphic behaviour. 
 
-$s_6=1$: the compiler enforces strict override consistency, including signature matching and return type compatibility. 
+$s_6=1$: the compiler enforces strict override consistency, requiring signature matching and return type compatibility. 
 
 \[
     F_b(\text{C\#}) = \frac{1+1+0+1+1+1}{6} = \frac{5}{6} \approx 0.83
@@ -220,7 +218,7 @@ In the C\# language, four semantically different paradigms of object creation ar
 
 \begin{itemize}
     \item $Constructor-based (new)$ defined by the specification as the main mechanism for creating instances of reference and meaningful types.
-    \item $Literal initialization$  allows the creation of objects without explicitly calling the constructor at the syntax level.
+    \item $Literal initialisation$  allows the creation of objects without explicitly calling the constructor at the syntax level.
     \item $Copying instantiation (\texttt{with} expressions for \texttt{record})$ implementing non-destructive mutation and representing a separate functional creation model.
     \item $Stack memory (stackalloc)$ provides an alternative model for managing the lifetime of objects outside of heap allocation
 \end{itemize}
@@ -258,15 +256,15 @@ However, C\# does not support the meta-object protocol and does not allow the ob
 
 \textbf{1) Dispatch Scope Mechanism $M_{scope}(L)$}
 
-C\# natively supports single dispatch via virtual method invocation, where method resolution depends on the runtime type of the receiver.
+C\# natively supports single dispatch via virtual method invocation. The method resolution depends on the runtime type of the receiver.
 
 $I_{single}(\text{C\#})=1$
 
-However, it does not provide true multiple dispatch, as method overloading is resolved at compile time and does not consider the runtime types of all arguments.
+The language does not provide true multiple dispatch, because method overloading is resolved at compile time and does not consider the runtime types of all arguments.
 
 $I_{multi}(\text{C\#})=0$ 
 
-The language supports a form of predicate-based dispatch through pattern matching constructs (e.g., \texttt{switch} expressions with guards and \texttt{is}-patterns), which enable branching based on both type and additional logical conditions.
+It supports a form of predicate-based dispatch through pattern-matching constructs (e.g., \texttt{switch}-expressions and \texttt{is}-patterns). This constructs enable branching based on both type and additional logical conditions.
 
 $I_{pred}(\text{C\#})=1$
 
@@ -276,11 +274,11 @@ $I_{pred}(\text{C\#})=1$
 
 \textbf{2) Dispatch Safety Guarantee $S_{disp}(L)$}
 
-First, C\# enforces compile-time verification of method dispatch correctness through static type checking: method calls, virtual dispatch resolution, and overload selection must be type-safe and valid at compile time, with the compiler rejecting ambiguous or invalid dispatch scenarios.
+C\# enforces compile-time verification of method dispatch correctness through static type checking. The method calls, the virtual dispatch resolution, and the overload selection must be type-safe and valid at compile time. The compiler is rejecting ambiguous or invalid dispatch scenarios.
 
 $I_{static}(\text{C\#})=1$
 
-Second, C\# does not enforce exhaustiveness of dispatch definitions. The virtual method overriding does not require covering all possible derived types, and pattern matching (e.g., \texttt{switch} expressions) is not universally required to be exhaustive unless specific constructs (like enums or sealed types) are used, thus lacking a general guarantee.
+In overriding virtual methods, it is not necessary to convert all possible derived types, and the pattern matching does not have to be exhaustive unless specific constructs (e.g., enums or sealed types) are used. The language does not provide complete definitions of dispatching.
 
 $I_{exhaust}(\text{C\#})=0$
 
@@ -288,16 +286,19 @@ $I_{exhaust}(\text{C\#})=0$
     S_{disp}(\text{C\#}) = \frac{1 + 0}{2} = 0.5
 \]
 
-\textbf{3) Virtualization Optimization Potential $O_{virt}(L)$}
+\textbf{3) Virtualisation Optimization Potential $O_{virt}(L)$}
 
 First, C\# supports non-virtual methods by default and allows explicitly sealing overridden methods using the \texttt{sealed} modifier, satisfying the condition.
 
 $K_{final}(\text{C\#})=1$
 
-Second, the language provides sealed class hierarchies via the \texttt{sealed} keyword, preventing further inheritance and enabling more aggressive compile-time and JIT optimizations, thus $K_{sealed}=1$. 
+Second, the language provides sealed class hierarchies via the \texttt{sealed} keyword, preventing further inheritance and enabling more aggressive compile-time and JIT optimizations.
+
+$K_{sealed}(\text{C\#})=1$. 
+
 Third, C\# supports static dispatch through \texttt{static} methods, which are resolved at compile time, as well as recent extensions such as \texttt{static abstract} interface members that further strengthen compile-time polymorphism.
 
-$K_{static}=1$ 
+$K_{static}(\text{C\#})=1$ 
 
 \[
 O_{virt}(\text{C\#}) = 1
@@ -316,7 +317,7 @@ O_{virt}(\text{C\#}) = 1
 
 \textbf{1) Default Mutability Score $M_{def}(L)$}
 
-All instances of reference and value types are mutable by default: fields can be modified after initialization, and property accessors do not restrict modification without additional modifiers. Immutability is achieved exclusively through explicit language constructs, such as \texttt{readonly} for fields, \texttt{init} for properties, or the use of the \texttt{record} type, which confirms the absence of immutability by default at the language level. 
+All instances of reference and value types are mutable by default: fields can be modified after initialisation, and property accessors do not restrict modification without additional modifiers. Immutability is achieved exclusively through explicit language constructs, such as \texttt{readonly} for fields, \texttt{init} for properties, or the use of the \texttt{record} type, which confirms the absence of immutability by default at the language level. 
 
 \[
     M_{def}(\text{C\#}) = 0
@@ -360,10 +361,11 @@ $S_{race}(\text{C\#}) = 0$
 
 C\# provides structured concurrency through \texttt{Task}, \texttt{async}/\texttt{await}, and the Task Parallel Library, which encapsulate threads and support composable asynchronous workflows but do not enforce actor-style isolation or channel-based communication as core language primitives:
 
-$S_{model}(\text{C\#}) = 0.5$
-
 \[
+\begin{aligned}
+    S_{model}(\text{C\#}) = 0.5 \\
     P_{conc}(\text{C\#}) = 0.25
+\end{aligned}
 \]
 
 \textbf{Final metric value:}
@@ -379,15 +381,18 @@ $S_{model}(\text{C\#}) = 0.5$
 
 \textbf{1) Native Contract Constructs Score $C_{nat}(L)$}
 
-C\# does not include first-class syntactic constructs for design-by-contract elements such as preconditions, postconditions, or invariants. Such functionality is historically provided via external mechanisms like the .NET Code Contracts library or manual assertions, which are not part of the core language syntax or semantics. $n_{pre} = 0$, $n_{post} = 0$, $n_{inv} = 0$
+C\# does not provide first-class syntactic constructs for designing-by-contract (preconditions, postconditions, invariants). Such functionality is provided via external mechanisms, which are not part of the core language syntax or semantics. 
 
 \[
-    C_{nat}(\text{C\#}) = 0
+\begin{aligned}
+    n_{pre} = 0, n_{post} = 0, n_{inv} = 0 \\
+    \Rightarrow C_{nat}(\text{C\#}) = 0
+\end{aligned}
 \]
 
 \textbf{2) Verification Enforcement Level $V_{enf}(L)$}
 
-C\# does not provide built-in static verification mechanisms capable of proving program correctness properties at compile time, as its type system is not dependent or refinement-based. However, the language and runtime support extensive runtime checking, including type safety, array bounds checking, null reference checks, and optional contract-like validation via assertions or guard clauses, all enforced during execution by the CLR. Since these checks occur at runtime rather than as compile-time proofs:
+C\# does not provide built-in static verification mechanisms capable of proving program correctness properties at compile time. Its type system is not dependent or refinement-based. However, the language and runtime support: extensive runtime checking, including type safety, array bounds checking, null reference checks, and optional contract-like validation via assertions or guard clauses, all enforced during execution by the CLR.
 
 \[
     V_{enf}(\text{C\#}) = 0.5
@@ -402,36 +407,28 @@ C\# does not provide built-in static verification mechanisms capable of proving 
 \end{aligned}
 \]
 
-\subsubsection{Conclusion}
-
-% TODO: Переписать conclusion
-
-The evaluation shows that C\# demonstrates strong performance in inheritance semantics and encapsulation, reflecting its design as a pragmatic industrial OO language. However, limitations arise in composition mechanisms, concurrency safety, and formal verifiability, confirming observations in prior studies that mainstream OO languages prioritize usability and backward compatibility over formal rigor \cite{pierce2002types, barnett2004spec}. These limitations motivate the need for improved object model designs in next-generation languages.
-
-
 \subsection{Metrics Evaluation for Java}
 
-\subsubsection{Introduction}
-
-Java represents a canonical example of a statically typed, nominally structured object-oriented language with a formally specified type system and execution model defined in the Java Language Specification (JLS)~\cite{gosling2015java}. Its design emphasizes type safety, backward compatibility, and controlled extensibility, making it a suitable subject for evaluating object model characteristics. In this section, the previously defined metrics are instantiated for Java based strictly on its formal specification and supported by established research literature on its type system and object semantics.
+Java represents a statically typed, nominally structured object-oriented language with a formally specified type system and execution model defined in the Java Language Specification (JLS)~\cite{gosling2015java}. Its design emphasises type safety, backward compatibility, and controlled extensibility.
 
 \subsubsection{Type System and Subtyping Model}
 
 \textbf{1) Nominal–Structural Typing Score $S_{nom}(L)$}
 
-As defined by the \textit{Java Language Specification (JLS)}~\cite{gosling2015java}: subtype relationships in Java are established exclusively through explicit declarations such as \texttt{extends} and \texttt{implements}, and not by structural equivalence. 
-All subtype relations must be declared in class or interface definitions according to the formal typing judgments in the specification, which sutisfy explicit subtype declarations. 
+The subtype relationships in Java are established through explicit declarations such as \texttt{extends} and \texttt{implements}. There is no structural equivalence subtyping in the language. All subtype relations must be declared in class or interface definitions, which sutisfy explicit subtype declarations. 
 
 \[
 \begin{aligned}
-    I_{struct}(\text{Java}) = 0, I_{nom}(\text{Java}) = 1 \Rightarrow S_{nom}(\text{Java}) = \frac{0 + 1}{2} = 0.5
+    I_{struct}(\text{Java}) = 0, I_{nom}(\text{Java}) = 1 
+    \Rightarrow S_{nom}(\text{Java}) = \frac{0 + 1}{2} = 0.5
 \end{aligned}
 \]
 
 \textbf{2) Variance Formalization Score $S_{var}(L)$}
 
-Java does not allow declaration-site variance (i.e., no explicit \texttt{in}/\texttt{out} annotations on type parameters), but supports use-site variance via wildcards (e.g., \texttt{? extends T}, \texttt{? super T}), which constitutes a restricted and indirect form of variance. 
-Regarding the soundness component, JLS provides precise typing judgments and constraints on wildcard capture and subtyping that ensure type safety, albeit through restrictions such as invariance of generic types and limitations on covariance.
+Java does not allow built-in variance (no explicit \texttt{in}/\texttt{out} annotations on type parameters), but supports use-site variance with wildcards (e.g., \texttt{? extends T}, \texttt{? super T}). Wildcards may be considered as limited and indirect form of variance. 
+
+The JLS defines strict typing and subtyping rules, including wildcard capture semantics, to ensure type safety. The safety is achieved partly through restrictions: invariance of generic types and limited covariance support.
 
 \[
 \begin{aligned}
@@ -442,15 +439,15 @@ Regarding the soundness component, JLS provides precise typing judgments and con
 
 \textbf{3) Inheritance–Subtyping Separation Score $S_{rel}(L)$}
 
-First, Java allows explicit subtyping without class inheritance through interfaces: a class may implement one or more interfaces without inheriting implementation, which establishes subtype relations independently of class extension. However, this mechanism is restricted to interfaces.
+Java supports subtyping both through class inheritance and interface implementation. A class may become a subtype of one or more interfaces independently of extending another class. However, Java does not support arbitrary explicit subtype declarations between classes outside inheritance.
 
 $I_{dec}(\text{Java}) = 0.5$
 
-Second, subtyping in Java is partially independent from inheritance semantics: while class inheritance (\texttt{extends}) directly induces subtyping, interface implementation (\texttt{implements}) defines subtype relations without sharing implementation, indicating partial independence.
+Java partially separates subtyping from implementation inheritance: subclassing (\texttt{extends}) creates subtype relations together with implementation inheritance, while interface implementation (\texttt{implements}) introduces subtype relations without requiring inheritance from another class.
 
 $I_{ind}(\text{Java}) = 0.5$
 
-Third, the JLS distinguishes between subclassing and subtyping at the level of types (e.g., class types, interface types, and their assignment compatibility rules), but this distinction is not fully formalized as two completely separate relations in the specification.
+The JLS distinguishes subclassing from subtyping at the level of types, including class types, interface types, and assignment compatibility. However, this distinction is not fully formalized as a separation between two independent relations in the specification.
 
 $I_{form}(\text{Java}) = 0.5$
 
@@ -480,8 +477,7 @@ Java defines four access scopes: \texttt{private} (accessible only within the de
 
 \textbf{2) Module Isolation Strength $M(L)$}
 
-The Java Platform Module System (JPMS) introduces explicit module boundaries with controlled exports.
-Java provides two primary modular boundaries: (i) packages, defined in JLS \S7, which organize types but do not enforce explicit export control (all \texttt{public} types are accessible unless restricted externally), and (ii) modules, defined in the JPMS (\texttt{module-info.java}), which enforce strict encapsulation via explicit \texttt{exports} and \texttt{requires} directives.
+The Java Platform Module System (JPMS) introduces explicit module boundaries with controlled exports. Java provides two primary modular mechanisms: packages, defined in JLS (\S7), which organize types without enforcing explicit export control, and modules, defined in the JPMS (\texttt{module-info.java}), which enforce strong encapsulation via explicit \texttt{exports} and \texttt{requires} directives. Therefore, module boundaries are independent from package organization, although explicit accessibility control is restricted to modules.
 
 \[
 \begin{aligned}
@@ -493,8 +489,7 @@ Java provides two primary modular boundaries: (i) packages, defined in JLS \S7, 
 
 \textbf{3) Interface Abstraction Capacity $I(L)$}
 
-Java provides two primary abstraction constructs: (i) \texttt{interface}, which defines pure behavioral contracts with method signatures (JLS \S9), and (ii) \texttt{abstract class}, which allows partial implementation alongside abstract methods (JLS \S8.1.1.1). 
-The object-defining constructs in Java are classes records, enums and annotations.
+Java provides two primary abstraction constructs: (i) \texttt{interface}, which defines pure behavioural contracts with method signatures (JLS \S9), and (ii) \texttt{abstract class}, which allows partial implementation alongside abstract methods (JLS \S8.1.1.1). The object-defining constructs in Java are classes records, enums and annotations.
 
 \[
 \begin{aligned}
@@ -533,7 +528,7 @@ Java enforces single inheritance for classes, allowing each class to declare at 
 
 \textbf{2) Linearization Determinism Score $L_d(L)$}
 
-According to the Java Language Specification (JLS), method lookup is strictly defined through a well-ordered procedure: class inheritance follows a single inheritance model for classes, ensuring a unique linear superclass chain, while multiple inheritance of behavior is permitted only via interfaces, whose default methods are resolved using explicitly defined rules (JLS \S8.4.8, \S9.4.1). In particular, Java enforces deterministic conflict resolution by prioritizing class methods over interface default methods, and requiring explicit disambiguation when multiple interfaces provide conflicting defaults.
+According to the Java Language Specification (JLS), method lookup is strictly defined through a well-ordered procedure: class inheritance follows a single inheritance model for classes, ensuring a unique linear superclass chain, while multiple inheritance of behaviour is permitted only via interfaces, whose default methods are resolved using explicitly defined rules (JLS \S8.4.8, \S9.4.1). In particular, Java enforces deterministic conflict resolution by prioritizing class methods over interface default methods, and requiring explicit disambiguation when multiple interfaces provide conflicting defaults.
 
 \[
     L_d(\text{Java}) = 1
@@ -541,17 +536,17 @@ According to the Java Language Specification (JLS), method lookup is strictly de
 
 \textbf{3) Constraint Protection Coefficient $C_p(L)$}
 
-$p_1=1$: Java supports finalization of classes and methods via the \texttt{final} keyword, preventing inheritance or overriding.
+$p_1=1$: Java provides finalisation mechanism through the \texttt{final} keyword for classes and methods, preventing inheritance and overriding.
 
-$p_2=1$: It also introduces sealed classes and interfaces (since Java~17), enabling explicitly restricted subclassing sets.
+$p_2=1$: the language supports sealed classes and interfaces (standardised in Java~17), enabling explicitly restricted subclass hierarchies.
 
-$p_3=0$: Override enforcement is not mandatory: the \texttt{@Override} annotation is optional and not required by the compiler.
+$p_3=0$: Java does not require explicit override declarations, since \texttt{@Override} annotation is optional.
 
-$p_4=0$: Methods in Java are virtual by default (except when declared \texttt{final}, \texttt{private}, or \texttt{static}), so non-virtual-by-default semantics are absent.
+$p_4=0$: methods are virtual by default (except when declared \texttt{final}, \texttt{private}, or \texttt{static}), so the language does not enforce non-virtual-by-default semantics.
 
-$p_5=1$: Java enforces a clear distinction between abstract classes and interfaces at the syntactic and semantic level, including rules for implementation and inheritance.
+$p_5=1$: Java maintains a clear syntactic and semantic distinction between abstract classes and interfaces, including separate inheritance and implementation rules.
 
-$p_6=1$: the JLS defines compile-time inheritance restrictions (e.g., a class cannot extend multiple classes, cannot extend a \texttt{final} class, and must implement all abstract methods). 
+$p_6=1$: the JLS defines compile-time inheritance restrictions, including the prohibition of multiple class inheritance, extensions of \texttt{final} classes, and absence of required abstract method implementations.
 
 \[
     C_p(\text{Java}) = \frac{1+1+0+0+1+1}{6} \approx 0.67
@@ -559,17 +554,17 @@ $p_6=1$: the JLS defines compile-time inheritance restrictions (e.g., a class ca
 
 \textbf{4) Fragile Base Mitigation Factor $F_b(L)$}
 
-$s_1=0$: Java does not require mandatory explicit override annotations, as \texttt{@Override} is optional.
+$s_1=0$: Java does not require explicit override annotations, since \texttt{@Override} is optional.
 
-$s_2=1$: It enforces strict method visibility via access modifiers (\texttt{private}, \texttt{protected}, \texttt{public}), limiting exposure of overridable members.
+$s_2=1$: the language enforces member visibility through access modifiers (\texttt{private}, \texttt{protected}, \texttt{public} and \texttt{package-private}), constraining inheritance and method overriding.
 
-$s_3=1$: Java requires explicit superclass constructor invocation either implicitly or explicitly using \texttt{super}, ensuring controlled initialization.
+$s_3=1$: Java requires controlled superclass initialisation through explicit or implicit constructor invocation using \texttt{super}.
 
-$s_4=1$: The JLS enforces type-safe overriding through return-type covariance and parameter invariance, preventing unsafe variance.
+$s_4=1$: the JLS enforces type-safe overriding through return-type covariance and parameter invariance, preventing unsafe method redefinition.
 
-$s_5=0$: methods are virtual by default (except \texttt{final}, \texttt{private}, \texttt{static}), so non-overridable-by-default semantics are absent.
+$s_5=0$: methods are virtual by default (except when declaed \texttt{final}, \texttt{private} or \texttt{static}), so Java does not employ non-overridable-by-default semantics.
 
-$s_6=1$: Java performs compile-time checks for overriding consistency (method signatures, return types, checked exceptions), ensuring correctness. 
+$s_6=1$: the compile performs strict compile-time checks for overriding consistency, including method signature matching, return type compatibility, and checked exception constraints. 
 
 \[
     F_b(\text{Java}) = \frac{0+1+1+1+0+1}{6} \approx 0.67
@@ -588,8 +583,9 @@ $s_6=1$: Java performs compile-time checks for overriding consistency (method si
 
 \textbf{1) Class-Based Delegation Score $D_{cls}(L)$}
 
-Java does not provide native syntactic delegation keywords (such as \texttt{delegate} in other languages). The delegation is typically implemented manually via composition and adapter patterns, where methods explicitly forward calls to a contained object. 
-The Java Language Specification does not define any mechanism for automatic method forwarding. All delegation logic must be written explicitly by the programmer, and no built-in feature generates forwarding methods implicitly.
+Java does not provide built-in syntactic support for delegation mechanisms. Instead, delegation is typically implemented explicitly through object composition and manual method forwarding (often Adapter or Proxy pattern).
+
+The Java Language Specification does not define automatic delegation or method-forwarding semantics. The language itself does not implicitly generate forwarding methods. So delegation behaviour is generally implemented manually or via external libraries and code-generation tools.
 
 \[
 \begin{aligned}
@@ -600,9 +596,9 @@ The Java Language Specification does not define any mechanism for automatic meth
 
 \textbf{2) Trait Expressiveness Score $T_{exp}(L)$}
 
-In the presence of multiple inherited default methods with the same signature, Java does not support conflict resolution via aliasing or exclusion. It enforces a compile-time error unless the implementing class explicitly overrides the conflicting method and resolves the ambiguity (JLS \S8.4.8, \S9.4.1.3).
-The interfaces cannot declare explicit requirements on the implementing class beyond method signatures. While abstract methods define obligations, there is no mechanism to express constraints such as required fields or dependent behavior within the interface itself.
+In Java, conflicts arising from multiple inherited default methods using the same signatures cannot be resolved by aliasing or selective exclusion. The language causes a compile-time error if the derived class does not explicitly redefine the conflicting method and disambiguate it. 
 
+Interfaces in Java cannot declare explicit implementation requirements beyond the requirements of method signatures. The language does not provide a mechanism for defining required fields, state dependencies and other structural constraints, or implementation-dependent behaviour in the interface itself.
 
 \[
 \begin{aligned}
@@ -613,8 +609,9 @@ The interfaces cannot declare explicit requirements on the implementing class be
 
 \textbf{3) Interface Composition Capacity $I_{comp}(L)$}
 
-Java allows a class to implement an arbitrary number of interfaces without any formal upper bound (JLS \S8.1.5), which corresponds to unrestricted composition. 
-Since Java~8, interfaces may include \textit{default methods} that provide concrete implementations (JLS \S9.4.1), enabling interfaces to encapsulate reusable behavior in addition to type abstraction.
+Java allows a class to implement an arbitrary number of interfaces without any formal upper bound, supporting unrestricted interface composition. 
+
+Since Java~8, interfaces may also define \textit{default methods} with concrete implementations, enabling interfaces to encapsulate reusable behaviour in addition to type abstraction.
 
 \[
 \begin{aligned}
@@ -636,7 +633,7 @@ Since Java~8, interfaces may include \textit{default methods} that provide concr
 
 \textbf{1) Identity Semantics Score $S_{id}(L)$}
 
-The primary user-definable type categories are classes, interfaces, enums, records, and annotation types. All of these are reference types, meaning variables hold references to objects rather than values, and identity is preserved via reference equality.
+The main user-definable types are classes, interfaces, enums, records, and annotation types. They are all reference types, which means that variables hold references to objects rather than values, and identity is preserved via reference equality.
 
 \[
     S_{id}(\text{Java}) = 1
@@ -644,7 +641,7 @@ The primary user-definable type categories are classes, interfaces, enums, recor
 
 \textbf{2) Instantiation Paradigm Diversity $S_{cr}(L)$}
 
-The primary instantiation mechanism is explicit construction via the \texttt{new} operator, which applies uniformly to classes, arrays, and records. Additionally, Java supports object creation via reflective instantiation (e.g., \texttt{Class::newInstance}, \texttt{Constructor::newInstance}), which constitutes a distinct paradigm as it defers type binding to runtime. Furthermore, Java provides cloning through the \texttt{clone()} method, representing a prototype-based instantiation style, albeit with restricted and non-uniform semantics. Other paradigms such as literal object construction (beyond strings and primitives) or actor-based spawning are not supported at the language level.
+The primary instantiation mechanism is explicit construction via the \texttt{new} operator. Additionally, Java supports object creation via reflective instantiation (e.g., \texttt{Class::newInstance}, \texttt{Constructor::newInstance}). Furthermore, Java provides cloning through the \texttt{clone()} method. Other paradigms are not supported at the language level.
 
 \[
     P_{supported}(\text{C\#}) = 4 \Rightarrow S_{cr}(\text{Java}) = \frac{3}{4}
@@ -652,7 +649,7 @@ The primary instantiation mechanism is explicit construction via the \texttt{new
 
 \textbf{3) Meta-level Extensibility Score $S_{meta}(L)$}
 
-The Java Language Specification, together with the core reflection API (\texttt{java.lang.reflect}), allows comprehensive introspection of classes, methods, fields, and annotations at runtime, enabling programs to query structural properties dynamically. However, Java does not permit direct structural modification of existing classes or objects at runtime (e.g., adding fields or methods), as the type system remains statically fixed after class loading. Furthermore, Java does not support overriding the object instantiation protocol via metaobjects.
+Java does not permit direct structural modification of loaded classes through the standard reflection API, although limited bytecode transformation is possible using instrumentation and specialised libraries.
 
 \[
 \begin{aligned}
@@ -677,11 +674,11 @@ Java natively supports single dispatch, where method selection is based on the d
 
 $I_{single}(\text{Java}) = 1$. 
 
-However, Java does not support multiple dispatch, as method overloading is resolved statically at compile time based on declared types rather than dynamically across all arguments.
+However, Java does not support multiple dispatch, because method overloading is resolved statically at compile time based on declared types, rather than dynamically across all arguments.
 
 $I_{multi}(\text{Java}) = 0$
 
-Similarly, predicate-based dispatch—where method selection depends on arbitrary runtime conditions—is not part of the language specification and must be emulated through explicit conditional logic.
+Similarly, predicate-based dispatch is not part of the language specification and must be emulated through explicit conditional logic.
 
 $I_{pred}(\text{Java}) = 0$
 
@@ -691,11 +688,11 @@ $I_{pred}(\text{Java}) = 0$
 
 \textbf{2) Dispatch Safety Guarantee $S_{disp}(L)$}
 
-First, Java ensures compile-time verification of method dispatch correctness through static type checking: method calls are validated against the declared type, and overload resolution is performed at compile time, guaranteeing that only valid methods can be invoked.
+Java uses static type checking to verify method invocations at compile time. Method calls are validated against declared reference types, overload resolution is performed statically during compilation, but overridden methods are dispatched dynamically at runtime.
 
 $I_{static}(\text{Java}) = 1$
 
-Second, Java does not enforce exhaustiveness of dispatch definitions in general polymorphic scenarios (e.g., method overriding or dynamic dispatch across class hierarchies). Although newer features such as pattern matching in \texttt{switch} with sealed types introduce partial exhaustiveness checks, this is limited and not a general property of the dispatch system.
+Java does not enforce exhaustiveness of dispatch definitions in general polymorphic scenarios (e.g., method overriding or dynamic dispatch across class hierarchies). Although newer features such as pattern matching in \texttt{switch} with sealed types introduce partial exhaustiveness checks, this is limited and not a general property of the dispatch system.
 
 $I_{exhaust}(\text{Java}) = 0$
 
@@ -703,7 +700,7 @@ $I_{exhaust}(\text{Java}) = 0$
     S_{disp}(\text{Java}) = \frac{1 + 0}{2} = 0.5
 \]
 
-\textbf{3) Virtualization Optimization Potential $O_{virt}(L)$}
+\textbf{3) Virtualisation Optimization Potential $O_{virt}(L)$}
 
 First, Java supports the \texttt{final} keyword for methods and classes, preventing overriding and enabling static binding.
 
@@ -713,7 +710,7 @@ Second, since Java~17, the language includes \texttt{sealed} classes and interfa
 
 $K_{sealed}(\text{Java}) = 1$
 
-Third, Java provides static dispatch mechanisms through \texttt{static} methods and compile-time binding of non-virtual calls (e.g., \texttt{private}, \texttt{final} methods), which serve as explicit or implicit devirtualization hints.
+Third, Java provides static dispatch mechanisms through \texttt{static} methods and compile-time binding of non-virtual calls (e.g., \texttt{private}, \texttt{final} methods), which serve as explicit or implicit deVirtualisation hints.
 
 $K_{static}(\text{Java}) = 1$
 
@@ -734,7 +731,7 @@ $K_{static}(\text{Java}) = 1$
 
 \textbf{1) Default Mutability Score $M_{def}(L)$}
 
-In Java, all objects are mutable by default unless explicitly designed otherwise by the programmer, for example by declaring fields as \texttt{final} or creating immutable classes (e.g., \texttt{String}). The JLS specifies that instance fields are mutable unless restricted, and there is no language-level requirement or annotation enforcing immutability by default. Moreover, immutability in Java is a design pattern rather than a built-in default behavior, requiring explicit developer effort. Therefore, Java does not satisfy the condition of immutability by default nor the condition where mutability requires explicit annotation. The mutability is inherent and unrestricted unless constrained.
+In Java, all objects are mutable by default unless explicitly designed otherwise by the programmer, for example by declaring fields as \texttt{final} or creating immutable classes (e.g., \texttt{String}). The JLS specifies that instance fields are mutable unless restricted, and there is no language-level requirement or annotation enforcing immutability by default. Moreover, immutability in Java is a design pattern rather than a built-in default behaviour, requiring explicit developer effort. Therefore, Java does not satisfy the condition of immutability by default nor the condition where mutability requires explicit annotation. The mutability is inherent and unrestricted unless constrained.
 
 \[
     M_{def}(\text{Java}) = 0
@@ -744,9 +741,11 @@ In Java, all objects are mutable by default unless explicitly designed otherwise
 
 Java employs references for all non-primitive types, and the primary constructs contributing to $N_{ref}(L)$ include: object references (class types), array references, interface-typed references, generic type references, and the \texttt{null} reference.
 
+Java employs references for all non-primitive types: object references (class types), array references, interface-typed references, generic type references, and the \texttt{null} reference.
+
 $N_{ref}(\text{Java}) = 5$
 
-Next, we identify constructs that impose compile-time constraints on reference usage: the \texttt{final} keyword, which restricts reassignment of references, generic type bounds (e.g., \texttt{<T extends ...>}), which constrain admissible reference types, and access modifiers (e.g., \texttt{private}, \texttt{protected}) that statically restrict reference visibility and usage contexts.
+Java provide constructs that impose compile-time constraints on reference usage: the \texttt{final} keyword, which restricts reassignment of references, generic type bounds (e.g., \texttt{<T extends ...>}), which constrain admissible reference types, and access modifiers (e.g., \texttt{private}, \texttt{protected}) that statically restrict reference visibility and usage contexts.
 
 $N_{constr}(\text{Java}) = 3$
 
@@ -772,16 +771,17 @@ $S_{model}(\text{Java}) = 0.5$
 
 \textbf{Final metric value:}
 \[
-    SCSI(\text{Java}) = 0.35 \cdot M_{def}(\text{Java}) + 0.25 \cdot S_{dens}(\text{Java}) + 0.4 \cdot P_{conc}(\text{Java})
-    = 0.35 \cdot 0 + 0.25 \cdot 0.6 + 0.4 \cdot 0.25
-    = 0.25
+\begin{aligned}
+    SCSI(\text{Java}) = 0.35 \cdot M_{def}(\text{Java}) + 0.25 \cdot S_{dens}(\text{Java}) + 0.4 \cdot P_{conc}(\text{Java}) \\
+    = 0.35 \cdot 0 + 0.25 \cdot 0.6 + 0.4 \cdot 0.25 = 0.25
+\end{aligned}
 \]
 
 \subsubsection{Support for Formal Specification and Verifiability}
 
 \textbf{1) Native Contract Constructs Score $C_{nat}(L)$}
 
-Java does not include native language-level constructs for specifying preconditions (e.g., \texttt{requires}), postconditions (e.g., \texttt{ensures}), or class invariants as part of its syntax or type system. While developers can express such constraints using assertions (\texttt{assert}) or external frameworks (e.g., JML), these are not integrated as formal contract constructs with guaranteed enforcement semantics in the core language specification.
+Java does not include native language-level constructs for specifying preconditions, postconditions, or class invariants as part of its syntax or type system. While developers can express such constraints using assertions (\texttt{assert}) or external frameworks, these are not integrated as formal contract constructs with guaranteed enforcement semantics in the core language specification.
 
 \[
     C_{nat}(\text{Java}) = 0
@@ -789,7 +789,7 @@ Java does not include native language-level constructs for specifying preconditi
 
 \textbf{2) Verification Enforcement Level $V_{enf}(L)$}
 
-Java does not support static verification of program correctness in the sense of compile-time proofs for contracts or general behavioral properties. The type system ensures type safety but does not verify semantic correctness such as preconditions or invariants. However, Java provides runtime checking mechanisms, most notably through the \texttt{assert} statement, which enables optional runtime validation of boolean conditions. Additionally, exceptions (e.g., \texttt{IllegalArgumentException}) are commonly used to enforce conditions dynamically during execution. These mechanisms are explicitly defined in the language and standard runtime but operate only at runtime rather than compile time.
+Java does not support static verification of program correctness in the sense of compile-time proofs for contracts or general behavioural properties. The type system ensures type safety but does not verify semantic correctness such as preconditions or invariants. Java mostly relies on runtime assertions and exception-based validation checking mechanisms to detect violations of expected program behaviour during execution. These mechanisms are explicitly defined in the language and standard runtime but operate only at runtime rather than compile time.
 
 \[
     V_{enf}(\text{Java}) = 0.5
@@ -804,10 +804,9 @@ Java does not support static verification of program correctness in the sense of
 \end{aligned}
 \]
 
-
 \subsection{Metrics Evaluation for Smalltalk}
 
-Smalltalk represents one of the earliest and most influential realizations of a pure object-oriented programming paradigm, where “everything is an object” and computation is performed exclusively via message passing \cite{goldberg1983smalltalk}. Its design deliberately prioritizes uniformity and reflection over static guarantees, which significantly impacts the quantitative evaluation of object model properties. As noted by Goldberg and Robson, “Smalltalk is a dynamically typed language in which all operations are expressed as messages sent to objects” \cite[p.~9]{goldberg1983smalltalk}. The following subsection evaluates Smalltalk against the proposed metrics, grounding each numerical assignment in the formal and de facto language specification as documented in canonical literature and subsequent analyses.
+Smalltalk represents one of the earliest and most influential realizations of a pure object-oriented programming paradigm, where everything is an object and computation is performed exclusively via message passing \cite{goldberg1983smalltalk}. The following chapter evaluates Smalltalk against the proposed metrics, grounding each numerical assignment in the formal and de facto language specification as documented in canonical literature and subsequent analyses.
 
 \subsubsection{Type System and Subtyping Model}
 
@@ -817,7 +816,7 @@ Smalltalk is a purely dynamically typed language\cite{blackpharo} whose semantic
 
 $I_{struct}(\text{Smalltalk}) = 0$
 
-Although Smalltalk employs classes and inheritance, subtype relationships are not enforced through a static type system with explicit nominal typing judgments, but instead emerge dynamically at runtime. It is lack of formal nominal typing as defined by static type theory.
+Smalltalk subtype relationships are not enforced through a static type system with explicit nominal typing judgments, but instead emerge dynamically at runtime. It is lack of formal nominal typing as defined by static type theory.
 
 $I_{nom}(\text{Smalltalk}) = 0$
 
@@ -849,7 +848,7 @@ Second, the subtype relation is not defined independently but is implicitly iden
 
 $I_{ind}(\text{Smalltalk})=0$
 
-Third, the specification does not formally distinguish between inheritance and subtyping as separate relations. The behavioral compatibility is informally tied to method availability within the class hierarchy, without a formal type system that separates these concepts.
+Third, the specification does not formally distinguish between inheritance and subtyping as separate relations. The behavioural compatibility is informally tied to method availability within the class hierarchy, without a formal type system that separates these concepts.
 
 $I_{form}(\text{Smalltalk})=0$
 
@@ -880,7 +879,7 @@ $n_{levels}(\text{Smalltalk}) = 1$
 
 \textbf{2) Module Isolation Strength $M(L)$}
 
-Smalltalk systems organize code primarily through classes and method categories, and in some environments through packages. However, these constructs do not enforce strict export control at the language specification level, as all classes and methods remain globally accessible via message passing. Thus, while modularization constructs exist, none impose enforced visibility restrictions or explicit export lists.
+Smalltalk organizes code through classes and method categories but lacks a strict module system with enforced visibility or explicit export control. Classes and methods mostly are globally accessible through message passing.
 
 \[
     M(\text{Smalltalk}) = 0
@@ -893,9 +892,9 @@ Smalltalk defines objects exclusively through classes.
 
 $n_{object}(\text{Smalltalk}) = 1$
 
-The language does not include distinct constructs such as interfaces, abstract classes with enforced method signatures, or formal protocols in its core specification. Behavioral abstraction is achieved implicitly through duck typing and message protocols, which are not separate syntactic or semantic entities. 
+The language lacks interfaces, enforced abstract classes, and formal protocols. Behavioural abstraction is achieved through duck typing and message passing.
 
-$n_{abstraction_constructs}(\text{Smalltalk}) = 0$
+$n_{abstraction\_constructs}(\text{Smalltalk}) = 0$
 
 \[
     
@@ -905,7 +904,7 @@ $n_{abstraction_constructs}(\text{Smalltalk}) = 0$
 
 \textbf{4) Encapsulation Enforcement Coefficient $E(L)$}
 
-Smalltalk provides fully reflective capabilities, including the ability to inspect and modify objects, classes, and method dictionaries at runtime. Additionally, instance variables can be accessed indirectly through reflective operations and message sending without enforced access restrictions. Since the language lacks a static type system and does not restrict reflective access or enforce encapsulation boundaries at runtime, it permits uncontrolled access to object internals.
+Smalltalk supports full reflection and allows runtime access and modification of objects, classes, and object internals without enforced encapsulation restrictions.
 
 \[
     E(\text{Smalltalk}) = 0
@@ -940,17 +939,17 @@ Smalltalk employs a strictly single inheritance model, where each class has exac
 
 \textbf{3) Constraint Protection Coefficient $C_p(L)$}
 
-$p_1=0$: Smalltalk does not support final classes or methods—all classes and methods can be subclassed or overridden.
+$p_1=0$: Smalltalk does not support final classes or methods.
 
-$p_2=0$: There is no notion of sealed or closed hierarchies, and any class can be extended freely.
+$p_2=0$: there is no notion of sealed or closed hierarchies, and any class can be extended freely.
 
-$p_3=0$ as method overriding does not require explicit annotation (method replacement is implicit via dynamic dispatch).
+$p_3=0$: as method overriding does not require explicit annotation (method replacement is implicit via dynamic dispatch).
 
-$p_4=0$: All methods are effectively virtual by default, with no non-virtual dispatch semantics.
+$p_4=0$: all methods are virtual by default.
 
-$p_5=0$: The language lacks a formal distinction between abstract classes and interfaces in its original specification, relying instead on conventions.
+$p_5=0$: the language lacks formal abstract classes and interfaces.
 
-$p_6=0$: There are no compile-time restrictions on inheritance due to the absence of static type checking and the system’s live, reflective nature. 
+$p_6=0$: Smalltalk has no compile-time inheritance restrictions 
 
 \[
     C_p(\text{Smalltalk})=\frac{0+0+0+0+0+0}{6}=0
@@ -958,17 +957,17 @@ $p_6=0$: There are no compile-time restrictions on inheritance due to the absenc
 
 \textbf{4) Fragile Base Mitigation Factor $F_b(L)$}
 
-$s_1=0$: Overriding does not require explicit annotation and occurs implicitly through method redefinition.
+$s_1=0$: Overriding does not require explicit annotation and occurs implicitly.
 
-$s_2=0$: Method visibility is not strictly enforced (all methods are effectively accessible within the system, with only conventional categories such as “private” lacking formal enforcement).
+$s_2=0$: Method visibility is not strictly enforced.
 
-$s_3=0$: There is no requirement to explicitly invoke superclass implementations—sending a \texttt{super} message is optional and not enforced.
+$s_3=0$: Superclass method invocation is optional.
 
-$s_4=0$: The language lacks a static type system and thus does not define variance constraints for safe overriding.
+$s_4=0$: Smalltalk does not define variance constraints.
 
-$s_5=0$: All methods are dynamically dispatched and overridable by default, with no mechanism for non-overridable declarations.
+$s_5=0$: All methods are overridable by default.
 
-$s_6=0$: There are no compile-time checks ensuring override consistency due to the absence of static compilation constraints. 
+$s_6=0$: Smalltalk has no compile-time override checks. 
 
 \[
     F_b(\text{Smalltalk})=\frac{0+0+0+0+0+0}{6}=0
@@ -977,7 +976,8 @@ $s_6=0$: There are no compile-time checks ensuring override consistency due to t
 \textbf{Final metric value:}
 \[
 \begin{aligned}
-    ISRI(\text{Smalltalk}) = 0.2 \cdot H_s(\text{Smalltalk}) + 0.25 \cdot L_d(\text{Smalltalk}) + 0.3 \cdot C_p(\text{Smalltalk}) + 0.25 \cdot F_b(\text{Smalltalk}) \\
+    ISRI(\text{Smalltalk}) \\
+    = 0.2 \cdot H_s(\text{Smalltalk}) + 0.25 \cdot L_d(\text{Smalltalk}) + 0.3 \cdot C_p(\text{Smalltalk}) + 0.25 \cdot F_b(\text{Smalltalk}) \\
     = 0.2 \cdot 1 + 0.25 \cdot 1 + 0.3 \cdot 0 + 0.25 \cdot 0 \\
     = 0.45
 \end{aligned}
@@ -987,17 +987,18 @@ $s_6=0$: There are no compile-time checks ensuring override consistency due to t
 
 \textbf{1) Class-Based Delegation Score $D_{cls}(L)$}
 
-Smalltalk does not provide dedicated language-level keywords for delegation (such as \texttt{delegate}), but delegation can be systematically emulated using composition and message forwarding patterns (e.g., via \texttt{doesNotUnderstand:}). 
-The language includes a reflective message interception mechanism through \texttt{doesNotUnderstand:}, which enables developers to implement dynamic forwarding of messages to another object, effectively supporting automatic delegation without explicit boilerplate per method.
+$K_{del}(\text{Smalltalk})=0.5$: Smalltalk does not provide built-in keywords for delegation, but supports delegation through composition and message forwarding via \texttt{doesNotUnderstand:}.
+
+$S_{fwd}(\text{Smalltalk})=1$: Smalltalk supports automatic delegation through \texttt{doesNotUnderstand:}.
 
 \[
-    K_{del}(\text{Smalltalk})=0.5, S_{fwd}(\text{Smalltalk})=1 \Rightarrow D_{cls}(\text{Smalltalk})=0.75
+    D_{cls}(\text{Smalltalk})=0.75
 \]
 
 \textbf{2) Trait Expressiveness Score $T_{exp}(L)$}
 
 Smalltalk traits provide explicit mechanisms for resolving method name conflicts through both exclusion and aliasing operators, which are formally defined in the trait composition semantics.
-The traits can declare required methods that must be implemented by the consuming class, enabling explicit specification of behavioral dependencies.
+The traits can declare required methods that must be implemented by the consuming class, enabling explicit specification of behavioural dependencies.
 
 \[
     R_{conf}(\text{Smalltalk})=1, O_{mod}(\text{Smalltalk})=1 \Rightarrow T_{exp}(\text{Smalltalk})=0
@@ -1005,7 +1006,7 @@ The traits can declare required methods that must be implemented by the consumin
 
 \textbf{3) Interface Composition Capacity $I_{comp}(L)$}
 
-Smalltalk does not define interfaces as a separate language feature. It relies on implicit typing (duck typing) and behavioral conformance, where any object responding to a set of messages satisfies the expected protocol. Consequently, there are no formal interface declarations or constructs analogous to interfaces, yielding Since interfaces do not exist as entities, there is no notion of default method implementations within them, thus 
+Smalltalk does not define interfaces as a separate language feature. It relies on implicit typing (duck typing) and behavioural conformance, where any object responding to a set of messages satisfies the expected protocol. Consequently, there are no formal interface declarations or constructs analogous to interfaces, yielding Since interfaces do not exist as entities, there is no notion of default method implementations within them, thus 
 
 \[
      N_{impl}(\text{Smalltalk})=0, D_{def}(\text{Smalltalk})=0 \Rightarrow I_{comp}(\text{Smalltalk})=0
@@ -1032,7 +1033,7 @@ In Smalltalk, all user-definable types are classes, and every instance is an obj
 
 \textbf{2) Instantiation Paradigm Diversity $S_{cr}(L)$}
 
-Smalltalk primarily supports class-based instantiation via message sending (e.g., \texttt{MyClass new}), which internally invokes standardized allocation and initialization protocols (such as \texttt{basicNew} and \texttt{initialize}). While additional patterns like cloning or literal construction may exist in specific implementations, they are not part of the core, formally defined instantiation paradigms of the language.
+Smalltalk natively supports one primary instantiation paradigm: class-based object creation via \texttt{new}
 
 \[
     P_{supported}(\text{C\#}) = 4 \Rightarrow S_{cr}(\text{Smalltalk})=\frac{1}{4}
@@ -1040,7 +1041,7 @@ Smalltalk primarily supports class-based instantiation via message sending (e.g.
 
 \textbf{3) Meta-level Extensibility Score $S_{meta}(L)$}
 
-Smalltalk provides a fully reflective environment in which classes are themselves objects (instances of metaclasses), and both structure and behavior can be modified at runtime. Moreover, the object instantiation process can be customized by overriding class-side methods such as \texttt{new}, \texttt{basicNew}, and initialization protocols, effectively enabling control over allocation and initialization semantics through metaobjects.
+Smalltalk is a fully reflective environment where classes are objects (instances of metaclasses), and their structure and behaviour can be modified at runtime. Object creation can be customized by overriding class-side methods such as \texttt{new}, \texttt{basicNew}, and initialisation protocols.
 
 \[
 \begin{aligned}
@@ -1070,7 +1071,7 @@ However, it does not provide native multiple dispatch, as method resolution does
 
 $I_{multi}(\text{Smalltalk})=0$
 
-Additionally, predicate-based dispatch is not part of the language specification. The conditional behavior must be encoded explicitly within method bodies rather than through the dispatch mechanism itself.
+In Smalltalk, conditional behaviour is implemented inside method bodies rather than through the dispatch mechanism. They are not part of language itself.
 
 $I_{pred}(\text{Smalltalk})=0$ 
 
@@ -1084,7 +1085,7 @@ First, Smalltalk employs purely dynamic message passing with no static type chec
 
 $I_{static}(\text{Smalltalk})=0$
 
-Second, the language does not require exhaustive definitions of dispatch cases—method lookup proceeds dynamically through the class hierarchy, and missing methods are handled at runtime rather than enforced statically.
+Second, the language does not require exhaustive definitions of dispatch cases-method lookup proceeds dynamically through the class hierarchy, and missing methods are handled at runtime rather than enforced statically.
 
 $I_{exhaust}(\text{Smalltalk})=0$
 
@@ -1092,7 +1093,7 @@ $I_{exhaust}(\text{Smalltalk})=0$
     S_{disp}(\text{Smalltalk})=\frac{0+0}{2}=0
 \]
 
-\textbf{3) Virtualization Optimization Potential $O_{virt}(L)$}
+\textbf{3) Virtualisation Optimization Potential $O_{virt}(L)$}
 
 Smalltalk does not support \texttt{final} or non-virtual methods, as all methods are dynamically dispatched and can be overridden.
 
@@ -1102,7 +1103,7 @@ Similarly, it does not provide sealed class hierarchies or mechanisms to restric
 
 $K_{sealed}(\text{Smalltalk})=0$
 
-Furthermore, there are no static dispatch hints or constructs such as \texttt{static} methods or annotations for devirtualization. All message sends are uniformly dynamic.
+Furthermore, there are no static dispatch hints or constructs such as \texttt{static} methods or annotations for deVirtualisation. All message sends are uniformly dynamic.
 
 $K_{static}(\text{Smalltalk})=0$
 
@@ -1123,7 +1124,7 @@ $K_{static}(\text{Smalltalk})=0$
 
 \textbf{1) Default Mutability Score $M_{def}(L)$}
 
-In Smalltalk, all entities are objects and their state is inherently mutable: instance variables can be freely modified through message passing without requiring any special annotations or qualifiers. There is no built-in notion of immutability enforced by default, nor a requirement to explicitly mark objects as mutable, mutability is the standard behavior.
+In Smalltalk, all entities are objects and their state is inherently mutable: instance variables can be freely modified through message passing without requiring any special annotations or qualifiers. There is no built-in notion of immutability enforced by default, nor a requirement to explicitly mark objects as mutable, mutability is the standard behaviour.
 
 \[
     M_{def}(\text{Smalltalk})=0
@@ -1145,7 +1146,7 @@ $N_{constr}(\text{Smalltalk}) = 0$
 
 \textbf{3) Concurrency Primitive Safety $P_{conc}(L)$}
 
-First, Smalltalk provides lightweight processes (green threads) and synchronization primitives (e.g., semaphores), but lacks a static type system or runtime mechanisms that enforce data race freedom, correctness depends entirely on programmer discipline when coordinating shared mutable state.
+First, Smalltalk provides lightweight processes (green threads) and synchronisation primitives (e.g., semaphores), but lacks a static type system or runtime mechanisms that enforce data race freedom, correctness depends entirely on programmer discipline when coordinating shared mutable state.
 
 $S_{race}(\text{Smalltalk}) = 0$
 
@@ -1160,7 +1161,8 @@ $S_{model}(\text{Smalltalk}) = 0$
 \textbf{Final metric value:}
 \[
 \begin{aligned}
-    SCSI(\text{Smalltalk}) = 0.35 \cdot M_{def}(\text{Smalltalk}) + 0.25 \cdot S_{dens}(\text{Smalltalk}) + 0.4 \cdot P_{conc}(\text{Smalltalk}) \\
+    SCSI(\text{Smalltalk}) \\
+    = 0.35 \cdot M_{def}(\text{Smalltalk}) + 0.25 \cdot S_{dens}(\text{Smalltalk}) + 0.4 \cdot P_{conc}(\text{Smalltalk}) \\
     = 0.35 \cdot 0 + 0.25 \cdot 0 + 0.4 \cdot 0 = 0
 \end{aligned}
 \]
@@ -1177,7 +1179,7 @@ Smalltalk does not natively support preconditions, postconditions, or invariants
 
 \textbf{2) Verification Enforcement Level $V_{enf}(L)$}
 
-Smalltalk is a dynamically typed language without any support for static verification or compile-time proofs of correctness. While developers may implement runtime checks (e.g., via assertions or conditional message sends), these are not part of a formal, built-in verification framework and are neither enforced nor standardized by the language semantics.
+Smalltalk is a dynamically typed language without built-in support for static verification or compile-time correctness proofs. Runtime checks can be implemented manually.
 
 \[
     V_{enf}(\text{Smalltalk})=0
