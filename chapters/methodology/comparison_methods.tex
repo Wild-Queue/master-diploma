@@ -413,7 +413,7 @@ where:
     \item $I_{pred} = 1$ if predicate-based or condition-based dispatch is available; $0$ otherwise.
     \item Weights are set as $w_{single}=1$, $w_{multi}=2$, $w_{pred}=2$
         \begin{itemize}
-            \item Single dispatch weight is $1$ because it often requires structural workarounds. 
+            \item Single dispatch weight is $1$ since it often requires structural workarounds. 
             \item Multiple dispatch weight is $2$ because it resolves the expression problem for operation extension without modifying existing ones. 
             \item Predicate dispatch weight is $2$ since it extends polymorphism beyond type hierarchies into execution logic.
         \end{itemize}

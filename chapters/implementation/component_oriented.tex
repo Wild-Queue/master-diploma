@@ -12,25 +12,21 @@ Zonnon employs a \textbf{nominal type system}. Subtyping is explicitly defined t
 According to the language specification, Zonnon employs an object model where types (objects) explicitly declare conformance to interfaces (``definitions'') via the \texttt{implements} clause, and relationships such as \texttt{implements} and \texttt{refines} are explicitly stated rather than inferred structurally. Hence, it satisfies nominal typing requirements with explicit subtype declarations \cite{gutknecht2004zonnon}. 
 
 Conversely, there is no evidence of structural subtyping based solely on shape compatibility or formal structural typing rules (i.e., no typing judgments allowing implicit compatibility based on member structure). 
+\begin{flalign*}
+    & I_{nom}(\text{Zonnon}) = 1, I_{struct}(\text{Zonnon}) = 0 &&\\
+    & S_{nom}(\text{Zonnon}) = \frac{1 + 0}{2} = 0.5&&
+\end{flalign*}
 
-\[
-\begin{aligned}
-    I_{nom}(\text{Zonnon}) = 1, I_{struct}(\text{Zonnon}) = 0 \\
-    S_{nom}(\text{Zonnon}) = \frac{1 + 0}{2} = 0.5
-\end{aligned}
-\]
 
 \textbf{2) Variance Formalization Score $S_{var}(L)$}
 
 Zonnon does not support parametric polymorphism (generics) or type constructors with variance annotations. The language relies on object types, definitions (interfaces), and explicit implementation relations without any mechanism for parameterised type abstraction. Variance cannot be expressed at the language level.
 Furthermore, since variance is not part of the type system, there are no formal rules, constraints, or proofs of soundness related to variance in the specification.
+\begin{flalign*}
+    & V_{exp}(\text{Zonnon}) = 0, V_{sound}(\text{Zonnon}) = 0 &&\\
+    & S_{var}(\text{Zonnon}) = 0&&
+\end{flalign*}
 
-\[
-\begin{aligned}
-    V_{exp}(\text{Zonnon}) = 0, V_{sound}(\text{Zonnon}) = 0 \\
-    S_{var}(\text{Zonnon}) = 0
-\end{aligned}
-\]
 
 \textbf{3) Inheritance–Subtyping Separation Score $S_{rel}(L)$}
 
@@ -59,26 +55,22 @@ Therefore
 \]
 
 \textbf{Final metric value:}
+\begin{flalign*}
+    & TSSI(\text{Zonnon}) = 0.3 \cdot S_{nom}(\text{Zonnon}) + 0.3 \cdot S_{var}(\text{Zonnon}) + 0.4 \cdot S_{rel}(\text{Zonnon}) &&\\
+    & = 0.3 \cdot 0.5 + 0.3 \cdot 0 + 0.4 \cdot 1 = 0.55&&
+\end{flalign*}
 
-\[
-\begin{aligned}
-    TSSI(\text{Zonnon}) = 0.3 \cdot S_{nom}(\text{Zonnon}) + 0.3 \cdot S_{var}(\text{Zonnon}) + 0.4 \cdot S_{rel}(\text{Zonnon}) \\
-    = 0.3 \cdot 0.5 + 0.3 \cdot 0 + 0.4 \cdot 1 = 0.55
-\end{aligned}
-\]
 
 \subsubsection{Abstraction and Encapsulation Mechanisms}
 
 \textbf{1) Visibility Granularity Index $V(L)$}
 
 Zonnon provides explicit visibility modifiers \texttt{private} and \texttt{public}, where \texttt{private} restricts access to the local scope of the declaration and \texttt{public} allows visibility across imported program units. Additionally, there exists an implicit module-level encapsulation boundary, since declarations are only accessible if explicitly exported and imported \cite{gutknecht2004zonnon}. Thus, the language supports three semantically distinct access scopes: local (private), module/exported (public), and non-exported encapsulated scope. 
+\begin{flalign*}
+    & n_{levels}(\text{Zonnon})=3, n_{max}=n_{levels}(\text{C\#})=7 &&\\
+    & V(\text{Zonnon})=\frac{3}{7}&&
+\end{flalign*}
 
-\[
-\begin{aligned}
-    n_{levels}(\text{Zonnon})=3, n_{max}=n_{levels}(\text{C\#})=7 \\
-    V(\text{Zonnon})=\frac{3}{7}
-\end{aligned}
-\]
 
 \textbf{2) Module Isolation Strength $M(L)$}
 
@@ -96,13 +88,11 @@ The language defines four basic programming units: \texttt{module}, \texttt{obje
 
 The language defines \texttt{definition} as a dedicated abstraction construct representing an interface (a set of method signatures and fields), clearly decoupled from implementation, while \texttt{implementation} provides reusable method bodies, and \texttt{object} serves as the concrete type that implements one or more definitions via the \texttt{implements} clause \cite{gutknecht2004zonnon}. 
 Additionally, \texttt{protocol} types describe interaction behaviour but are primarily oriented toward concurrency rather than general interface abstraction, and thus are not counted as core abstraction constructs.
+\begin{flalign*}
+    & n_{abstraction\_constructs}(\text{Zonnon})=1, n_{object}(\text{Zonnon})=2 &&\\
+    & I(\text{Zonnon})=\frac{1}{1}=1&&
+\end{flalign*}
 
-\[
-\begin{aligned}
-    n_{abstraction\_constructs}(\text{Zonnon})=1, n_{object}(\text{Zonnon})=2 \\
-    I(\text{Zonnon})=\frac{1}{1}=1
-\end{aligned}
-\]
 
 \textbf{4) Encapsulation Enforcement Coefficient $E(L)$}
 
@@ -114,14 +104,13 @@ Although Zonnon includes a reflection facility, it is defined in a controlled ma
 \]
 
 \textbf{Final metric value:}
+\begin{flalign*}
+    & AE(\text{Zonnon}) = 0.2 \cdot V(\text{Zonnon}) + 0.25 \cdot M(\text{Zonnon}) + 0.25 \cdot I(\text{Zonnon}) &&\\
+    & \qquad + 0.3 \cdot E(\text{Zonnon}) &&\\
+    & = 0.2 \cdot \frac{3}{7} + 0.25 \cdot 0.75 + 0.25 \cdot 1 + 0.3 \cdot 1 
+    \approx 0.8232&&
+\end{flalign*}
 
-\[
-\begin{aligned}
-    AE(\text{Zonnon}) = 0.2 \cdot V(\text{Zonnon}) + 0.25 \cdot M(\text{Zonnon}) + 0.25 \cdot I(\text{Zonnon}) + 0.3 \cdot E(\text{Zonnon}) \\
-    = 0.2 \cdot \frac{3}{7} + 0.25 \cdot 0.75 + 0.25 \cdot 1 + 0.3 \cdot 1 
-    \approx 0.8232
-\end{aligned}
-\]
 
 \subsubsection{Inheritance Semantics and Hierarchy Management}
 
@@ -181,14 +170,13 @@ $s_6=1$: The compiler enforces consistency of method signatures during overridin
 \]
 
 \textbf{Final metric value:}
+\begin{flalign*}
+    & ISRI(\text{Zonnon}) = 0.2 \cdot H_s(\text{Zonnon}) + 0.25 \cdot L_d(\text{Zonnon}) + 0.3 \cdot C_p(\text{Zonnon}) &&\\
+    & \qquad + 0.25 \cdot F_b(\text{Zonnon})  &&\\
+    & = 0.2 \cdot 1 + 0.25 \cdot 1 + 0.3 \cdot 0.5 + 0.25 \cdot \frac{4}{6}
+    \approx 0.7667&&
+\end{flalign*}
 
-\[
-\begin{aligned}
-    ISRI(\text{Zonnon}) = 0.2 \cdot H_s(\text{Zonnon}) + 0.25 \cdot L_d(\text{Zonnon}) + 0.3 \cdot C_p(\text{Zonnon}) + 0.25 \cdot F_b(\text{Zonnon}) \\
-    = 0.2 \cdot 1 + 0.25 \cdot 1 + 0.3 \cdot 0.5 + 0.25 \cdot \frac{4}{6}
-    \approx 0.7667
-\end{aligned}
-\]
 
 \subsubsection{Composition and Alternatives to Inheritance}
 
@@ -219,22 +207,19 @@ Additionally, \texttt{implementation} units do not declare behavioural requireme
 
 In Zonnon, \texttt{object} types can implement multiple \texttt{definition}s (interfaces) via the \texttt{implements} clause without any specified upper bound, implying unrestricted interface composition \cite{gutknecht2004zonnon}. 
 However, \texttt{definition} constructs serve purely as abstract interfaces containing field declarations and method signatures. They do not allow method implementations, as behaviour is provided separately via \texttt{implementation} or directly within \texttt{object}s.
+\begin{flalign*}
+    & N_{impl}(\text{Zonnon})=1, D_{def}(\text{Zonnon})=0 &&\\
+    & I_{comp}(\text{Zonnon})=0.5&&
+\end{flalign*}
 
-\[
-\begin{aligned}
-    N_{impl}(\text{Zonnon})=1, D_{def}(\text{Zonnon})=0 \\
-    I_{comp}(\text{Zonnon})=0.5
-\end{aligned}
-\]
 
 \textbf{Final metric value:}
+\begin{flalign*}
+    & CRFI(\text{Zonnon}) = 0.3 \cdot D_{cls}(\text{Zonnon}) + 0.35 \cdot T_{exp}(\text{Zonnon}) &&\\
+    & \qquad + 0.35 \cdot I_{comp}(\text{Zonnon}) &&\\
+    & = 0.3 \cdot 0.25 + 0.35 \cdot 0 + 0.35 \cdot 0.5 = 0.25&&
+\end{flalign*}
 
-\[
-\begin{aligned}
-    CRFI(\text{Zonnon}) = 0.3 \cdot D_{cls}(\text{Zonnon}) + 0.35 \cdot T_{exp}(\text{Zonnon}) + 0.35 \cdot I_{comp}(\text{Zonnon}) \\
-    = 0.3 \cdot 0.25 + 0.35 \cdot 0 + 0.35 \cdot 0.5 = 0.25
-\end{aligned}
-\]
 
 \subsubsection{Object Representation and Creation Model}
 
@@ -243,13 +228,11 @@ However, \texttt{definition} constructs serve purely as abstract interfaces cont
 According to the specification, the primary user-definable types are \texttt{object} and \texttt{record}. Objects in Zonnon can be declared with modifiers \texttt{ref} (reference semantics) or \texttt{value} (value semantics), with \texttt{value} being the default, while \texttt{record} is explicitly defined as a value object type \cite{gutknecht2004zonnon}. Since reference semantics are not enforced uniformly across all user-defined types-only optionally for \texttt{object} types-there is no type category that strictly enforces reference semantics by definition.
 
 Zonnon distinguishes value and reference objects:
+\begin{flalign*}
+    & T_{user}=2 \text{(value, reference)} T_{ref}=1 &&\\
+    & S_{id}(\text{Zonnon})=0.5&&
+\end{flalign*}
 
-\[
-\begin{aligned}
-    T_{user}=2 \text{(value, reference)} T_{ref}=1 \\
-    S_{id}(\text{Zonnon})=0.5
-\end{aligned}
-\]
 
 \textbf{2) Instantiation Paradigm Diversity $S_{cr}(L)$}
 
@@ -270,14 +253,13 @@ The specification defines a reflection mechanism that enables querying program s
 \]
 
 \textbf{Final metric value:}
+\begin{flalign*}
+    & ORCI(\text{Zonnon}) = 0.35 \cdot S_{id}(\text{Zonnon}) + 0.3 \cdot S_{cr}(\text{Zonnon}) &&\\
+    & \qquad + 0.35 \cdot S_{meta}(\text{Zonnon}) &&\\
+    & = 0.35 \cdot 0.5 + 0.3 \cdot \frac{2}{4} + 0.35 \cdot \frac{1}{3} &&\\
+    & \approx 0.4417&&
+\end{flalign*}
 
-\[
-\begin{aligned}
-    ORCI(\text{Zonnon}) = 0.35 \cdot S_{id}(\text{Zonnon}) + 0.3 \cdot S_{cr}(\text{Zonnon}) + 0.35 \cdot S_{meta}(\text{Zonnon}) \\
-    = 0.35 \cdot 0.5 + 0.3 \cdot \frac{2}{4} + 0.35 \cdot \frac{1}{3} \\
-    \approx 0.4417
-\end{aligned}
-\]
 
 \subsubsection{Polymorphism and Dispatch Mechanisms}
 
@@ -335,14 +317,13 @@ $K_{static}=1$
 \]
 
 \textbf{Final metric value:}
+\begin{flalign*}
+    & PDEI(\text{Zonnon}) = 0.35 \cdot M_{scope}(\text{Zonnon}) + 0.35 \cdot S_{disp}(\text{Zonnon}) &&\\
+    & \qquad + 0.3 \cdot O_{virt}(\text{Zonnon}) &&\\
+    & = 0.35 \cdot 0.2 + 0.35 \cdot 0.5 + 0.3 \cdot \frac{2}{3} &&\\
+    & = 0.445&&
+\end{flalign*}
 
-\[
-\begin{aligned}
-    PDEI(\text{Zonnon}) = 0.35 \cdot M_{scope}(\text{Zonnon}) + 0.35 \cdot S_{disp}(\text{Zonnon}) + 0.3 \cdot O_{virt}(\text{Zonnon})\\
-    = 0.35 \cdot 0.2 + 0.35 \cdot 0.5 + 0.3 \cdot \frac{2}{3} \\
-    = 0.445
-\end{aligned}
-\]
 
 \subsubsection{State Model, Mutability, and Concurrency Guarantees}
 
@@ -389,14 +370,13 @@ $S_{model}(\text{Zonnon})=0.5$
 \]
 
 \textbf{Final metric value:}
+\begin{flalign*}
+    & SCSI(\text{Zonnon}) = 0.35 \cdot M_{def}(\text{Zonnon}) + 0.25 \cdot S_{dens}(\text{Zonnon}) &&\\
+    & \qquad + 0.4 \cdot P_{conc}(\text{Zonnon}) &&\\
+    & = 0.35 \cdot 0 + 0.25 \cdot \frac{2}{3} + 0.4 \cdot 0.5 &&\\
+    & \approx 0.3667&&
+\end{flalign*}
 
-\[
-\begin{aligned}
-    SCSI(\text{Zonnon}) = 0.35 \cdot M_{def}(\text{Zonnon}) + 0.25 \cdot S_{dens}(\text{Zonnon}) + 0.4 \cdot P_{conc}(\text{Zonnon}) \\
-    = 0.35 \cdot 0 + 0.25 \cdot \frac{2}{3} + 0.4 \cdot 0.5 \\
-    \approx 0.3667
-\end{aligned}
-\]
 
 \subsubsection{Support for Formal Specification and Verifiability}
 
@@ -422,10 +402,8 @@ Zonnon does not provide a static verification system capable of proving correctn
 \]
 
 \textbf{Final metric value:}
+\begin{flalign*}
+    & FSVI(\text{Zonnon}) = 0.45 \cdot C_{nat}(\text{Zonnon}) + 0.55 \cdot V_{enf}(\text{Zonnon}) &&\\
+    & = 0.45 \cdot \frac{2}{3} + 0.55 \cdot 0.5 = 0.575&&
+\end{flalign*}
 
-\[
-\begin{aligned}
-    FSVI(\text{Zonnon}) = 0.45 \cdot C_{nat}(\text{Zonnon}) + 0.55 \cdot V_{enf}(\text{Zonnon}) \\
-    = 0.45 \cdot \frac{2}{3} + 0.55 \cdot 0.5 = 0.575
-\end{aligned}
-\]
