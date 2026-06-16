@@ -8,9 +8,9 @@ C++ represents a multi-paradigm language with a predominantly nominal and static
 
 % TODO: Перепроверить сорсы
 
-\textbf{1) Nominal–Structural Typing Score $S_{nom}(L)$}
+\textbf{1) Nominal-Structural Typing Score $S_{nom}(L)$}
 
-C++ does not define structural subtyping\cite{stroustrup1994design} ((ISO/IEC 14882) ) in core type system: type compatibility is not determined by the structure but rather by explicit declarations, and while templates and concepts enable compile-time constraints resembling structural checks, they do not constitute formal structural subtyping judgments in the specification. 
+C++ does not define structural subtyping\cite{stroustrup1994design} (ISO/IEC 14882) in core type system: type compatibility is not determined by the structure but rather by explicit declarations, and while templates and concepts enable compile-time constraints resembling structural checks, they do not constitute formal structural subtyping judgments in the specification. 
 C++ is fundamentally nominally typed: subtype relationships are explicitly declared via class inheritance (e.g., \texttt{class B : public A}), and the standard formally specifies these relationships through inheritance and access control rules. 
 
 \[
@@ -25,7 +25,7 @@ C++ supports parametric polymorphism through templates, but does not have an exp
     V_{exp}(\text{C++}) = 0.5, V_{sound}(\text{C++}) = 0.5 \Rightarrow S_{var}(\text{C++}) = 0.5
 \]
 
-\textbf{3) Inheritance–Subtyping Separation Score $S_{rel}(L)$}
+\textbf{3) Inheritance-Subtyping Separation Score $S_{rel}(L)$}
 
 First, the language does not support a separate subtyping mechanism.: it is possible only through class inheritance.
 
@@ -45,9 +45,9 @@ $I_{form}(\text{C++}) = 0$
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & TSSI(\text{C++}) = 0.3 \cdot S_{nom}(\text{C++}) + 0.3 \cdot S_{var}(\text{C++}) + 0.4 \cdot S_{rel}(\text{C++}) &&\\
-    & = 0.3 \cdot 0.5 + 0.3 \cdot 0.5 + 0.4 \cdot 0 &&\\
-    & = 0.3&&
+    & \qquad TSSI(\text{C++}) = 0.3 \cdot S_{nom}(\text{C++}) + 0.3 \cdot S_{var}(\text{C++}) + 0.4 \cdot S_{rel}(\text{C++}) &&\\
+    & \qquad = 0.3 \cdot 0.5 + 0.3 \cdot 0.5 + 0.4 \cdot 0 &&\\
+    & \qquad = 0.3&&
 \end{flalign*}
 
 \subsubsection{Abstraction and Encapsulation Mechanisms}
@@ -67,8 +67,8 @@ The language provides two primary boundary mechanisms: namespaces and modules.
 Namespaces serve as organizational scopes but do not enforce strict access control, as all members are visible once declared. They are not counted as strict boundaries. 
 In contrast, C++20 modules introduce explicit export control via \texttt{export} declarations, forming well-defined interface boundaries that restrict visibility across translation units.
 \begin{flalign*}
-    & b_{strict}(\text{C++}) = 1, b_{total}(\text{C++}) = 2 &&\\
-    & \Rightarrow M(\text{C++}) = 0.5&&
+    & \qquad b_{strict}(\text{C++}) = 1, b_{total}(\text{C++}) = 2 &&\\
+    & \qquad \Rightarrow M(\text{C++}) = 0.5&&
 \end{flalign*}
 
 
@@ -77,8 +77,8 @@ In contrast, C++20 modules introduce explicit export control via \texttt{export}
 The language does not provide a dedicated \textit{interface} keyword. Abstraction is achieved primarily through abstract classes and, more recently, through \texttt{concepts}, which define compile-time behavioural constraints. 
 Regarding object-defining constructs, C++ includes \texttt{class}, \texttt{struct}, and \texttt{union}, all formally specified as distinct type constructors.
 \begin{flalign*}
-    & n_{abstraction_constructs}(\text{C++}) = 2, n_{object}(\text{C++}) = 3 &&\\
-    & \Rightarrow I(\text{C++}) = \frac{2}{3} = 0.67&&
+    & \qquad n_{abstraction_constructs}(\text{C++}) = 2, n_{object}(\text{C++}) = 3 &&\\
+    & \qquad \Rightarrow I(\text{C++}) = \frac{2}{3} = 0.67&&
 \end{flalign*}
 
 
@@ -92,9 +92,10 @@ C++ enforces multiple mechanisms that allow bypassing encapsulation constraints:
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & AE(\text{C++}) = 0.2 \cdot V(\text{C++}) + 0.25 \cdot M(\text{C++}) + 0.25 \cdot I(\text{C++}) + 0.3 \cdot E(\text{C++}) &&\\
-    & = 0.2 \cdot \frac{3}{7} + 0.25 \cdot 0.5 + 0.25 \cdot \frac{2}{3} + 0.3 \cdot 0 &&\\
-    & \approx 0.3774&&
+    & \qquad AE(\text{C++}) = 0.2 \cdot V(\text{C++}) + 0.25 \cdot M(\text{C++}) + 0.25 \cdot I(\text{C++}) &&\\
+    & \qquad \qquad + 0.3 \cdot E(\text{C++}) &&\\
+    & \qquad = 0.2 \cdot \frac{3}{7} + 0.25 \cdot 0.5 + 0.25 \cdot \frac{2}{3} + 0.3 \cdot 0 &&\\
+    & \qquad \approx 0.3774&&
 \end{flalign*}
 
 \subsubsection{Inheritance Semantics and Hierarchy Management}
@@ -153,10 +154,10 @@ $s_6 = 1$: the compiler strictly checks the correctness of the redefinition at t
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & ISRI(\text{C++}) = 0.2 \cdot H_s(\text{C++}) + 0.25 \cdot L_d(\text{C++}) &&\\
-    & \qquad + 0.3 \cdot C_p(\text{C++}) + 0.25 \cdot F_b(\text{C++}) &&\\
-    & = 0.2 \cdot 0 + 0.25 \cdot 0.5 + 0.3 \cdot 0.33 + 0.25 \cdot \frac{4}{6} &&\\
-    & \approx 0.3907&&
+    & \qquad ISRI(\text{C++}) = 0.2 \cdot H_s(\text{C++}) + 0.25 \cdot L_d(\text{C++}) &&\\
+    & \qquad \qquad + 0.3 \cdot C_p(\text{C++}) + 0.25 \cdot F_b(\text{C++}) &&\\
+    & \qquad = 0.2 \cdot 0 + 0.25 \cdot 0.5 + 0.3 \cdot 0.33 + 0.25 \cdot \frac{4}{6} &&\\
+    & \qquad \approx 0.3907&&
 \end{flalign*}
 
 \subsubsection{Composition and Alternatives to Inheritance}
@@ -189,9 +190,9 @@ Unlike traditional interface-only constructs, abstract classes in C++ may contai
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & CRFI(\text{C++}) = 0.3 \cdot D_{cls}(\text{C++}) + 0.35 \cdot T_{exp}(\text{C++}) + 0.35 \cdot I_{comp}(\text{C++}) &&\\
-    & = 0.3 \cdot 0.25 + 0.35 \cdot 0 + 0.35 \cdot 1 &&\\
-    & = 0.425&&
+    & \qquad CRFI(\text{C++}) = 0.3 \cdot D_{cls}(\text{C++}) + 0.35 \cdot T_{exp}(\text{C++}) + 0.35 \cdot I_{comp}(\text{C++}) &&\\
+    & \qquad = 0.3 \cdot 0.25 + 0.35 \cdot 0 + 0.35 \cdot 1 &&\\
+    & \qquad = 0.425&&
 \end{flalign*}
 
 \subsubsection{Object Representation and Creation Model}
@@ -222,9 +223,9 @@ The language provides limited runtime introspection via mechanisms such as \text
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & ORCI(\text{C++}) = 0.35 \cdot S_{id}(\text{C++}) + 0.3 \cdot S_{cr}(\text{C++}) + 0.35 \cdot S_{meta}(\text{C++}) &&\\
-    & = 0.35 \cdot 0 + 0.3 \cdot \frac{3}{4} + 0.35 \cdot \frac{1}{3} &&\\
-    & \approx 0.3417&&
+    & \qquad ORCI(\text{C++}) = 0.35 \cdot S_{id}(\text{C++}) + 0.3 \cdot S_{cr}(\text{C++}) + 0.35 \cdot S_{meta}(\text{C++}) &&\\
+    & \qquad = 0.35 \cdot 0 + 0.3 \cdot \frac{3}{4} + 0.35 \cdot \frac{1}{3} &&\\
+    & \qquad \approx 0.3417&&
 \end{flalign*}
 
 \subsubsection{Polymorphism and Dispatch Mechanisms}
@@ -281,9 +282,9 @@ $K_{static}(\text{C++})=1$
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & PDEI(\text{C++}) = 0.35 \cdot M_{scope}(\text{C++}) + 0.35 \cdot S_{disp}(\text{C++}) + 0.3 \cdot O_{virt}(\text{C++}) &&\\
-    & = 0.35 \cdot 0.2 + 0.35 \cdot 0 + 0.3 \cdot 1 &&\\
-    & = 0.37&&
+    & \qquad PDEI(\text{C++}) = 0.35 \cdot M_{scope}(\text{C++}) + 0.35 \cdot S_{disp}(\text{C++}) + 0.3 \cdot O_{virt}(\text{C++}) &&\\
+    & \qquad = 0.35 \cdot 0.2 + 0.35 \cdot 0 + 0.3 \cdot 1 &&\\
+    & \qquad = 0.37&&
 \end{flalign*}
 
 \subsubsection{State Model, Mutability, and Concurrency Guarantees}
@@ -332,9 +333,9 @@ $S_{model}(\text{C++}) = 0$
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & SCSI(\text{C++}) = 0.35 \cdot M_{def}(\text{C++}) + 0.25 \cdot S_{dens}(\text{C++}) + 0.4 \cdot P_{conc}(\text{C++}) &&\\
-    & = 0.35 \cdot 0 + 0.25 \cdot \frac{4}{6} + 0.4 \cdot 0 &&\\
-    & \approx 0.1667&&
+    & \qquad SCSI(\text{C++}) = 0.35 \cdot M_{def}(\text{C++}) + 0.25 \cdot S_{dens}(\text{C++}) + 0.4 \cdot P_{conc}(\text{C++}) &&\\
+    & \qquad = 0.35 \cdot 0 + 0.25 \cdot \frac{4}{6} + 0.4 \cdot 0 &&\\
+    & \qquad \approx 0.1667&&
 \end{flalign*}
 
 \subsubsection{Support for Formal Specification and Verifiability}
@@ -357,18 +358,18 @@ C++ does not have built-in formal static verification tools. Checks through \tex
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & FSVI(\text{C++}) = 0.45 \cdot C_{nat}(\text{C++}) + 0.55 \cdot V_{enf}(\text{C++}) &&\\
-    & = 0.45 \cdot 0 + 0.55 \cdot 0.5 &&\\
-    & = 0.275&&
+    & \qquad FSVI(\text{C++}) = 0.45 \cdot C_{nat}(\text{C++}) + 0.55 \cdot V_{enf}(\text{C++}) &&\\
+    & \qquad = 0.45 \cdot 0 + 0.55 \cdot 0.5 &&\\
+    & \qquad = 0.275&&
 \end{flalign*}
 
 \subsection{Metrics Evaluation for C}
 
 The C programming language, standardised by ISO/IEC 9899, represents a minimalistic procedural paradigm with a weak notion of abstraction and no native support for object-oriented constructs. As noted by Kernighan and Ritchie, “C provides no direct support for object-oriented programming” \cite{ritchie1978c}. Consequently, evaluating C under object-model-oriented metrics requires interpreting its type system, memory model, and modularisation mechanisms through the lens of emulated object-oriented patterns. This subsection computes the defined metrics strictly based on the formal language specification and authoritative analyses \cite{iso9899_2024, pierce2002types}.
 
-\subsubsection{1) Type System and Subtyping Model}
+\subsubsection{Type System and Subtyping Model}
 
-\textbf{1) Nominal–Structural Typing Score $S_{nom}(L)$}
+\textbf{1) Nominal-Structural Typing Score $S_{nom}(L)$}
 
 Structural subtyping is absent in C, since type compatibility is not based on structural equivalence with subtyping rules, but rather on strict compatibility rules without a formal subtype relation (ISO/IEC 9899).
 
@@ -396,7 +397,7 @@ $V_{sound}(\text{C})=0$.
     S_{var}(\text{C}) = 0
 \]
 
-\textbf{3) Inheritance–Subtyping Separation Score $S_{rel}(L)$}
+\textbf{3) Inheritance-Subtyping Separation Score $S_{rel}(L)$}
 
 C is a procedural language with a type system based on compatibility rather than subtype polymorphism. The constructs such as \texttt{struct} composition and pointer conversions do not constitute explicit subtyping relations defined by the language semantics.
 
@@ -412,8 +413,8 @@ $I_{form}(\text{C}) = 0$ because there is no formal distinction between inherita
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & TSSI(\text{C}) = 0.3 \cdot S_{nom}(\text{C}) + 0.3 \cdot S_{var}(\text{C}) + 0.4 \cdot S_{rel}(\text{C}) &&\\
-    & = 0.3 \cdot 0 + 0.3 \cdot 0 + 0.4 \cdot 0 = 0&&
+    & \qquad TSSI(\text{C}) = 0.3 \cdot S_{nom}(\text{C}) + 0.3 \cdot S_{var}(\text{C}) + 0.4 \cdot S_{rel}(\text{C}) &&\\
+    & \qquad = 0.3 \cdot 0 + 0.3 \cdot 0 + 0.4 \cdot 0 = 0&&
 \end{flalign*}
 
 \subsubsection{Abstraction and Encapsulation Mechanisms}
@@ -456,16 +457,16 @@ C does not enforce encapsulation at the language level: it allows unrestricted m
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & AE(\text{C}) = 0.2 \cdot V(\text{C}) + 0.25 \cdot M(\text{C}) + 0.25 \cdot I(\text{C}) + 0.3 \cdot E(\text{C}) &&\\
-    & = 0.2 \cdot \frac{2}{7} + 0.25 \cdot 0 + 0.25 \cdot 0 + 0.3 \cdot 0 &&\\
-    & \approx 0.0571&&
+    & \qquad AE(\text{C}) = 0.2 \cdot V(\text{C}) + 0.25 \cdot M(\text{C}) + 0.25 \cdot I(\text{C}) + 0.3 \cdot E(\text{C}) &&\\
+    & \qquad = 0.2 \cdot \frac{2}{7} + 0.25 \cdot 0 + 0.25 \cdot 0 + 0.3 \cdot 0 &&\\
+    & \qquad \approx 0.0571&&
 \end{flalign*}
 
 \subsubsection{Inheritance Semantics and Hierarchy Management}
 
 According to the ISO C standard, C does not support inheritance:
 \begin{flalign*}
-    & H_s(\text{C}) = 0, L_d(\text{C}) = 0, C_p(\text{C}) = 0, F_b(\text{C}) = 0&&
+    & \qquad H_s(\text{C}) = 0, L_d(\text{C}) = 0, C_p(\text{C}) = 0, F_b(\text{C}) = 0&&
 \end{flalign*}
 
 \textbf{Final metric value:}
@@ -502,9 +503,9 @@ No interfaces:
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & CRFI(\text{C}) = 0.3 \cdot D_{cls}(\text{C}) + 0.35 \cdot T_{exp}(\text{C}) + 0.35 \cdot I_{comp}(\text{C}) &&\\
-    & = 0.3 \cdot 0.25 + 0.35 \cdot 0 + 0.35 \cdot 0 &&\\
-    & = 0.075&&
+    & \qquad CRFI(\text{C}) = 0.3 \cdot D_{cls}(\text{C}) + 0.35 \cdot T_{exp}(\text{C}) + 0.35 \cdot I_{comp}(\text{C}) &&\\
+    & \qquad = 0.3 \cdot 0.25 + 0.35 \cdot 0 + 0.35 \cdot 0 &&\\
+    & \qquad = 0.075&&
 \end{flalign*}
 
 \subsubsection{Object Representation and Creation Model}
@@ -535,9 +536,9 @@ C does not provide any built-in mechanisms for runtime introspection or structur
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & ORCI(\text{C}) = 0.35 \cdot S_{id}(\text{C}) + 0.3 \cdot S_{cr}(\text{C}) + 0.35 \cdot S_{meta}(\text{C}) &&\\
-    & = 0.35 \cdot 0 + 0.3 \cdot \frac{2}{4} + 0.35 \cdot 0 &&\\
-    & = 0.15&&
+    & \qquad ORCI(\text{C}) = 0.35 \cdot S_{id}(\text{C}) + 0.3 \cdot S_{cr}(\text{C}) + 0.35 \cdot S_{meta}(\text{C}) &&\\
+    & \qquad = 0.35 \cdot 0 + 0.3 \cdot \frac{2}{4} + 0.35 \cdot 0 &&\\
+    & \qquad = 0.15&&
 \end{flalign*}
 
 \subsubsection{Polymorphism and Dispatch Mechanisms}
@@ -594,9 +595,9 @@ $K_{static}(\text{C}) = 1$
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & PDEI(\text{C}) = 0.35 \cdot M_{scope}(\text{C}) + 0.35 \cdot S_{disp}(\text{C}) + 0.3 \cdot O_{virt}(\text{C}) &&\\
-    & = 0.35 \cdot 0 + 0.35 \cdot 0 + 0.3 \cdot \frac{1}{3} &&\\
-    & = 0.1&&
+    & \qquad PDEI(\text{C}) = 0.35 \cdot M_{scope}(\text{C}) + 0.35 \cdot S_{disp}(\text{C}) + 0.3 \cdot O_{virt}(\text{C}) &&\\
+    & \qquad = 0.35 \cdot 0 + 0.35 \cdot 0 + 0.3 \cdot \frac{1}{3} &&\\
+    & \qquad = 0.1&&
 \end{flalign*}
 
 \subsubsection{State Model, Mutability, and Concurrency Guarantees}
@@ -639,9 +640,9 @@ $S_{model}(\text{C}) = 0$
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & SCSI(\text{C}) = 0.35 \cdot M_{def}(\text{C}) + 0.25 \cdot S_{dens}(\text{C}) + 0.4 \cdot P_{conc}(\text{C}) &&\\
-    & = 0.35 \cdot 0 + 0.25 \cdot \frac{2}{3} + 0.4 \cdot 0 &&\\
-    & \approx 0.1667&&
+    & \qquad SCSI(\text{C}) = 0.35 \cdot M_{def}(\text{C}) + 0.25 \cdot S_{dens}(\text{C}) + 0.4 \cdot P_{conc}(\text{C}) &&\\
+    & \qquad = 0.35 \cdot 0 + 0.25 \cdot \frac{2}{3} + 0.4 \cdot 0 &&\\
+    & \qquad \approx 0.1667&&
 \end{flalign*}
 
 \subsubsection{Support for Formal Specification and Verifiability}
@@ -664,8 +665,8 @@ C does not support static verification in the sense of compile-time proof of pro
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & FSVI(\text{C}) = 0.45 \cdot C_{nat}(\text{C}) + 0.55 \cdot V_{enf}(\text{C}) &&\\
-    & = 0.45 \cdot 0 + 0.55 \cdot 0 = 0&&
+    & \qquad FSVI(\text{C}) = 0.45 \cdot C_{nat}(\text{C}) + 0.55 \cdot V_{enf}(\text{C}) &&\\
+    & \qquad = 0.45 \cdot 0 + 0.55 \cdot 0 = 0&&
 \end{flalign*}
 
 
@@ -673,9 +674,9 @@ C does not support static verification in the sense of compile-time proof of pro
 
 The Go programming language (Golang) represents a statically typed, compiled language that deliberately departs from classical object-oriented paradigms \cite{go_spec}. Go does not provide inheritance, subtype polymorphism via class hierarchies, or explicit object constructs. Instead, it adopts a composition-based design philosophy combined with structural typing through interfaces. Pike et al., that Go is not an object-oriented language, because it has no classes, inheritance, and explicit method hierarchies \cite{pike2012go}.
 
-\subsubsection{1) Type System and Subtyping Model}
+\subsubsection{Type System and Subtyping Model}
 
-\textbf{1) Nominal–Structural Typing Score $S_{nom}(L)$}
+\textbf{1) Nominal-Structural Typing Score $S_{nom}(L)$}
 
 Go supports structural typing through its interface system: a type satisfies an interface implicitly if it implements the required method set, without explicit declaration, which corresponds to structural subtyping governed by formal assignability and method-set rules in the specification. 
 
@@ -703,7 +704,7 @@ $V_{sound}(\text{Golang})=0.5$
     S_{var}(\text{Golang})=\frac{0.5+0.5}{2}=0.5
 \]
 
-\textbf{3) Inheritance–Subtyping Separation Score $S_{rel}(L)$}
+\textbf{3) Inheritance-Subtyping Separation Score $S_{rel}(L)$}
 
 Go allows subtyping (in the form of interface satisfaction) without any inheritance constructs such as class extension. The types implement interfaces implicitly based on method sets, independent of declaration. 
 
@@ -722,9 +723,10 @@ $S_{rel}(\text{Golang})=\frac{1+1+0.5}{3}\approx0.83$,
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & TSSI(\text{Golang}) = 0.3 \cdot S_{nom}(\text{Golang}) + 0.3 \cdot S_{var}(\text{Golang}) + 0.4 \cdot S_{rel}(\text{Golang}) &&\\
-    & = 0.3 \cdot 0.5 + 0.3 \cdot 0.5 + 0.4 \cdot \frac{5}{6} &&\\
-    & \approx 0.6334&&
+    & \qquad TSSI(\text{Golang}) = 0.3 \cdot S_{nom}(\text{Golang}) + 0.3 \cdot S_{var}(\text{Golang}) &&\\
+    & \qquad \qquad + 0.4 \cdot S_{rel}(\text{Golang}) &&\\
+    & \qquad = 0.3 \cdot 0.5 + 0.3 \cdot 0.5 + 0.4 \cdot \frac{5}{6} &&\\
+    & \qquad \approx 0.6334&&
 \end{flalign*}
 
 \subsubsection{Abstraction and Encapsulation Mechanisms}
@@ -772,10 +774,10 @@ Go supports encapsulation through packet visibility rules. However, \texttt{unsa
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & AE(\text{Golang}) = 0.2 \cdot V(\text{Golang}) + 0.25 \cdot M(\text{Golang}) &&\\
-    & \qquad + 0.25 \cdot I(\text{Golang}) + 0.3 \cdot E(\text{Golang}) &&\\
-    & = 0.2 \cdot \frac{2}{7} + 0.25 \cdot 0.5 + 0.25 \cdot 1 + 0.3 \cdot 0 &&\\
-    & \approx 0.4321&&
+    & \qquad AE(\text{Golang}) = 0.2 \cdot V(\text{Golang}) + 0.25 \cdot M(\text{Golang}) &&\\
+    & \qquad \qquad + 0.25 \cdot I(\text{Golang}) + 0.3 \cdot E(\text{Golang}) &&\\
+    & \qquad = 0.2 \cdot \frac{2}{7} + 0.25 \cdot 0.5 + 0.25 \cdot 1 + 0.3 \cdot 0 &&\\
+    & \qquad \approx 0.4321&&
 \end{flalign*}
 
 \subsubsection{Inheritance Semantics and Hierarchy Management}
@@ -835,10 +837,10 @@ $s_6=1$: the compiler statically checks the compatibility of signatures with int
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & ISRI(\text{Golang}) = 0.2 \cdot H_s(\text{Golang}) + 0.25 \cdot L_d(\text{Golang}) &&\\
-    & \qquad + 0.3 \cdot C_p(\text{Golang}) + 0.25 \cdot F_b(\text{Golang}) &&\\
-    & = 0.2 \cdot 1 + 0.25 \cdot 1 + 0.3 \cdot \frac{2}{6} + 0.25 \cdot \frac{4}{6} &&\\
-    & \approx 0.7167&&
+    & \qquad ISRI(\text{Golang}) = 0.2 \cdot H_s(\text{Golang}) + 0.25 \cdot L_d(\text{Golang}) &&\\
+    & \qquad \qquad + 0.3 \cdot C_p(\text{Golang}) + 0.25 \cdot F_b(\text{Golang}) &&\\
+    & \qquad = 0.2 \cdot 1 + 0.25 \cdot 1 + 0.3 \cdot \frac{2}{6} + 0.25 \cdot \frac{4}{6} &&\\
+    & \qquad \approx 0.7167&&
 \end{flalign*}
 
 \subsubsection{Composition and Alternatives to Inheritance}
@@ -887,10 +889,10 @@ $D_{def}(\text{Golang})=0$
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & CRFI(\text{Golang}) = 0.3 \cdot D_{cls}(\text{Golang}) + 0.35 \cdot T_{exp}(\text{Golang}) &&\\
-    & \qquad + 0.35 \cdot I_{comp}(\text{Golang}) &&\\
-    & = 0.3 \cdot 0.25 + 0.35 \cdot 0 + 0.35 \cdot 0.5 &&\\
-    & = 0.25&&
+    & \qquad CRFI(\text{Golang}) = 0.3 \cdot D_{cls}(\text{Golang}) + 0.35 \cdot T_{exp}(\text{Golang}) &&\\
+    & \qquad \qquad + 0.35 \cdot I_{comp}(\text{Golang}) &&\\
+    & \qquad = 0.3 \cdot 0.25 + 0.35 \cdot 0 + 0.35 \cdot 0.5 &&\\
+    & \qquad = 0.25&&
 \end{flalign*}
 
 \subsubsection{Object Representation and Creation Model}
@@ -936,10 +938,10 @@ According to the Go Language Specification and its \textit{reflect} package mode
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & ORCI(\text{Golang}) = 0.35 \cdot S_{id}(\text{Golang}) + 0.3 \cdot S_{cr}(\text{Golang}) &&\\
-    & \qquad + 0.35 \cdot S_{meta}(\text{Golang}) &&\\
-    & = 0.35 \cdot \frac{5}{7} + 0.3 \cdot 0.75 + 0.35 \cdot \frac{1}{3} &&\\
-    & \approx 0.5917&&
+    & \qquad ORCI(\text{Golang}) = 0.35 \cdot S_{id}(\text{Golang}) + 0.3 \cdot S_{cr}(\text{Golang}) &&\\
+    & \qquad \qquad + 0.35 \cdot S_{meta}(\text{Golang}) &&\\
+    & \qquad = 0.35 \cdot \frac{5}{7} + 0.3 \cdot 0.75 + 0.35 \cdot \frac{1}{3} &&\\
+    & \qquad \approx 0.5917&&
 \end{flalign*}
 
 \subsubsection{Polymorphism and Dispatch Mechanisms}
@@ -992,10 +994,10 @@ $K_{static}(\text{Golang})=0$: there are no explicit language-level annotations 
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & PDEI(\text{Golang}) &&\\
-    & = 0.35 \cdot M_{scope}(\text{Golang}) + 0.35 \cdot S_{disp}(\text{Golang}) + 0.3 \cdot O_{virt}(\text{Golang}) &&\\
-    & = 0.35 \cdot 0.2 + 0.35 \cdot 0.5 + 0.3 \cdot 0 &&\\
-    & = 0.245&&
+    & \qquad PDEI(\text{Golang}) &&\\
+    & \qquad = 0.35 \cdot M_{scope}(\text{Golang}) + 0.35 \cdot S_{disp}(\text{Golang}) + 0.3 \cdot O_{virt}(\text{Golang}) &&\\
+    & \qquad = 0.35 \cdot 0.2 + 0.35 \cdot 0.5 + 0.3 \cdot 0 &&\\
+    & \qquad = 0.245&&
 \end{flalign*}
 
 \subsubsection{State Model, Mutability, and Concurrency Guarantees}
@@ -1038,9 +1040,9 @@ $S_{model}(\text{Golang}) = 1$
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & SCSI(\text{Golang}) &&\\
-    & = 0.35 \cdot M_{def}(\text{Golang}) + 0.25 \cdot S_{dens}(\text{Golang}) + 0.4 \cdot P_{conc}(\text{Golang}) &&\\
-    & = 0.35 \cdot 0 + 0.25 \cdot 0 + 0.4 \cdot 0.75 = 0.3    &&
+    & \qquad SCSI(\text{Golang}) &&\\
+    & \qquad = 0.35 \cdot M_{def}(\text{Golang}) + 0.25 \cdot S_{dens}(\text{Golang}) + 0.4 \cdot P_{conc}(\text{Golang}) &&\\
+    & \qquad = 0.35 \cdot 0 + 0.25 \cdot 0 + 0.4 \cdot 0.75 = 0.3    &&
 \end{flalign*}
 
 \subsubsection{Support for Formal Specification and Verifiability}
@@ -1049,8 +1051,8 @@ $S_{model}(\text{Golang}) = 1$
 
 The Go specification does not include any native language features for design-by-contract: there are no keywords or type-system mechanisms to declare preconditions, or invariants that are enforced either at compile time or runtime. Such constraints are typically expressed through explicit \texttt{if}-statements, error handling patterns, or documentation comments, which fall outside the definition of native constructs. 
 \begin{flalign*}
-    & n_{pre} = 0, n_{post} = 0, n_{inv} = 0 &&\\
-    & C_{nat}(\text{Golang}) = \frac{0 + 0 + 0}{3} = 0&&
+    & \qquad n_{pre} = 0, n_{post} = 0, n_{inv} = 0 &&\\
+    & \qquad C_{nat}(\text{Golang}) = \frac{0 + 0 + 0}{3} = 0&&
 \end{flalign*}
 
 \textbf{2) Verification Enforcement Level $V_{enf}(L)$}
@@ -1063,6 +1065,6 @@ Go does not support formal static verification and does not have dependent types
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & FSVI(\text{Golang}) = 0.45 \cdot C_{nat}(\text{Golang}) + 0.55 \cdot V_{enf}(\text{Golang}) &&\\
-    & = 0.45 \cdot 0 + 0.55 \cdot 0.5 = 0.275&&
+    & \qquad FSVI(\text{Golang}) = 0.45 \cdot C_{nat}(\text{Golang}) + 0.55 \cdot V_{enf}(\text{Golang}) &&\\
+    & \qquad = 0.45 \cdot 0 + 0.55 \cdot 0.5 = 0.275&&
 \end{flalign*}

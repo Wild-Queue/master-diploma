@@ -1,20 +1,24 @@
 \section{Parameter Estimation for Metric Coefficients}
 
-The selection of weighting coefficients for the proposed metrics is guided by the primary objective of this work: to emphasize those aspects of object models that most significantly affect extensibility, safety, and semantic clarity in object-oriented programming. The coefficients are calibrated to prioritize semantic soundness over syntactic convenience, explicitness over implicit behaviour, and composability over rigid hierarchy structures. Additionally,  separation of concerns-particularly between subtyping, inheritance, and composition-is critical for scalable software architecture \cite{odersky2004overview, cook1989inheritance}. Therefore, higher weights are systematically assigned to components reflecting formal guarantees and semantic orthogonality.
+The choice of weighting coefficients for the proposed metrics is guided by the main objective of this work: to emphasize those aspects of object models that most significantly affect extensibility, safety and semantic clarity in object-oriented programming. The coefficients are calibrated to prioritize semantic soundness over syntactic convenience, explicitness over implicit behaviour, and composability over rigid hierarchy structures. In addition, separation of concerns-particularly between subtyping, inheritance and composition-is critical for scalable software architecture \cite{odersky2004overview, cook1989inheritance}. The higher weights are systematically assigned to components reflecting formal guarantees and semantic orthogonality.
 
 \subsection{Type System and Subtyping Model}
+
+We determine the weighting coefficients for the TSSM metric based on the importance of each component for comparing object models across modern programming languages. The higher weights is given to characteristics that have a stronger impact on object-oriented software development.
 
 \[
     \alpha = 0.3, \beta = 0.3, \gamma = 0.4
 \]
 
-The highest weight is assigned to the inheritance–subtyping separation component ($\gamma = 0.45$). This decision is grounded in extensive literature identifying the conflation of inheritance and subtyping as a fundamental flaw in mainstream object-oriented languages \cite{cook1989inheritance}. Failure to distinguish them leads to violations of the Liskov Substitution Principle and undermines sound modular reasoning. Liskov and Wing further formalize this issue, noting that subtype relationships must preserve behavioural specifications independently of implementation structure \cite{liskov1999behavioral}. This separation is treated as the most critical factor influencing the overall soundness of the object model.
+The highest weight is assigned to the inheritance-subtyping separation component ($\gamma = 0.45$).  This decision is justified by a literature that identifies the conflation of inheritance and subtyping as a major flaw in mainstream object-oriented languages \cite{cook1989inheritance}. Failure to distinguish them leads to violations of the Liskov Substitution Principle and undermines sound modular reasoning. Liskov and Wing further formalize this issue, noting that subtype relationships must preserve behavioural specifications independently of implementation structure \cite{liskov1999behavioral}. This separation is treated as the most critical factor influencing the overall soundness of the object model.
 
-The variance formalization component is assigned the second-highest weight ($\beta = 0.30$), as it directly impacts type safety in the presence of parametric polymorphism  \cite{pierce2002types}. Historical issues in Java generics, such as the need for use-site variance (wildcards), illustrate the complexity introduced by insufficiently expressive or partially formalized variance systems. 
+The variance formalization component is assigned the second-highest weight ($\beta = 0.30$), as it directly impacts type safety in the presence of parametric polymorphism  \cite{pierce2002types}. Historical problems in Java generics, such as the need for use-site variance (wildcards), exemplify the complexity introduced by variance systems that are not expressive enough or only partially formalized.  
 
-The nominal–structural typing balance component receives a slightly lower weight ($\alpha = 0.25$). While important for flexibility and expressiveness, its impact on soundness is more indirect compared to the other components. Cardelli and Wegner argue that no single typing discipline suffices for all abstraction needs \cite{cardelli1985understanding}, motivating hybrid approaches that combine nominal and structural typing. Structural typing improves composability and reduces coupling, while nominal typing enhances readability and explicitness of design intent. Therefore, $\alpha$ is assigned a moderate weight, reflecting its role as an enabler of expressive type design rather than a primary determinant of soundness.
+The balance component of the nominal-structural typing trade-off is assigned a slightly lower weight ($\alpha = 0.25$). While the importance of this component for flexibility and expressiveness is clear, its impact on soundness is more indirect than the other components. Cardelli and Wegner argue that no single typing discipline is sufficient for all types of abstraction \cite{cardelli1985understanding}, which motivates hybrid approaches that combine nominal and structural typing. Structural typing improves composability and reduces coupling, while nominal typing improves readability and explicitness of design intent. Hence, $\alpha$ is assigned a moderate weight, reflecting its role as an enabler of expressive type design rather than a primary determinant of soundness.
 
 \subsection{Abstraction and Encapsulation Mechanisms}
+
+The weighting coefficients of the AE metric are defined by the importance of each component for object model comparison in modern programming languages. Characteristics that have a greater effect on object-oriented software development are assigned higher weights
 
 \[
     \alpha = 0.20, \beta = 0.25, \gamma = 0.25, \delta = 0.30
@@ -24,11 +28,13 @@ The highest weight is assigned to the encapsulation enforcement coefficient ($\d
 
 The module isolation strength component is assigned $\beta = 0.25$, reflecting its importance in large-scale system design. Modular boundaries serve as the primary mechanism for controlling visibility across compilation units and deployment artefacts. Parnas emphasises that modularisation should be based on design decisions which are likely to change \cite{parnas1972criteria}, requiring strict control over exported interfaces. Languages with explicit export lists and strong module systems provide stronger guarantees than those with weaker namespace mechanisms.
 
-The interface abstraction capacity component is also assigned $\gamma = 0.25$, as the ability to separate specification from implementation is fundamental to object-oriented design. Liskov and Wing emphasise that abstraction mechanisms must support behavioural subtyping independently of implementation details \cite{liskov1999behavioral}. Languages that provide multiple abstraction constructs (interfaces, abstract classes, traits, protocols) enable more flexible and precise modelling of contracts.
+The interface abstraction capacity component is also assigned $\gamma = 0.25$, as the ability to separate specification from implementation is fundamental to object-oriented design. Liskov and Wing emphasise that abstraction mechanisms must support behavioural subtyping independently of implementation details \cite{liskov1999behavioral}. Languages that offer several abstraction constructs (interfaces, abstract classes, traits, protocols) allow more flexible and precise contract modelling.
 
-The visibility granularity index receives the lowest weight ($\alpha = 0.20$), as fine-grained access modifiers contribute to encapsulation but are insufficient on their own. The presence of multiple visibility levels does not prevent violations if the language permits reflection or unsafe access.
+The visibility granularity index receives the lowest weight ($\alpha = 0.20$), since fine-grained access modifiers help encapsulation but they are not enough by themselves. Multiple visibility levels do not prevent violations if the language supports reflection or unsafe access.
 
 \subsection{Inheritance Semantics and Hierarchy Management}
+
+We derive the weighting coefficients for the ISRI metric from the importance of each component for the comparison of object models in modern programming languages. We assign higher weights to characteristics with a stronger influence on object-oriented software development.
 
 \[
 \alpha = 0.20, \beta = 0.25, \gamma = 0.30, \delta = 0.25
@@ -44,6 +50,8 @@ The hierarchy simplicity factor receives the lowest weight ($\alpha = 0.20$), as
 
 \subsection{Composition and Alternatives to Inheritance}
 
+We determine the weighting coefficients for the CRFI metric based on the importance of each component for comparing object models across modern programming languages. We assign higher weights to characteristics that exert a stronger influence on object-oriented software development.
+
 \[
 \alpha = 0.30, \beta = 0.35, \gamma = 0.35
 \]
@@ -54,6 +62,8 @@ As Gamma et al. state, favor object composition over class inheritance \cite{gam
 The class-based delegation score receives a slightly lower weight ($\alpha = 0.30$). Delegation is a well-established alternative to inheritance, particularly in prototype-based and dynamically typed languages. However, in many statically typed languages, delegation is often implemented through design patterns (e.g., Adapter, Decorator) rather than first-class language constructs, resulting in boilerplate code and reduced clarity. Languages that provide built-in delegation mechanisms reduce this overhead. However, delegation alone does not provide the same level of compositional structure and conflict resolution as traits or advanced interface systems. For this reason, Class-Based Delegation Score is assigned a slightly lower weight compared to the other components.
 
 \subsection{Object Representation and Creation Model}
+
+We determine the weighting coefficients for the ORCI metric based on the importance of each component for comparing object models across modern programming languages. We assign higher weights to characteristics that exert a stronger influence on object-oriented software development.
 
 \[
 \alpha = 0.35, \beta = 0.30, \gamma = 0.35
@@ -69,6 +79,8 @@ The instantiation paradigm diversity component receives a slightly lower weight 
 
 
 \subsection{Polymorphism and Dispatch Mechanisms}
+
+We determine the weighting coefficients for the PDEI metric based on the importance of each component for comparing object models across modern programming languages. We assign higher weights to characteristics that exert a stronger influence on object-oriented software development.
 
 \[
 \alpha = 0.35, \beta = 0.35, \gamma = 0.30
@@ -86,6 +98,8 @@ The Virtualisation optimization potential receives a slightly lower weight ($\ga
 
 \subsection{State Model, Mutability, and Concurrency Guarantees}
 
+We determine the weighting coefficients for the SCSI metric based on the importance of each component for comparing object models across modern programming languages. We assign higher weights to characteristics that exert a stronger influence on object-oriented software development.
+
 \[
     \alpha = 0.35, \beta = 0.25, \gamma = 0.40
 \]
@@ -98,6 +112,8 @@ The static reference constraint density component ($\beta = 0.25$) is assigned a
 
 
 \subsection{Support for Formal Specification and Verifiability}
+
+We determine the weighting coefficients for the FSVI metric based on the importance of each component for comparing object models across modern programming languages. We assign higher weights to characteristics that exert a stronger influence on object-oriented software development.
 
 \[
 \alpha = 0.45, \beta = 0.55

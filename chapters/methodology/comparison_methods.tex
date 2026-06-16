@@ -21,7 +21,7 @@ where $L$ denotes the analyzed programming language, $\alpha + \beta + \gamma = 
 
 \subsubsection{Components}
 
-\textbf{1) Nominal–Structural Typing Score $S_{nom}(L)$}
+\textbf{1) Nominal-Structural Typing Score $S_{nom}(L)$}
 
 \[
 S_{nom}(L) = \frac{I_{struct}(L) + I_{nom}(L)}{2}
@@ -49,7 +49,7 @@ where:
 \item $V_{sound}(L) \in [0,1]$ measures formal soundness guarantees (1 if variance rules are formally defined and proven type-safe in specification; 0.5 if partially restricted; 0 if unsound or unspecified).
 \end{itemize}
 
-\textbf{3) Inheritance–Subtyping Separation Score $S_{rel}(L)$}
+\textbf{3) Inheritance-Subtyping Separation Score $S_{rel}(L)$}
 
 \[
 S_{rel}(L) = \frac{I_{dec}(L) + I_{ind}(L) + I_{form}(L)}{3}
@@ -413,7 +413,7 @@ where:
     \item $I_{pred} = 1$ if predicate-based or condition-based dispatch is available; $0$ otherwise.
     \item Weights are set as $w_{single}=1$, $w_{multi}=2$, $w_{pred}=2$
         \begin{itemize}
-            \item Single dispatch weight is $1$ since it often requires structural workarounds. 
+            \item Single dispatch weight is $1$ as it often requires structural workarounds. 
             \item Multiple dispatch weight is $2$ because it resolves the expression problem for operation extension without modifying existing ones. 
             \item Predicate dispatch weight is $2$ since it extends polymorphism beyond type hierarchies into execution logic.
         \end{itemize}

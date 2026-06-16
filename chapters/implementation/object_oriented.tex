@@ -10,7 +10,7 @@ In this section, we evaluate the language against the defined metrics, grounding
 
 \subsubsection{Type System and Subtyping Model}
 
-\textbf{1) Nominal–Structural Typing Score $S_{nom}(L)$}
+\textbf{1) Nominal-Structural Typing Score $S_{nom}(L)$}
 
 C\# employs a strictly nominal type system in which subtypes are explicitly declared using type names, inheritance relationships, and the implementation of the interface \cite{ecma334}. Structural typing is not supported at the language level.
 
@@ -22,7 +22,7 @@ C\# supports generics with explicit variance annotations (\texttt{in}, \texttt{o
 
 $V_{exp}(\text{C\#}) = 1, V_{sound}(\text{C\#}) = 1 \therefore S_{var}(\text{C\#}) = 1 $
 
-\textbf{3) Inheritance–Subtyping Separation Score $S_{rel}(L)$}
+\textbf{3) Inheritance-Subtyping Separation Score $S_{rel}(L)$}
 
 First, C\# explicitly supports subtyping independently of class inheritance through interface implementation: a class or struct may implement one or more interfaces without inheriting implementation, thereby introducing subtyping relations decoupled from class inheritance.
 
@@ -42,9 +42,9 @@ $I_{form}(\text{C\#})=0.5$
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & TSSI(\text{C\#}) = 0.3 \cdot S_{nom}(\text{C\#}) + 0.3 \cdot S_{var}(\text{C\#}) + 0.4 \cdot S_{rel}(\text{C\#}) &&\\
-    & = 0.3 \cdot 0.5 + 0.3 \cdot 1 + 0.4 \cdot \frac{5}{6} &&\\
-    & \approx 0.7833 &&
+    & \qquad TSSI(\text{C\#}) = 0.3 \cdot S_{nom}(\text{C\#}) + 0.3 \cdot S_{var}(\text{C\#}) + 0.4 \cdot S_{rel}(\text{C\#}) &&\\
+    & \qquad = 0.3 \cdot 0.5 + 0.3 \cdot 1 + 0.4 \cdot \frac{5}{6} &&\\
+    & \qquad \approx 0.7833 &&
 \end{flalign*}
 
 
@@ -84,9 +84,9 @@ $E(\text{C\#}) = 0$
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & AE(\text{C\#}) = 0.2 \cdot V(\text{C\#}) + 0.25 \cdot M(\text{C\#}) + 0.25 \cdot I(\text{C\#}) + 0.3 \cdot E(\text{C\#}) &&\\
-    & = 0.2 \cdot 1 + 0.25 \cdot 0 + 0.25 \cdot 0.75 + 0.3 \cdot 0 &&\\
-    & = 0.3875 &&
+    & \qquad AE(\text{C\#}) = 0.2 \cdot V(\text{C\#}) + 0.25 \cdot M(\text{C\#}) + 0.25 \cdot I(\text{C\#}) + 0.3 \cdot E(\text{C\#}) &&\\
+    & \qquad = 0.2 \cdot 1 + 0.25 \cdot 0 + 0.25 \cdot 0.75 + 0.3 \cdot 0 &&\\
+    & \qquad = 0.3875 &&
 \end{flalign*}
 
 
@@ -145,9 +145,9 @@ $s_6=1$: the compiler enforces strict override consistency, requiring signature 
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & ISRI(\text{C\#}) = 0.2 \cdot H_s(\text{C\#}) + 0.25 \cdot L_d(\text{C\#}) + 0.3 \cdot C_p(\text{C\#}) + 0.25 \cdot F_b(\text{C\#}) &&\\
-    & = 0.2 \cdot 1 + 0.25 \cdot 1 + 0.3 \cdot \frac{5}{6} + 0.25 \cdot \frac{5}{6} &&\\
-    & \approx 0.9083 &&
+    & \qquad ISRI(\text{C\#}) = 0.2 \cdot H_s(\text{C\#}) + 0.25 \cdot L_d(\text{C\#}) + 0.3 \cdot C_p(\text{C\#}) + 0.25 \cdot F_b(\text{C\#}) &&\\
+    & \qquad = 0.2 \cdot 1 + 0.25 \cdot 1 + 0.3 \cdot \frac{5}{6} + 0.25 \cdot \frac{5}{6} &&\\
+    & \qquad \approx 0.9083 &&
 \end{flalign*}
 
 
@@ -160,11 +160,7 @@ The delegate keyword exists in C\# \cite{ecma334}. It is a reference type that e
 There is no built-in syntax for automatic forwarding in C\#. The developer must manually proxy the calls.
 
 \[
-    K_{del}(\text{C\#}) = 1, S_{fwd}(\text{C\#}) = 0
-\]
-
-\[
-    D_{cls}(\text{C\#}) = 0.5
+    K_{del}(\text{C\#}) = 1, S_{fwd}(\text{C\#}) = 0 \therefore D_{cls}(\text{C\#}) = 0.5
 \]
 
 \textbf{2) Trait Expressiveness Score $T_{exp}(L)$}
@@ -185,9 +181,9 @@ Starting with C\# 8.0, default interface methods have been introduced. Now the i
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & CRFI(\text{C\#}) = 0.3 \cdot D_{cls}(\text{C\#}) + 0.35 \cdot T_{exp}(\text{C\#}) + 0.35 \cdot I_{comp}(\text{C\#}) &&\\
-    & = 0.3 \cdot 0.5 + 0.35 \cdot 0 + 0.35 \cdot 1 &&\\
-    & = 0.5 &&
+    & \qquad CRFI(\text{C\#}) = 0.3 \cdot D_{cls}(\text{C\#}) + 0.35 \cdot T_{exp}(\text{C\#}) + 0.35 \cdot I_{comp}(\text{C\#}) &&\\
+    & \qquad = 0.3 \cdot 0.5 + 0.35 \cdot 0 + 0.35 \cdot 1 &&\\
+    & \qquad = 0.5 &&
 \end{flalign*}
 
 
@@ -240,9 +236,9 @@ $I_{level}(\text{JS/Python/Ruby}) = 3$
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & ORCI(\text{C\#}) = 0.35 \cdot S_{id}((\text{C\#})) + 0.3 \cdot S_{cr}((\text{C\#})) + 0.35 \cdot S_{meta}((\text{C\#})) &&\\
-    & = 0.35 \cdot 0.6 + 0.3 \cdot 1 + 0.35 \cdot \frac{2}{3} &&\\
-    & \approx 0.7433 &&
+    & \qquad ORCI(\text{C\#}) = 0.35 \cdot S_{id}(\text{C\#}) + 0.3 \cdot S_{cr}(\text{C\#}) + 0.35 \cdot S_{meta}(\text{C\#}) &&\\
+    & \qquad = 0.35 \cdot 0.6 + 0.3 \cdot 1 + 0.35 \cdot \frac{2}{3} &&\\
+    & \qquad \approx 0.7433 &&
 \end{flalign*}
 
 
@@ -268,7 +264,7 @@ $I_{pred}(\text{C\#})=1$
 
 \textbf{2) Dispatch Safety Guarantee $S_{disp}(L)$}
 
-C\# enforces compile-time verification of method dispatch correctness through static type checking. The method calls, the virtual dispatch resolution, and the overload selection must be type-safe and valid at compile time. The compiler is rejecting ambiguous or invalid dispatch scenarios.
+C\# enforces compile-time verification of method dispatch correctness using static type checking. The method calls, the virtual dispatch resolution, and the overload selection must be type-safe and valid at compile time. The compiler is rejecting ambiguous or invalid dispatch scenarios.
 
 $I_{static}(\text{C\#})=1$
 
@@ -300,9 +296,9 @@ O_{virt}(\text{C\#}) = 1
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & PDEI(\text{C\#}) = 0.35 \cdot M_{scope}(\text{C\#}) + 0.35 \cdot S_{disp}(\text{C\#}) + 0.3 \cdot O_{virt}(\text{C\#}) &&\\
-    & = 0.35 \cdot 0.6 + 0.35 \cdot 0.5 + 0.3 \cdot 1 &&\\
-    & = 0.685 &&
+    & \qquad PDEI(\text{C\#}) = 0.35 \cdot M_{scope}(\text{C\#}) + 0.35 \cdot S_{disp}(\text{C\#}) + 0.3 \cdot O_{virt}(\text{C\#}) &&\\
+    & \qquad = 0.35 \cdot 0.6 + 0.35 \cdot 0.5 + 0.3 \cdot 1 &&\\
+    & \qquad = 0.685 &&
 \end{flalign*}
 
 
@@ -353,17 +349,21 @@ According to the C\# specification and .NET memory model, C\# does not provide c
 $S_{race}(\text{C\#}) = 0$
 
 C\# provides structured concurrency through \texttt{Task}, \texttt{async}/\texttt{await}, and the Task Parallel Library, which encapsulate threads and support composable asynchronous workflows but do not enforce actor-style isolation or channel-based communication as core language primitives:
-\begin{flalign*}
-    & S_{model}(\text{C\#}) = 0.5 &&\\
-    & P_{conc}(\text{C\#}) = 0.25 &&
-\end{flalign*}
+
+\[
+    S_{model}(\text{C\#}) = 0.5
+\]
+
+\[
+    P_{conc}(\text{C\#}) = 0.25
+\]
 
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & SCSI(\text{C\#}) = 0.35 \cdot M_{def}(\text{C\#}) + 0.25 \cdot S_{dens}(\text{C\#}) + 0.4 \cdot P_{conc}(\text{C\#}) &&\\
-    & = 0.35 \cdot 0 + 0.25 \cdot 0.6 + 0.4 \cdot 0.25 &&\\
-    & = 0.25 &&
+    & \qquad SCSI(\text{C\#}) = 0.35 \cdot M_{def}(\text{C\#}) + 0.25 \cdot S_{dens}(\text{C\#}) + 0.4 \cdot P_{conc}(\text{C\#}) &&\\
+    & \qquad = 0.35 \cdot 0 + 0.25 \cdot 0.6 + 0.4 \cdot 0.25 &&\\
+    & \qquad = 0.25 &&
 \end{flalign*}
 
 
@@ -387,8 +387,8 @@ C\# does not provide built-in static verification mechanisms capable of proving 
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & FSVI(\text{C\#}) = 0.45 \cdot C_{nat}(\text{C\#}) + 0.55 \cdot V_{enf}(\text{C\#}) = 0.45 \cdot 0 + 0.55 \cdot 0.5 &&\\
-    & = 0.275 &&
+    & \qquad FSVI(\text{C\#}) = 0.45 \cdot C_{nat}(\text{C\#}) + 0.55 \cdot V_{enf}(\text{C\#}) = 0.45 \cdot 0 + 0.55 \cdot 0.5 &&\\
+    & \qquad = 0.275 &&
 \end{flalign*}
 
 
@@ -398,13 +398,14 @@ Java represents a statically typed, nominally structured object-oriented languag
 
 \subsubsection{Type System and Subtyping Model}
 
-\textbf{1) Nominal–Structural Typing Score $S_{nom}(L)$}
+\textbf{1) Nominal-Structural Typing Score $S_{nom}(L)$}
 
 The subtype relationships in Java are established through explicit declarations such as \texttt{extends} and \texttt{implements}. There is no structural equivalence subtyping in the language. All subtype relations must be declared in class or interface definitions, which sutisfy explicit subtype declarations. 
-\begin{flalign*}
-    & I_{struct}(\text{Java}) = 0, I_{nom}(\text{Java}) = 1 
-    \Rightarrow S_{nom}(\text{Java}) = \frac{0 + 1}{2} = 0.5 &&
-\end{flalign*}
+
+\[
+    I_{struct}(\text{Java}) = 0, I_{nom}(\text{Java}) = 1 
+    \Rightarrow S_{nom}(\text{Java}) = \frac{0 + 1}{2} = 0.5
+\]
 
 
 \textbf{2) Variance Formalization Score $S_{var}(L)$}
@@ -412,12 +413,13 @@ The subtype relationships in Java are established through explicit declarations 
 Java does not allow built-in variance (no explicit \texttt{in}/\texttt{out} annotations on type parameters), but supports use-site variance with wildcards (e.g., \texttt{? extends T}, \texttt{? super T}). Wildcards may be considered as limited and indirect form of variance. 
 
 The JLS defines strict typing and subtyping rules, including wildcard capture semantics, to ensure type safety. The safety is achieved partly through restrictions: invariance of generic types and limited covariance support.
-\begin{flalign*}
-    & V_{exp}(\text{Java}) = 0.5, V_{sound}(\text{Java}) = 0.5  S_{var}(\text{Java}) = \frac{0.5 + 0.5}{2} = 0.5 &&
-\end{flalign*}
+
+\[
+    V_{exp}(\text{Java}) = 0.5, V_{sound}(\text{Java}) = 0.5  S_{var}(\text{Java}) = \frac{0.5 + 0.5}{2} = 0.5
+\]
 
 
-\textbf{3) Inheritance–Subtyping Separation Score $S_{rel}(L)$}
+\textbf{3) Inheritance-Subtyping Separation Score $S_{rel}(L)$}
 
 Java supports subtyping both through class inheritance and interface implementation. A class may become a subtype of one or more interfaces independently of extending another class. However, Java does not support arbitrary explicit subtype declarations between classes outside inheritance.
 
@@ -437,9 +439,9 @@ $I_{form}(\text{Java}) = 0.5$
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & TSSI(\text{Java}) = 0.3 \cdot S_{nom}(\text{Java}) + 0.3 \cdot S_{var}(\text{Java}) + 0.4 \cdot S_{rel}(\text{Java}) &&\\
-    & = 0.3 \cdot 0.5 + 0.3 \cdot 0.5 + 0.4 \cdot 0.5 &&\\
-    & = 0.5 &&
+    & \qquad TSSI(\text{Java}) = 0.3 \cdot S_{nom}(\text{Java}) + 0.3 \cdot S_{var}(\text{Java}) + 0.4 \cdot S_{rel}(\text{Java}) &&\\
+    & \qquad = 0.3 \cdot 0.5 + 0.3 \cdot 0.5 + 0.4 \cdot 0.5 &&\\
+    & \qquad = 0.5 &&
 \end{flalign*}
 
 
@@ -466,9 +468,10 @@ The Java Platform Module System (JPMS) introduces explicit module boundaries wit
 \textbf{3) Interface Abstraction Capacity $I(L)$}
 
 Java provides two primary abstraction constructs: (i) \texttt{interface}, which defines pure behavioural contracts with method signatures (JLS \S9), and (ii) \texttt{abstract class}, which allows partial implementation alongside abstract methods (JLS \S8.1.1.1). The object-defining constructs in Java are classes records, enums and annotations.
-\begin{flalign*}
-    & n_{abstraction_constructs}(\text{Java}) = 2, n_{object}(\text{Java}) = 4 \Rightarrow I(\text{Java}) = \frac{2}{4} = 0.5 &&
-\end{flalign*}
+
+\[
+    n_{abstraction_constructs}(\text{Java}) = 2, n_{object}(\text{Java}) = 4 \Rightarrow I(\text{Java}) = \frac{2}{4} = 0.5
+\]
 
 
 
@@ -482,10 +485,10 @@ While Java enforces access control statically via modifiers such as \texttt{priv
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & AE(\text{Java}) &&\\
-    & = 0.2 \cdot V(\text{Java}) + 0.25 \cdot M(\text{Java}) + 0.25 \cdot I(\text{Java}) + 0.3 \cdot E(\text{Java}) &&\\
-    & = 0.2 \cdot \frac{4}{7} + 0.25 \cdot 0.5 + 0.25 \cdot 0.5 + 0.3 \cdot 0 &&\\
-    & = 0.3643 &&
+    & \qquad AE(\text{Java}) &&\\
+    & \qquad = 0.2 \cdot V(\text{Java}) + 0.25 \cdot M(\text{Java}) + 0.25 \cdot I(\text{Java}) + 0.3 \cdot E(\text{Java}) &&\\
+    & \qquad = 0.2 \cdot \frac{4}{7} + 0.25 \cdot 0.5 + 0.25 \cdot 0.5 + 0.3 \cdot 0 &&\\
+    & \qquad = 0.3643 &&
 \end{flalign*}
 
 
@@ -545,10 +548,10 @@ $s_6=1$: the compile performs strict compile-time checks for overriding consiste
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & ISRI(\text{Java}) &&\\
-    & = 0.2 \cdot H_s(\text{Java}) + 0.25 \cdot L_d(\text{Java}) + 0.3 \cdot C_p(\text{Java}) + 0.25 \cdot F_b(\text{Java}) &&\\
-    & = 0.2 \cdot \frac{4}{7} + 0.25 \cdot 1 + 0.3 \cdot \frac{4}{6} + 0.25 \cdot \frac{4}{6} &&\\
-    & \approx 0.731 &&
+    & \qquad ISRI(\text{Java}) &&\\
+    & \qquad = 0.2 \cdot H_s(\text{Java}) + 0.25 \cdot L_d(\text{Java}) + 0.3 \cdot C_p(\text{Java}) + 0.25 \cdot F_b(\text{Java}) &&\\
+    & \qquad = 0.2 \cdot \frac{4}{7} + 0.25 \cdot 1 + 0.3 \cdot \frac{4}{6} + 0.25 \cdot \frac{4}{6} &&\\
+    & \qquad \approx 0.731 &&
 \end{flalign*}
 
 
@@ -559,9 +562,10 @@ $s_6=1$: the compile performs strict compile-time checks for overriding consiste
 Java does not provide built-in syntactic support for delegation mechanisms. Instead, delegation is typically implemented explicitly through object composition and manual method forwarding (often Adapter or Proxy pattern).
 
 The Java Language Specification does not define automatic delegation or method-forwarding semantics. The language itself does not implicitly generate forwarding methods. So delegation behaviour is generally implemented manually or via external libraries and code-generation tools.
-\begin{flalign*}
-    & K_{del}(\text{Java}) = 0.5, S_{fwd}(\text{Java}) = 0 \Rightarrow D_{cls}(\text{Java}) = \frac{0.5 + 0}{2} = 0.25 &&
-\end{flalign*}
+
+\[
+    K_{del}(\text{Java}) = 0.5, S_{fwd}(\text{Java}) = 0 \Rightarrow D_{cls}(\text{Java}) = \frac{0.5 + 0}{2} = 0.25
+\]
 
 
 \textbf{2) Trait Expressiveness Score $T_{exp}(L)$}
@@ -569,9 +573,10 @@ The Java Language Specification does not define automatic delegation or method-f
 In Java, conflicts arising from multiple inherited default methods using the same signatures cannot be resolved by aliasing or selective exclusion. The language causes a compile-time error if the derived class does not explicitly redefine the conflicting method and disambiguate it. 
 
 Interfaces in Java cannot declare explicit implementation requirements beyond the requirements of method signatures. The language does not provide a mechanism for defining required fields, state dependencies and other structural constraints, or implementation-dependent behaviour in the interface itself.
-\begin{flalign*}
-    & R_{conf}(\text{Java}) = 0, O_{mod}(\text{Java}) = 0 \Rightarrow T_{exp}(\text{Java}) = 0 &&
-\end{flalign*}
+
+\[
+    R_{conf}(\text{Java}) = 0, O_{mod}(\text{Java}) = 0 \Rightarrow T_{exp}(\text{Java}) = 0
+\]
 
 
 \textbf{3) Interface Composition Capacity $I_{comp}(L)$}
@@ -579,16 +584,17 @@ Interfaces in Java cannot declare explicit implementation requirements beyond th
 Java allows a class to implement an arbitrary number of interfaces without any formal upper bound, supporting unrestricted interface composition. 
 
 Since Java~8, interfaces may also define \textit{default methods} with concrete implementations, enabling interfaces to encapsulate reusable behaviour in addition to type abstraction.
-\begin{flalign*}
-    & N_{impl}(\text{Java}) = 1, D_{def}(\text{Java}) = 1 \Rightarrow I_{comp}(\text{Java}) = 1 &&
-\end{flalign*}
+
+\[
+    N_{impl}(\text{Java}) = 1, D_{def}(\text{Java}) = 1 \Rightarrow I_{comp}(\text{Java}) = 1
+\]
 
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & CRFI(\text{Java}) = 0.3 \cdot D_{cls}(\text{Java}) + 0.35 \cdot T_{exp}(\text{Java}) + 0.35 \cdot I_{comp}(\text{Java}) &&\\
-    & = 0.3 \cdot 0.25 + 0.35 \cdot 0 + 0.35 \cdot 1 &&\\
-    & = 0.425 &&
+    & \qquad CRFI(\text{Java}) = 0.3 \cdot D_{cls}(\text{Java}) + 0.35 \cdot T_{exp}(\text{Java}) + 0.35 \cdot I_{comp}(\text{Java}) &&\\
+    & \qquad = 0.3 \cdot 0.25 + 0.35 \cdot 0 + 0.35 \cdot 1 &&\\
+    & \qquad = 0.425 &&
 \end{flalign*}
 
 
@@ -613,16 +619,17 @@ The primary instantiation mechanism is explicit construction via the \texttt{new
 \textbf{3) Meta-level Extensibility Score $S_{meta}(L)$}
 
 Java does not permit direct structural modification of loaded classes through the standard reflection API, although limited bytecode transformation is possible using instrumentation and specialised libraries.
-\begin{flalign*}
-    & I_{level}(\text{Java}) = 1, I_{level}(\text{JS/Python/Ruby}) = 3 \Rightarrow S_{meta}(\text{Java}) = \frac{1}{3} &&
-\end{flalign*}
+
+\[
+    I_{level}(\text{Java}) = 1, I_{level}(\text{JS/Python/Ruby}) = 3 \Rightarrow S_{meta}(\text{Java}) = \frac{1}{3}
+\]
 
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & ORCI(\text{Java}) = 0.35 \cdot S_{id}(\text{Java}) + 0.3 \cdot S_{cr}(\text{Java}) + 0.35 \cdot S_{meta}(\text{Java}) &&\\
-    & = 0.35 \cdot 1 + 0.3 \cdot \frac{3}{4} + 0.35 \cdot \frac{1}{3} &&\\
-    & \approx 0.6917 &&
+    & \qquad ORCI(\text{Java}) = 0.35 \cdot S_{id}(\text{Java}) + 0.3 \cdot S_{cr}(\text{Java}) + 0.35 \cdot S_{meta}(\text{Java}) &&\\
+    & \qquad = 0.35 \cdot 1 + 0.3 \cdot \frac{3}{4} + 0.35 \cdot \frac{1}{3} &&\\
+    & \qquad \approx 0.6917 &&
 \end{flalign*}
 
 
@@ -680,9 +687,9 @@ $K_{static}(\text{Java}) = 1$
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & PDEI(\text{Java}) = 0.35 \cdot M_{scope}(\text{Java}) + 0.35 \cdot S_{disp}(\text{Java}) + 0.3 \cdot O_{virt}(\text{Java}) &&\\
-    & = 0.35 \cdot 0.2 + 0.35 \cdot 0.5 + 0.3 \cdot 1 &&\\
-    & = 0.545 &&
+    & \qquad PDEI(\text{Java}) = 0.35 \cdot M_{scope}(\text{Java}) + 0.35 \cdot S_{disp}(\text{Java}) + 0.3 \cdot O_{virt}(\text{Java}) &&\\
+    & \qquad = 0.35 \cdot 0.2 + 0.35 \cdot 0.5 + 0.3 \cdot 1 &&\\
+    & \qquad = 0.545 &&
 \end{flalign*}
 
 
@@ -721,15 +728,16 @@ $S_{race}(\text{Java}) = 0$
 Second, Java primarily exposes low-level concurrency primitives such as threads (\texttt{Thread}) and locks (\texttt{synchronized}, \texttt{Lock}), while also offering structured abstractions like \texttt{Future}, \texttt{ExecutorService}, and task-based concurrency. However, these do not constitute fully high-level models like Actors or CSP channels.
 
 $S_{model}(\text{Java}) = 0.5$
-\begin{flalign*}
-    & P_{conc}(\text{Java}) = 0.25 &&
-\end{flalign*}
+
+\[
+    P_{conc}(\text{Java}) = 0.25
+\]
 
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & SCSI(\text{Java}) = 0.35 \cdot M_{def}(\text{Java}) + 0.25 \cdot S_{dens}(\text{Java}) + 0.4 \cdot P_{conc}(\text{Java}) &&\\
-    & = 0.35 \cdot 0 + 0.25 \cdot 0.6 + 0.4 \cdot 0.25 = 0.25 &&
+    & \qquad SCSI(\text{Java}) = 0.35 \cdot M_{def}(\text{Java}) + 0.25 \cdot S_{dens}(\text{Java}) + 0.4 \cdot P_{conc}(\text{Java}) &&\\
+    & \qquad = 0.35 \cdot 0 + 0.25 \cdot 0.6 + 0.4 \cdot 0.25 = 0.25 &&
 \end{flalign*}
 
 
@@ -753,8 +761,8 @@ Java does not support static verification of program correctness in the sense of
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & FSVI(\text{Java}) = 0.45 \cdot C_{nat}(\text{Java}) + 0.55 \cdot V_{enf}(\text{Java}) = 0.45 \cdot 0 + 0.55 \cdot 0.5 &&\\
-    & = 0.275 &&
+    & \qquad FSVI(\text{Java}) = 0.45 \cdot C_{nat}(\text{Java}) + 0.55 \cdot V_{enf}(\text{Java}) = 0.45 \cdot 0 + 0.55 \cdot 0.5 &&\\
+    & \qquad = 0.275 &&
 \end{flalign*}
 
 
@@ -764,7 +772,7 @@ Smalltalk represents one of the earliest and most influential realizations of a 
 
 \subsubsection{Type System and Subtyping Model}
 
-\textbf{1) Nominal–Structural Typing Score $S_{nom}(L)$}
+\textbf{1) Nominal-Structural Typing Score $S_{nom}(L)$}
 
 Smalltalk is a purely dynamically typed language\cite{blackpharo} whose semantics are defined by message passing rather than static typing judgments. It does not provide formal structural subtyping rules.
 
@@ -792,7 +800,7 @@ $V_{sound}(\text{Smalltalk}) = 0$
     V_{exp}(\text{Smalltalk}) = 0, V_{sound}(\text{Smalltalk}) = 0 \Rightarrow S_{var}(\text{Smalltalk}) = 0
 \]
 
-\textbf{3) Inheritance–Subtyping Separation Score $S_{rel}(L)$}
+\textbf{3) Inheritance-Subtyping Separation Score $S_{rel}(L)$}
 
 First, Smalltalk does not provide any explicit notion of subtyping separate from class inheritance. The type compatibility is entirely governed by the class hierarchy, and there are no interfaces, traits, or structural typing mechanisms that would allow subtyping without inheritance.
 
@@ -812,9 +820,9 @@ $I_{form}(\text{Smalltalk})=0$
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & TSSI(\text{Smalltalk}) &&\\
-    & = 0.3 \cdot S_{nom}(\text{Smalltalk}) + 0.3 \cdot S_{var}(\text{Smalltalk}) + 0.4 \cdot S_{rel}(\text{Smalltalk}) &&\\
-    & = 0.3 \cdot 0 + 0.3 \cdot 0 + 0.4 \cdot 0 = 0 &&
+    & \qquad TSSI(\text{Smalltalk}) &&\\
+    & \qquad = 0.3 \cdot S_{nom}(\text{Smalltalk}) + 0.3 \cdot S_{var}(\text{Smalltalk}) + 0.4 \cdot S_{rel}(\text{Smalltalk}) &&\\
+    & \qquad = 0.3 \cdot 0 + 0.3 \cdot 0 + 0.4 \cdot 0 = 0 &&
 \end{flalign*}
 
 
@@ -866,11 +874,11 @@ Smalltalk supports full reflection and allows runtime access and modification of
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & AE(\text{Smalltalk}) &&\\
-    & = 0.2 \cdot V(\text{Smalltalk}) + 0.25 \cdot M(\text{Smalltalk}) + 0.25 \cdot I(\text{Smalltalk}) &&\\
-    & \qquad + 0.3 \cdot E(\text{Smalltalk}) &&\\
-    & = 0.2 \cdot \frac{1}{7} + 0.25 \cdot 0 + 0.25 \cdot 0 + 0.3 \cdot 0 &&\\
-    & \approx 0.0286 &&
+    & \qquad AE(\text{Smalltalk}) &&\\
+    & \qquad = 0.2 \cdot V(\text{Smalltalk}) + 0.25 \cdot M(\text{Smalltalk}) + 0.25 \cdot I(\text{Smalltalk}) &&\\
+    & \qquad \qquad + 0.3 \cdot E(\text{Smalltalk}) &&\\
+    & \qquad = 0.2 \cdot \frac{1}{7} + 0.25 \cdot 0 + 0.25 \cdot 0 + 0.3 \cdot 0 &&\\
+    & \qquad \approx 0.0286 &&
 \end{flalign*}
 
 
@@ -930,11 +938,11 @@ $s_6=0$: Smalltalk has no compile-time override checks.
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & ISRI(\text{Smalltalk}) &&\\
-    & = 0.2 \cdot H_s(\text{Smalltalk}) + 0.25 \cdot L_d(\text{Smalltalk}) + 0.3 \cdot C_p(\text{Smalltalk}) &&\\
-    & \qquad + 0.25 \cdot F_b(\text{Smalltalk}) &&\\
-    & = 0.2 \cdot 1 + 0.25 \cdot 1 + 0.3 \cdot 0 + 0.25 \cdot 0 &&\\
-    & = 0.45 &&
+    & \qquad ISRI(\text{Smalltalk}) &&\\
+    & \qquad = 0.2 \cdot H_s(\text{Smalltalk}) + 0.25 \cdot L_d(\text{Smalltalk}) + 0.3 \cdot C_p(\text{Smalltalk}) &&\\
+    & \qquad \qquad + 0.25 \cdot F_b(\text{Smalltalk}) &&\\
+    & \qquad = 0.2 \cdot 1 + 0.25 \cdot 1 + 0.3 \cdot 0 + 0.25 \cdot 0 &&\\
+    & \qquad = 0.45 &&
 \end{flalign*}
 
 
@@ -969,10 +977,10 @@ Smalltalk does not define interfaces as a separate language feature. It relies o
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & CRFI(\text{Smalltalk}) &&\\
-    & = 0.3 \cdot D_{cls}(\text{Smalltalk}) + 0.35 \cdot T_{exp}(\text{Smalltalk}) + 0.35 \cdot I_{comp}(\text{Smalltalk}) &&\\
-    & = 0.3 \cdot 0.75 + 0.35 \cdot 0 + 0.35 \cdot 0 &&\\
-    & = 0.225 &&
+    & \qquad CRFI(\text{Smalltalk}) &&\\
+    & \qquad = 0.3 \cdot D_{cls}(\text{Smalltalk}) + 0.35 \cdot T_{exp}(\text{Smalltalk}) + 0.35 \cdot I_{comp}(\text{Smalltalk}) &&\\
+    & \qquad = 0.3 \cdot 0.75 + 0.35 \cdot 0 + 0.35 \cdot 0 &&\\
+    & \qquad = 0.225 &&
 \end{flalign*}
 
 
@@ -998,17 +1006,17 @@ Smalltalk natively supports one primary instantiation paradigm: class-based obje
 
 Smalltalk is a fully reflective environment where classes are objects (instances of metaclasses), and their structure and behaviour can be modified at runtime. Object creation can be customized by overriding class-side methods such as \texttt{new}, \texttt{basicNew}, and initialisation protocols.
 \begin{flalign*}
-    & I_{level}(\text{Smalltalk})=3, I_{level}(\text{JS/Python/Ruby}) = 3 &&\\
-    & \Rightarrow S_{meta}(\text{Smalltalk})= \frac{1}{3} &&
+    & \qquad I_{level}(\text{Smalltalk})=3, I_{level}(\text{JS/Python/Ruby}) = 3 &&\\
+    & \qquad \Rightarrow S_{meta}(\text{Smalltalk})= \frac{1}{3} &&
 \end{flalign*}
 
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & ORCI(\text{Smalltalk}) = 0.35 \cdot S_{id}(\text{Smalltalk}) + 0.3 \cdot S_{cr}(\text{Smalltalk}) &&\\
-    & \qquad + 0.35 \cdot S_{meta}(\text{Smalltalk}) &&\\
-    & = 0.35 \cdot 1 + 0.3 \cdot \frac{1}{4} + 0.35 \cdot \frac{1}{3} &&\\
-    & \approx 0.5417 &&
+    & \qquad ORCI(\text{Smalltalk}) = 0.35 \cdot S_{id}(\text{Smalltalk}) + 0.3 \cdot S_{cr}(\text{Smalltalk}) &&\\
+    & \qquad \qquad + 0.35 \cdot S_{meta}(\text{Smalltalk}) &&\\
+    & \qquad = 0.35 \cdot 1 + 0.3 \cdot \frac{1}{4} + 0.35 \cdot \frac{1}{3} &&\\
+    & \qquad \approx 0.5417 &&
 \end{flalign*}
 
 
@@ -1066,10 +1074,10 @@ $K_{static}(\text{Smalltalk})=0$
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & PDEI(\text{Smalltalk}) = 0.35 \cdot M_{scope}(\text{Smalltalk}) + 0.35 \cdot S_{disp}(\text{Smalltalk}) &&\\
-    & \qquad + 0.3 \cdot O_{virt}(\text{Smalltalk}) &&\\
-    & = 0.35 \cdot 0.2 + 0.35 \cdot 0 + 0.3 \cdot 0 &&\\
-    & = 0.07 &&
+    & \qquad PDEI(\text{Smalltalk}) = 0.35 \cdot M_{scope}(\text{Smalltalk}) + 0.35 \cdot S_{disp}(\text{Smalltalk}) &&\\
+    & \qquad \qquad + 0.3 \cdot O_{virt}(\text{Smalltalk}) &&\\
+    & \qquad = 0.35 \cdot 0.2 + 0.35 \cdot 0 + 0.3 \cdot 0 &&\\
+    & \qquad = 0.07 &&
 \end{flalign*}
 
 
@@ -1113,9 +1121,10 @@ $S_{model}(\text{Smalltalk}) = 0$
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & SCSI(\text{Smalltalk}) &&\\
-    & = 0.35 \cdot M_{def}(\text{Smalltalk}) + 0.25 \cdot S_{dens}(\text{Smalltalk}) + 0.4 \cdot P_{conc}(\text{Smalltalk}) &&\\
-    & = 0.35 \cdot 0 + 0.25 \cdot 0 + 0.4 \cdot 0 = 0 &&
+    & \qquad SCSI(\text{Smalltalk}) &&\\
+    & \qquad = 0.35 \cdot M_{def}(\text{Smalltalk}) + 0.25 \cdot S_{dens}(\text{Smalltalk}) &&\\
+    & \qquad \qquad + 0.4 \cdot P_{conc}(\text{Smalltalk}) &&\\
+    & \qquad = 0.35 \cdot 0 + 0.25 \cdot 0 + 0.4 \cdot 0 = 0 &&
 \end{flalign*}
 
 
@@ -1139,7 +1148,7 @@ Smalltalk is a dynamically typed language without built-in support for static ve
 
 \textbf{Final metric value:}
 \begin{flalign*}
-    & FSVI(\text{Smalltalk}) = 0.45 \cdot C_{nat}(\text{Smalltalk}) + 0.55 \cdot V_{enf}(\text{Smalltalk}) &&\\
-    & = 0.45 \cdot 0 + 0.55 \cdot 0 = 0 &&
+    & \qquad FSVI(\text{Smalltalk}) = 0.45 \cdot C_{nat}(\text{Smalltalk}) + 0.55 \cdot V_{enf}(\text{Smalltalk}) &&\\
+    & \qquad = 0.45 \cdot 0 + 0.55 \cdot 0 = 0 &&
 \end{flalign*}
 
