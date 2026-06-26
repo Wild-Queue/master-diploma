@@ -197,8 +197,8 @@ public class BankAccount_V2
     }
 }
     \end{minted}
-    \caption{Fragile Base Class: misspelled implementation base class}
-    \label{fig:fragile-base-class-misspelled-implementation-base-class}
+    \caption{Fragile Base Class: updated implementation base class}
+    \label{fig:fragile-base-class-updated-implementation-base-class}
 \end{figure}
 
 \begin{figure}
@@ -258,7 +258,7 @@ The inheritance mechanism introduces structural coupling between base and derive
 Beyond inheritance-induced coupling, OOP systems exhibit architectural issues with circular dependencies among classes. Circular dependencies create tight mutual coupling that reduces the possibility of separate reuse and creates domino effects where changes in one module spread unwanted side effects to dependent modules. This architectural pattern violates the foundational principle of modular decomposition, particularly problematic in large-scale systems where dependency management becomes increasingly complex.
 
 The Gang of Four Design Patterns documentation explicitly acknowledges this limitation, stating that inheritance exposes a subclass to details of its parent's implementation, and therefore ``inheritance breaks encapsulation'' \cite{gamma1995design}. The authors warn that implementation of a subclass can become so bound to the implementation of its parent that any change in the parent's implementation forces the subclass to change. They further note that polymorphism combined with implementation inheritance can create systems where it is difficult to predict which method will be invoked in response to a message, complicating both debugging and maintenance.
-architectural coupling
+
 \begin{figure}[htbp]
     \centering
     \begin{minted}[breaklines=true,fontsize=\footnotesize]{java}
@@ -398,7 +398,7 @@ public class OrderItem {
     \label{fig:orderitem-support}
 \end{figure}
 
-The examples demonstrate two critical manifestations of excessive coupling in object-oriented systems. Figures \ref{fig:account-base} and \ref{fig:savings-derived} illustrate inheritance-induced coupling where \texttt{SavingsAccount} becomes dependent on implementation details of its parent \texttt{Account}: the protected field \texttt{balance}, the internal workflow sequence (deposit $\rightarrow$ log), and the assumption that \texttt{logTransaction()} executes after state modification. This breaks encapsulation because the subclass gains access to superclass internals that should remain hidden. Critically, any modification to \texttt{Account}'s implementation-renaming \texttt{balance}, reordering workflow steps, or changing \texttt{logTransaction()}'s signature-necessitates corresponding changes in \texttt{SavingsAccount}, creating ripple effects through the inheritance hierarchy. Figures~\ref{fig:order-circular} \ref{fig:customer-circular} \ref{fig:orderitem-support} exhibit architectural coupling through circular dependencies between \texttt{Order} and \texttt{Customer}, where each class maintains a direct reference to the other. This mutual dependency prevents independent reuse of either component, violates modular decomposition principles, and creates domino effects where changes to \texttt{Order}'s calculation logic (\texttt{calculateTotal()}) propagate unpredictably to \texttt{Customer.getLifetimeValue()}.
+The examples demonstrate two critical manifestations of excessive coupling in object-oriented systems. Figures \ref{fig:account-base} and \ref{fig:savings-derived} illustrate inheritance-induced coupling where \texttt{SavingsAccount} becomes dependent on implementation details of its parent \texttt{Account}: the protected field \texttt{balance}, the internal workflow sequence (deposit $\rightarrow$ log), and the assumption that \texttt{logTransaction()} executes after state modification. This breaks encapsulation because the subclass gains access to superclass internals that should remain hidden. Critically, any modification to \texttt{Account}'s implementation-renaming \texttt{balance}, reordering workflow steps, or changing \texttt{logTransaction()}'s signature-necessitates corresponding changes in \texttt{SavingsAccount}, creating ripple effects through the inheritance hierarchy. Figures~\ref{fig:order-circular}, \ref{fig:customer-circular}, \ref{fig:orderitem-support} exhibit architectural coupling through circular dependencies between \texttt{Order} and \texttt{Customer}, where each class maintains a direct reference to the other. This mutual dependency prevents independent reuse of either component, violates modular decomposition principles, and creates domino effects where changes to \texttt{Order}'s calculation logic (\texttt{calculateTotal()}) propagate unpredictably to \texttt{Customer.getLifetimeValue()}.
 
 \subsection{Multiple Inheritance and Ambiguity Resolution}
 
@@ -530,9 +530,7 @@ Effective reuse typically requires either shallow inheritance hierarchies or car
     \centering
     \begin{minted}[
         breaklines=true,
-        fontsize=\footnotesize,
-        linenos=true,
-        numbersep=5pt
+        fontsize=\footnotesize
     ]{java}
 // Problematic reuse through inheritance
 public class InstrumentedHashSet<E> extends HashSet<E> {
@@ -563,9 +561,7 @@ public class InstrumentedHashSet<E> extends HashSet<E> {
     \centering
     \begin{minted}[
         breaklines=true,
-        fontsize=\footnotesize,
-        linenos=true,
-        numbersep=5pt
+        fontsize=\footnotesize
     ]{java}
 // Robust reuse through composition
 public class InstrumentedSet<E> implements Set<E> {
@@ -865,6 +861,8 @@ class EnterpriseOrderProcessor extends RetryableProcessor {
 \end{figure}
 
 The example presented in Figures~\ref{fig:abstract_processor},\ref{fig:payment_processor},\ref{fig:fraud_processor},\ref{fig:retry_processor},\ref{fig:enterprise_processor} illustrates structural characteristics empirically associated with reduced maintainability and increased defect proneness in object-oriented systems.
+
+Beyond providing a basis for metric evaluation, this hierarchy directly illustrates the specification-implementation conflation discussed in the preceding subsection. The \texttt{AbstractEnterpriseProcessor} defines a validate method and a hook \texttt{preProcess}. The \texttt{FraudAwareProcessor} overrides \texttt{preProcess} to implement fraud screening. Because the base class' process method orchestrates these calls internally, a modification to validate's implementation or the order of invocations in the base class—while preserving the public contract of process—can inadvertently break the fraud logic in the derived class.
 
 First, the hierarchy exhibits a Depth of Inheritance Tree (DIT) equal to five. Understanding the runtime behaviour of the \texttt{process} operation requires analysis across multiple abstraction layers. It has been empirically correlated with decreased comprehensibility and increased maintenance effort.
 

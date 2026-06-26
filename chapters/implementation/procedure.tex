@@ -50,6 +50,12 @@ $I_{form}(\text{C++}) = 0$
     & \qquad = 0.3&&
 \end{flalign*}
 
+\begin{flalign*}
+    & \qquad TSSI(\text{C++}) = 0.25 \cdot S_{nom}(\text{C++}) + 0.3 \cdot S_{var}(\text{C++}) + 0.45 \cdot S_{rel}(\text{C++}) &&\\
+    & \qquad = 0.25 \cdot 0.5 + 0.3 \cdot 0.5 + 0.45 \cdot 0 &&\\
+    & \qquad = 0.275&&
+\end{flalign*}
+
 \subsubsection{Abstraction and Encapsulation Mechanisms}
 
 \textbf{1) Visibility Granularity Index $V(L)$}
@@ -417,6 +423,11 @@ $I_{form}(\text{C}) = 0$ because there is no formal distinction between inherita
     & \qquad = 0.3 \cdot 0 + 0.3 \cdot 0 + 0.4 \cdot 0 = 0&&
 \end{flalign*}
 
+\begin{flalign*}
+    & \qquad TSSI(\text{C}) = 0.25 \cdot S_{nom}(\text{C}) + 0.3 \cdot S_{var}(\text{C}) + 0.45 \cdot S_{rel}(\text{C}) &&\\
+    & \qquad = 0.25 \cdot 0 + 0.3 \cdot 0 + 0.45 \cdot 0 = 0&&
+\end{flalign*}
+
 \subsubsection{Abstraction and Encapsulation Mechanisms}
 
 \textbf{1) Visibility Granularity Index $V(L)$}
@@ -727,6 +738,13 @@ $S_{rel}(\text{Golang})=\frac{1+1+0.5}{3}\approx0.83$,
     & \qquad \qquad + 0.4 \cdot S_{rel}(\text{Golang}) &&\\
     & \qquad = 0.3 \cdot 0.5 + 0.3 \cdot 0.5 + 0.4 \cdot \frac{5}{6} &&\\
     & \qquad \approx 0.6334&&
+\end{flalign*}
+
+\begin{flalign*}
+    & \qquad TSSI(\text{Golang}) = 0.25 \cdot S_{nom}(\text{Golang}) + 0.3 \cdot S_{var}(\text{Golang}) &&\\
+    & \qquad \qquad + 0.45 \cdot S_{rel}(\text{Golang}) &&\\
+    & \qquad = 0.25 \cdot 0.5 + 0.3 \cdot 0.5 + 0.45 \cdot \frac{5}{6} &&\\
+    & \qquad \approx 0.65&&
 \end{flalign*}
 
 \subsubsection{Abstraction and Encapsulation Mechanisms}

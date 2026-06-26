@@ -59,27 +59,45 @@ where:
 \[
     I_{dec}(L) =
     \begin{cases}
-        1, & \text{if the language allows explicit subtyping without inheritance constructs} \\
-        0.5, & \text{if such separation exists but is restricted (e.g., limited to specific constructs)} \\
-        0, & \text{if subtyping is defined only through inheritance}
+        1, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if the language allows explicit subtyping without inheritance constructs%
+        }} \\
+        0.5, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if such separation exists but is restricted (e.g., limited to specific constructs)%
+         }} \\
+        0, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if subtyping is defined only through inheritance%
+         }}
     \end{cases}
 \]
 
 \[
     I_{ind}(L) =
     \begin{cases}
-        1, & \text{if subtyping rules are defined independently of inheritance semantics} \\
-        0.5, & \text{if independence is partial or implicit} \\
-        0, & \text{if subtyping is fully derived from inheritance}
+        1, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if subtyping rules are defined independently of inheritance semantics%
+         }} \\
+        0.5, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if independence is partial or implicit%
+         }} \\
+        0, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if subtyping is fully derived from inheritance%
+         }}
     \end{cases}
 \]
 
 \[
     I_{form}(L) =
     \begin{cases}
-        1, & \text{if inheritance and subtyping are formally specified as distinct relations} \\
-        0.5, & \text{if separation is stated but не полностью формализована} \\
-        0, & \text{if distinction отсутствует или не определена в спецификации}
+        1, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if inheritance and subtyping are formally specified as distinct relations%
+        }} \\
+        0.5, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if separation is stated but not fully formalized%
+         }} \\
+        0, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if distinction is missing or not defined in the specification%
+         }}
     \end{cases}
 \]
 
@@ -171,9 +189,15 @@ A binary measure reflecting whether the language defines a formally specified, d
 \[
     L_d(L) =
     \begin{cases}
-        1, & \text{if linearization is formally defined and deterministic}, \\
-        0.5, & \text{if partially specified}, \\
-        0, & \text{if ambiguous or implementation-defined}.
+        1, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if linearization is formally defined and deterministic%
+         }} \\
+        0.5, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if partially specified%
+         }} \\
+        0, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if ambiguous or implementation-defined%
+         }}
     \end{cases}
 \]
 
@@ -243,17 +267,27 @@ where:
     \[
     K_{del}(L) = 
     \begin{cases}
-    1, & \text{if available with keywords (e.g. \texttt{delegate})}, \\
-    0.5, & \text{if emulated via adapters}, \\
-    0, & \text{if language does not provide delegation mechanisms}.
+    1, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if available with keywords (e.g. \texttt{delegate})%
+         }} \\
+    0.5, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if emulated via adapters%
+         }} \\
+    0, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if language does not provide delegation mechanisms%
+         }}
     \end{cases}
     \]
     \item $S_{fwd}(L)$ evaluates the presence of mechanisms that allows to automatically delegate method calls from one object to another without writing boilerplate code.
     \[
     S_{fwd}(L) = 
     \begin{cases}
-    1, & \text{if automatic delegation mechanisms are available}, \\
-    0, & \text{if language does not provide automatic delegation}.
+    1, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if automatic delegation mechanisms are available%
+         }} \\
+    0, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if language does not provide automatic delegation%
+         }}
     \end{cases}
     \]
 \end{itemize}
@@ -270,17 +304,27 @@ where:
     \[
     R_{conf}(L) = 
     \begin{cases}
-    1, & \text{if resolution using explicit exclusion or aliasing}, \\
-    0.5, & \text{if resolution using declaration order}, \\
-    0, & \text{if compilation error}.
+    1, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if resolution using explicit exclusion or aliasing%
+         }} \\
+    0.5, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if resolution using declaration order%
+         }} \\
+    0, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if compilation error%
+         }}
     \end{cases}
     \]
     \item $O_{mod}(L)$ evaluates the ability of composition mechanisms (tracks, mixins) to determine the requirements for the class that uses them.
     \[
     O_{mod}(L) = 
     \begin{cases}
-    1, & \text{if allows to declare requirements inside traits/mixins}, \\
-    0, & \text{if traits/mixins should be completely self-constrained}.
+    1, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if allows to declare requirements inside traits/mixins%
+         }} \\
+    0, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if traits/mixins should be completely self-constrained%
+         }}
     \end{cases}
     \]
 \end{itemize}
@@ -297,18 +341,30 @@ where:
     \[
     N_{impl}(L) = 
     \begin{cases}
-        1, & \text{if number of interfaces is not restricted}, \\
-        0.66, & \text{if the number of interfaces is limited, but it is greater than 1}, \\
-        0.33, & \text{if the number of interfaces is limited by 1 interface}, \\
-        0, & \text{if there are no interfaces or their analogues}.
+        1, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if number of interfaces is not restricted%
+         }} \\
+        0.66, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if the number of interfaces is limited, but it is greater than 1%
+         }} \\
+        0.33, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if the number of interfaces is limited by 1 interface%
+         }} \\
+        0, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if there are no interfaces or their analogues%
+         }}
     \end{cases}
     \]
     \item $D_{def}(L)$ indicates the presence of default method implementations in interfaces.
     \[
     D_{def}(L) = 
     \begin{cases}
-    1, & \text{if allows to declare implementations inside interfaces.}, \\
-    0, & \text{if interfaces contain only method signatures, constant, types}.
+    1, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if allows to declare implementations inside interfaces%
+         }} \\
+    0, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if interfaces contain only method signatures, constant, types%
+         }}
     \end{cases}
     \]
 \end{itemize}
@@ -370,10 +426,18 @@ $I_{level}(L)$ represents the depth of intercession allowed (0 = none, 1 = intro
 \[
 I_{level}(L) = 
 \begin{cases}
-    3, & \text{if allows overriding the object instantiation process via metaobjects}, \\
-    2, & \text{if allows modification of existing object structures at runtime}, \\
-    1, & \text{if allows querying object structure at runtime but prohibits modification}, \\
-    0, & \text{if does not allows querying object structure and modification}.
+    3, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if allows overriding the object instantiation process via metaobjects%
+         }} \\
+    2, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if allows modification of existing object structures at runtime%
+         }} \\
+    1, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if allows querying object structure at runtime but prohibits modification%
+         }} \\
+    0, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if does not allows querying object structure and modification%
+         }}
 \end{cases}
 \]
 
@@ -432,15 +496,23 @@ where:
 
 \[I_{static}(L) =
     \begin{cases}
-        1, & \text{if the language guarantees dispatch safety at compile time} \\
-        0, & \text{otherwise}
+        1, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if the language guarantees dispatch safety at compile time%
+         }} \\
+        0, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            otherwise%
+         }}
     \end{cases}
 \]
 
 \[I_{exhaust}(L) =
     \begin{cases}
-    1, & \text{if the language enforces exhaustive dispatch definitions} \\
-    0, & \text{otherwise}
+    1, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if the language enforces exhaustive dispatch definitions%
+         }} \\
+    0, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            otherwise%
+         }}
     \end{cases}
 \]
 
@@ -481,9 +553,15 @@ where $L$ denotes the analyzed programming language, $\alpha + \beta + \gamma = 
 \[
 M_{def}(L) = 
 \begin{cases} 
-    1, & \text{if objects are immutable by default} \\
-    0.5, & \text{if mutability requires explicit annotation} \\
-    0, & \text{if objects are mutable by default}
+    1, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if objects are immutable by default%
+         }} \\
+    0.5, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if mutability requires explicit annotation%
+         }} \\
+    0, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if objects are mutable by default%
+         }}
 \end{cases}
 \]
 
@@ -527,18 +605,30 @@ where:
     \[
     S_{race}(L) = 
     \begin{cases} 
-    1, & \text{if the type system proves data race freedom} \\
-    0.5, & \text{if runtime checks exist} \\
-    0, & \text{if reliance is purely on programmer discipline}
+    1, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if the type system proves data race freedom%
+         }} \\
+    0.5, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if runtime checks exist%
+         }} \\
+    0, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if reliance is purely on programmer discipline%
+         }}
     \end{cases}
     \]
     \item $S_{model}(L) \in [0,1]$ measures the abstraction level of concurrency primitives. 
     \[
     S_{model}(L) = 
     \begin{cases} 
-    1, & \text{if provide high-level models(Actors, CSP channels)} \\
-    0.5, & \text{if provide structured concurrency (tasks/futures)} \\
-    0, & \text{if provide only low-level threads and locks}
+    1, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if provide high-level models(Actors, CSP channels)%
+         }} \\
+    0.5, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if provide structured concurrency (tasks/futures)%
+         }} \\
+    0, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if provide only low-level threads and locks%
+         }}
     \end{cases}
     \]
 \end{itemize}
@@ -579,8 +669,14 @@ C_{nat}(L) = \frac{n_{pre} + n_{post} + n_{inv}}{3}
 \[
 V_{enf}(L) = 
 \begin{cases} 
-    1.0, & \text{if static verification is supported (compile-time proof)} \\
-    0.5, & \text{if only runtime checking is available} \\
-    0.0, & \text{if no enforcement mechanism exists}
+    1.0, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if static verification is supported (compile-time proof)%
+         }} \\
+    0.5, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if only runtime checking is available%
+         }} \\
+    0.0, & \text{\parbox[t]{0.65\linewidth}{\raggedright
+            if no enforcement mechanism exists%
+         }}
 \end{cases}
 \]

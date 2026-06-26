@@ -7,7 +7,7 @@ The choice of weighting coefficients for the proposed metrics is guided by the m
 We determine the weighting coefficients for the TSSM metric based on the importance of each component for comparing object models across modern programming languages. The higher weights is given to characteristics that have a stronger impact on object-oriented software development.
 
 \[
-    \alpha = 0.3, \beta = 0.3, \gamma = 0.4
+    \alpha = 0.25, \beta = 0.3, \gamma = 0.45
 \]
 
 The highest weight is assigned to the inheritance-subtyping separation component ($\gamma = 0.45$).  This decision is justified by a literature that identifies the conflation of inheritance and subtyping as a major flaw in mainstream object-oriented languages \cite{cook1989inheritance}. Failure to distinguish them leads to violations of the Liskov Substitution Principle and undermines sound modular reasoning. Liskov and Wing further formalize this issue, noting that subtype relationships must preserve behavioural specifications independently of implementation structure \cite{liskov1999behavioral}. This separation is treated as the most critical factor influencing the overall soundness of the object model.
